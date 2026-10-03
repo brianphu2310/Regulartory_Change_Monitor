@@ -1,0 +1,43 @@
+# Regulatory Change Monitor
+
+A Power BI report (plus an interactive HTML design preview) that tracks regulatory changes from Australian agencies (AUSTRAC, ATO, Fair Work, Law Society, OAIC, DFAT) and maps them to the departments of a law firm: which changes matter, how urgent they are, and what still needs action.
+
+> **All data is synthetic.** The ~200 items are invented for demonstration and are not real agency announcements. Tags (topic, impact, audience, action required, deadline) come from transparent keyword rules in `classifier.py`, not from a model, and this is not legal advice. There is no web scraping in this project.
+
+![Overview](docs/screenshots/preview_0.png)
+
+## What is in the repo
+| Path | What it is |
+|---|---|
+| `powerbi/regulatory_change_monitor.pbix` | The Power BI report (open in Power BI Desktop) |
+| `preview/dashboard_preview.html` | Interactive HTML design preview (d3), opens in any browser |
+| `bi_export/` | Star-schema CSV tables the report is built on |
+| `generate_synthetic.py` | Builds the synthetic dataset (seeded, reproducible shape) |
+| `classifier.py` | Rule-based tagging: topic, impact, audience, action required, deadline |
+| `db.py`, `export_for_bi.py` | SQLite storage and CSV export for BI tools |
+| `app.py` | Small Streamlit explorer over the same data |
+| `POWERBI_GUIDE.md`, `TABLEAU_GUIDE.md` | Model, DAX measures and build notes |
+
+## Power BI report
+8 visible pages: Overview, five department pages (Accounts & Trust, Compliance & AML, HR & Payroll, Privacy & IT, Property), Action tracker and About. Four hidden pages support interactivity:
+- **Change detail** and **Topic detail**: drill-through pages. Right-click an agency (or a topic) and choose *Drill through*; a Back button is included.
+- **Agency tooltip** and **Topic tooltip**: report-page tooltips shown on hover.
+
+Header dropdowns (Status, Year) are synced across pages; every chart cross-filters the others; the Action tracker colours deadlines by urgency.
+
+Model: `changes` fact table with `dim_date`, `dim_department`, `dim_topic` and bridge tables (`change_topics`, `change_audiences`, `topic_department`). Measures include Total Changes, High Impact, Open Actions, Overdue Actions, Due In 30 Days and Action Rate.
+
+Things to know: Power BI has no true 3D charts, so panel shapes are background images. In Power BI Desktop, sidebar navigation needs Ctrl+click; a single click works once published. Agency names are text, not official logos.
+
+## Run the Python side
+```bash
+pip install -r requirements.txt
+python export_for_bi.py --sample   # generate synthetic data and write bi_export/ CSVs
+streamlit run app.py               # optional explorer
+```
+Note: dates are generated relative to today, so re-running shifts them slightly compared with the CSVs committed here.
+
+## Design choices
+- Rule-based tagging so every label is explainable and auditable.
+- Star schema with separate bridge tables for the many-to-many topic and audience tags.
+- Deadline and heat colours are DAX measures, so the report stays dynamic.

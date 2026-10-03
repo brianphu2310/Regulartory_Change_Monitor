@@ -1,0 +1,479 @@
+<title>Regulatory Change Monitor</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: navy sidebar + slanted navy title banner; two gold-gradient profile panels on top, three light insight cards below. Bars are extruded 3D blocks. */
+:root{--navy:#08241f;--navy0:#04130f;--navy1:#0e3833;--navy2:#14483b;--navy3:#1f6b57;--bt:#288970;--bs:#071f1b;--gold:#d9b25f;--gold2:#e7cf9c;--gold3:#ede0bf;--pg1:#fffdf5;--pg2:#f7ecc8;--pg3:#d9b25f;--page:#e3ebe8;--pill:#f6e1d6;--pillt:#8a3a24;--mute:#cededa;--tm0:#f6efd8;--tm1:#b88a2e;
+--card:#f7f7fa;--ink:#0f2420;--mut:#56655f;--line:#d0dad6;
+--display:'Sora','Segoe UI',system-ui,sans-serif;--body:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 var(--body)}
+.app{display:grid;grid-template-columns:212px minmax(0,1fr);gap:0;min-height:100vh;max-width:1760px;margin:auto}
+aside{background:linear-gradient(180deg,var(--navy1) 0%,var(--navy0) 70%,var(--navy0) 100%);padding:20px 0 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;min-height:680px;color:#fff;box-shadow:6px 0 24px rgba(10,16,40,.35)}
+.brand{display:grid;grid-template-columns:auto 1fr;gap:2px 11px;align-items:center;padding:0 16px 14px}
+.mono{grid-row:span 2;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font:800 19px var(--display);color:var(--navy);background:linear-gradient(145deg,var(--gold3),var(--gold));box-shadow:0 5px 14px rgba(242,169,0,.4),inset 0 -3px 0 rgba(0,0,0,.15)}
+.brand b{font:700 14px var(--display);align-self:end}.brand span{font:600 9.5px var(--body);letter-spacing:.17em;color:var(--gold2);align-self:start}
+.ringbox{margin:6px 16px 14px;padding:12px 8px 8px;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03));text-align:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.ringbox small{display:block;font:600 9.5px var(--body);letter-spacing:.14em;color:var(--gold2);margin-top:2px}
+nav{display:grid;gap:2px;margin-top:168px}
+nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:11px;padding:12px 18px 12px 16px;color:#d9def2;font:500 13px var(--body);border-left:4px solid transparent;transition:background .15s,color .15s}
+nav button svg{width:17px;height:17px;flex:none;stroke:var(--gold2)}
+nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+nav button[aria-pressed=true]{background:linear-gradient(90deg,rgba(242,169,0,.28),rgba(242,169,0,0));border-left-color:var(--gold);color:#fff;font-weight:600}
+nav button:focus-visible,.chip button:focus-visible,#reset:focus-visible,.tab:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.foot{margin-top:auto;height:62px;background:linear-gradient(90deg,var(--gold),var(--gold2));display:grid;place-items:center;font:700 9.5px var(--body);letter-spacing:.12em;color:var(--navy);text-align:center;padding:0 8px}
+main{min-width:0;padding:14px 22px 26px 20px;display:grid;gap:14px;align-content:start}
+.banner{position:relative;height:66px;display:flex;align-items:center;padding:0 30px;color:#fff;background:linear-gradient(100deg,var(--navy),var(--navy2));clip-path:polygon(0 0,100% 0,100% 100%,2.2% 100%);border-radius:0 0 0 0;box-shadow:0 8px 20px rgba(10,16,40,.25)}
+.banner h1{margin:0;font:800 clamp(15px,2vw,24px)/1 var(--display);letter-spacing:.16em;text-transform:uppercase;text-wrap:balance}
+.banner .st{position:absolute;right:0;top:0;bottom:0;width:36%;overflow:hidden;pointer-events:none}
+.banner .st i{position:absolute;top:0;bottom:0;transform:skewX(-28deg)}
+.banner .st i:nth-child(1){right:48%;width:7%;background:var(--navy3)}.banner .st i:nth-child(2){right:36%;width:7%;background:linear-gradient(180deg,var(--gold),var(--gold2))}
+.banner .st i:nth-child(3){right:-6%;width:38%;background:linear-gradient(90deg,var(--gold),var(--gold3) 85%,#fff3c6)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;min-height:28px}
+.hint{color:var(--mut);font-size:12.5px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--gold);border-radius:20px;padding:3px 4px 3px 11px;font-size:12px;box-shadow:0 2px 6px rgba(13,24,56,.12)}
+.chip button{all:unset;cursor:pointer;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:#fff;font-size:10px}
+#reset{all:unset;cursor:pointer;font-size:12px;color:var(--navy3);text-decoration:underline;text-underline-offset:3px}
+.top{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.panel{position:relative;border-radius:16px;padding:44px 14px 10px;background:linear-gradient(170deg,var(--pg1) 0%,var(--pg2) 38%,var(--pg3) 100%);box-shadow:0 14px 28px rgba(13,24,56,.28),inset 0 0 0 3px rgba(13,24,56,.9);min-width:0}
+.ribbon{position:absolute;left:14px;top:12px;background:linear-gradient(100deg,var(--navy),var(--navy3));color:#fff;font:700 12px var(--display);letter-spacing:.1em;padding:7px 38px 7px 14px;clip-path:polygon(0 0,100% 0,calc(100% - 16px) 100%,0 100%);text-transform:uppercase}
+.pbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,40%);gap:12px;align-items:stretch}
+.ptile{background:linear-gradient(180deg,#fff,#eef0f6);border-radius:14px;padding:10px 12px 8px;box-shadow:0 8px 18px rgba(13,24,56,.22),inset 0 0 0 1px #fff;text-align:center;display:grid;align-content:space-between;gap:4px}
+.big{font:800 clamp(30px,3.6vw,46px)/1 var(--display);color:var(--navy);font-variant-numeric:tabular-nums}
+.cap{background:#e9ebf3;border-radius:6px;padding:3px 6px;font-size:11.5px;color:var(--mut)}
+.cap b{color:var(--pillt);font:700 17px var(--display)}
+.split{display:flex;justify-content:center;gap:0}
+.split button{all:unset;cursor:pointer;flex:1;background:var(--navy);color:#fff;padding:5px 4px;font:600 11px var(--body);display:flex;justify-content:center;align-items:center;gap:5px;transition:filter .15s}
+.split button+button{background:#d9dcea;color:var(--navy)}
+.split button:hover{filter:brightness(1.15)}.split button[aria-pressed=true]{box-shadow:inset 0 -3px 0 var(--gold)}
+.split button:focus-visible{outline:2px solid var(--gold)}
+.split svg{width:13px;height:13px}
+.bot{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,1fr);gap:16px}
+.col{display:grid;gap:16px;align-content:start;min-width:0}
+.card{background:linear-gradient(180deg,#fcfcfe,#eceef5);border-radius:16px;padding:12px 14px 12px;box-shadow:0 12px 24px rgba(13,24,56,.2),inset 0 0 0 1px #fff;min-width:0}
+.card h2{margin:0 0 8px;font:700 12px var(--display);text-align:center;color:#fff;background:linear-gradient(100deg,var(--navy),var(--navy2));padding:8px 12px;border-radius:4px;letter-spacing:.02em;text-wrap:balance}
+.ins{background:#e3e6f0;border-radius:6px;padding:6px 10px;font-size:11.5px;color:var(--ink);margin-bottom:6px;text-align:center;min-height:44px;display:grid;align-items:center}
+.ins b{color:var(--pillt)}
+.chart{width:100%;display:block}
+svg text{font:10.5px var(--body);fill:var(--ink)}
+.hit{cursor:pointer}.hit:hover{filter:brightness(1.12)}
+.tm{cursor:pointer}.tm:hover rect{filter:brightness(1.08)}
+.hm{cursor:pointer}.hm:hover rect{stroke:var(--navy);stroke-width:2}
+#tip{position:fixed;pointer-events:none;z-index:9;background:var(--navy);color:#fff;border:1px solid var(--gold);border-radius:8px;padding:7px 10px;font-size:12px;max-width:240px;opacity:0;transition:opacity .1s;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.tbl{max-height:260px;overflow:auto;border-radius:6px}
+.row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px;align-items:center;padding:6px 6px;border-bottom:1px solid var(--line);font-size:12px;cursor:default}
+.row .d{font:600 11.5px var(--body);color:var(--navy3);white-space:nowrap}.row .d.o{color:var(--pillt)}
+.row small{display:block;color:var(--mut);font-size:10.5px}
+.pill{font:700 10px var(--body);padding:2px 8px;border-radius:10px;background:#d9dcea}
+.pill.High{background:var(--navy);color:#fff}.pill.Medium{background:var(--gold);color:var(--navy)}
+
+aside{z-index:1}main{position:relative;z-index:2}
+.pop{position:absolute;left:-84px;top:56px;width:176px;z-index:6;text-align:center;filter:drop-shadow(0 14px 18px rgba(8,14,36,.5))}
+.pop small{display:inline-block;margin-top:-14px;position:relative;background:linear-gradient(100deg,var(--gold),var(--gold2));color:var(--navy);font:800 10px var(--body);letter-spacing:.14em;padding:5px 14px;border-radius:12px}
+.bar{padding-left:100px}.pa{padding-left:104px}.pa .ribbon{left:104px}
+.ptile{margin-top:-34px;margin-bottom:-20px;position:relative;z-index:3}
+.ptile svg{filter:drop-shadow(0 6px 6px rgba(13,24,56,.28))}
+.panel{margin-bottom:12px}
+@media (max-width:900px){.bar{padding-left:0}nav{margin-top:6px}.pop{display:none}.pa{padding-left:14px}.pa .ribbon{left:14px}.tw{margin-top:0;margin-bottom:0}.ribbon{left:-8px!important}nav{margin-top:6px}}
+
+:root{--c:18px;--c2:15px}
+aside{z-index:1}
+.fr{position:absolute;inset:0;filter:drop-shadow(0 12px 12px rgba(13,24,56,.28));pointer-events:none;z-index:0}
+.fr .in{position:absolute;inset:0;background:var(--bd);clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,0 calc(100% - var(--c)),0 var(--c))}
+.fr .in::after{content:'';position:absolute;inset:var(--bw);background:var(--fill);clip-path:polygon(var(--c2) 0,calc(100% - var(--c2)) 0,100% var(--c2),100% calc(100% - var(--c2)),calc(100% - var(--c2)) 100%,var(--c2) 100%,0 calc(100% - var(--c2)),0 var(--c2))}
+.panel{background:none;box-shadow:none;padding:52px 18px 26px;--bd:var(--navy);--bw:4px;--fill:linear-gradient(170deg,var(--pg1) 0%,var(--pg2) 38%,var(--pg3) 100%)}
+.panel>.pbody{position:relative;z-index:1}
+.card{background:none;box-shadow:none;padding:16px 16px 16px;position:relative;--bd:#fff;--bw:2px;--fill:linear-gradient(180deg,#fbfbfe,#e9ecf4);--c:16px;--c2:14px}
+.card>*:not(.fr){position:relative;z-index:1}
+.card h2{margin:-8px -24px 10px;padding:10px 30px;border-radius:0;clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,16px 100%,0 50%);background:linear-gradient(100deg,var(--navy),var(--navy3));box-shadow:none}
+.ribbon{left:-14px;top:-15px;padding:10px 40px;z-index:4;clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,16px 100%,0 50%);background:linear-gradient(100deg,var(--navy),var(--navy3));border:0}
+.pa .ribbon{left:84px}
+.tw{margin-top:-40px;margin-bottom:-22px;position:relative;z-index:3;filter:drop-shadow(0 12px 10px rgba(13,24,56,.34))}
+.ptile{--c:16px;clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,0 calc(100% - var(--c)),0 var(--c));background:linear-gradient(180deg,#fff,#e9ecf5);box-shadow:none;padding:14px 14px 10px;height:100%}
+.pop{left:-118px;top:70px;width:204px}
+.pop small{margin-top:-12px}
+nav{margin-top:222px}
+.pa{padding-left:104px}
+.bot{align-items:stretch;gap:20px}.top{gap:22px}
+@media (max-width:1180px){.bot{grid-template-columns:repeat(2,minmax(0,1fr))}.bot .col:first-child{grid-column:span 2}}
+@media (max-width:900px){.app{grid-template-columns:minmax(0,1fr)}
+aside{position:static;height:auto;min-height:0;padding:14px 0 0}.ringbox{display:none}.foot{display:none}
+nav{display:flex;overflow-x:auto;gap:0}nav button{white-space:nowrap;flex:none;border-left:0;border-bottom:3px solid transparent;padding:10px 14px}nav button[aria-pressed=true]{border-bottom-color:var(--gold);background:rgba(242,169,0,.18)}
+main{padding:14px 16px 26px}.top{grid-template-columns:minmax(0,1fr)}.pbody{grid-template-columns:minmax(0,1fr)}.bot{grid-template-columns:minmax(0,1fr)}.bot .col:first-child{grid-column:auto}
+.banner{clip-path:none;padding:0 16px}.banner .st{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:900px){nav{margin-top:6px}.tw{margin-top:6px;margin-bottom:-14px}.pa .ribbon,.ribbon{left:-8px}.pa{padding-left:16px}.pop{display:none}.ptile{height:auto}.panel{padding-bottom:34px}}
+/* v4 additions */
+.tag{margin-left:auto;font:600 10.5px var(--body);letter-spacing:.06em;color:var(--mut);background:#fff;border:1px solid var(--line);border-radius:14px;padding:4px 12px}
+.view{display:grid;gap:22px;align-content:start;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch}
+.g2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:stretch}
+.g21{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.leg{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:11px;color:var(--mut);margin-top:6px}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.tbl2{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl2 th{position:sticky;top:0;background:var(--navy);color:#fff;text-align:left;font:700 10.5px var(--body);letter-spacing:.08em;padding:9px 10px;cursor:pointer;white-space:nowrap;user-select:none}
+.tbl2 th[aria-sort]{color:var(--gold2)}
+.tbl2 th:first-child{border-radius:6px 0 0 0}.tbl2 th:last-child{border-radius:0 6px 0 0}
+.tbl2 td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl2 tr.r{cursor:pointer}.tbl2 tr.r:hover td{background:rgba(31,107,87,.08)}.tbl2 tr.sel td{background:rgba(217,178,95,.28)}
+.tw2{max-height:420px;overflow:auto;border-radius:8px;border:1px solid var(--line);background:#fff}
+.dl{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}.dl.o{color:var(--pillt)}.dl.s{color:#b8741a}.dl.k{color:var(--navy3)}
+.detail{background:linear-gradient(180deg,#fff,#eef2ef);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12.5px;min-height:62px}
+.detail b{font:700 13px var(--display);display:block;margin-bottom:3px}.detail span{color:var(--mut)}
+.fb{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.fb button{all:unset;cursor:pointer;font:600 11px var(--body);padding:5px 12px;border-radius:14px;background:#fff;border:1px solid var(--navy3);color:var(--navy)}
+.fb button[aria-pressed=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.fb button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.fb small{color:var(--mut);font-size:11px;margin-right:4px;font-weight:600;letter-spacing:.08em}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:6px -6px 4px}
+.step{background:linear-gradient(100deg,var(--navy),var(--navy3));color:#fff;padding:14px 26px 14px 30px;clip-path:polygon(0 0,calc(100% - 20px) 0,100% 50%,calc(100% - 20px) 100%,0 100%,20px 50%);margin-left:-8px}
+.step:first-child{clip-path:polygon(0 0,calc(100% - 20px) 0,100% 50%,calc(100% - 20px) 100%,0 100%);margin-left:0;padding-left:18px}
+.step b{font:700 12px var(--display);display:block;letter-spacing:.06em;color:var(--gold2)}.step span{font-size:11.5px;opacity:.92}
+.defs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px}
+.defs div{font-size:12.5px}.defs b{color:var(--navy3);font-family:var(--display);font-size:12px;display:block}
+.bdg{display:flex;gap:8px;flex-wrap:wrap}.bdg span{font:600 11px var(--body);padding:5px 12px;border-radius:14px;border:1px solid var(--gold);background:#fff}
+.note2{font-size:12.5px;color:var(--mut);margin:0}
+.big2{font:800 28px var(--display);color:var(--navy)}
+@media (max-width:1180px){.g3,.g2,.g21{grid-template-columns:repeat(2,minmax(0,1fr))}.g3>*:first-child,.g2>*:first-child{grid-column:span 2}}
+@media (max-width:900px){.g3,.g2,.g21{grid-template-columns:minmax(0,1fr)}.g3>*:first-child,.g2>*:first-child{grid-column:auto}.steps{grid-template-columns:minmax(0,1fr)}.step,.step:first-child{clip-path:none;margin:0 0 4px;border-radius:6px;padding:12px 16px}.defs{grid-template-columns:minmax(0,1fr)}.tag{display:none}}
+</style>
+<div class="app">
+<aside>
+ <div class="brand"><div class="mono">BP</div><b>Brian Phu</b><span>DATA ANALYST</span></div>
+ <nav id="nav" aria-label="Pages"></nav>
+ <div class="foot">SYNTHETIC SAMPLE DATA<br>NOT LEGAL ADVICE</div>
+</aside>
+<main>
+ <div class="pop" id="pop"></div>
+ <div class="banner"><h1 id="ttl">Regulatory Change Monitor</h1><div class="st"><i></i><i></i><i></i></div></div>
+ <div class="bar"><div id="barl" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"></div><span style="display:flex;gap:8px;align-items:center"><select id="thm" class="tag" aria-label="Colour theme" style="cursor:pointer;font-family:inherit"></select><button id="flat" class="tag" style="cursor:pointer;font-family:inherit" aria-pressed="false">Bars: 3D</button><span class="tag">Data as at 3 Oct 2026 · synthetic sample data</span></span></div>
+ <div class="view" id="view"></div>
+</main>
+</div>
+<div id="tip" role="status"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const RAW=[["2025-10-03","Fair Work","High","Reviewed",1,"","Employment","Enforcement: employer penalised for underpayment of employees"],["2025-10-04","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2025-10-06","Fair Work","Medium","Actioned",1,"","Employment","Modern award changes for clerks and legal services employees"],["2025-10-07","ATO","High","Actioned",1,"2025-11-16","Payroll, Employment","Annual wage review: new minimum wage and modern award increases"],["2025-10-08","AUSTRAC","Medium","Actioned",1,"","AML/CTF","Guidance published on suspicious matter reporting for law firms"],["2025-10-19","OAIC","High","Reviewed",0,"","Privacy & Data","Privacy Act amendments: strengthened penalties and new obligations"],["2025-10-22","ATO","High","Actioned",1,"2026-02-21","Superannuation, Payroll","Payday super: employers need to prepare for more frequent super guarantee payments"],["2025-10-24","Fair Work","Medium","Actioned",1,"","Employment","Casual employment: updated information statement requirements"],["2025-10-26","ATO","Medium","Actioned",1,"","Superannuation, Employment","Stapled super funds: choice of fund reminder for new employees"],["2025-10-28","ATO","Medium","Reviewed",0,"","Tax","Fringe benefits tax: draft guidance released"],["2025-11-05","ATO","Medium","Reviewed",0,"","Tax, Property","Capital gains tax: reminder for property sellers"],["2025-11-09","ATO","Medium","Actioned",1,"2026-02-14","Superannuation","Unpaid superannuation: penalties and the super guarantee charge"],["2025-11-09","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2025-11-15","ATO","High","Reviewed",1,"2026-02-04","Payroll, Employment","Annual wage review: new minimum wage and modern award increases"],["2025-11-17","ATO","Medium","Actioned",1,"","Superannuation, Payroll","Super guarantee rate and maximum contribution base update"],["2025-11-17","ATO","Medium","Reviewed",0,"","Tax, Property","Capital gains tax: reminder for property sellers"],["2025-11-20","Fair Work","Medium","Actioned",1,"","Employment","Casual employment: updated information statement requirements"],["2025-11-21","OAIC","High","Reviewed",0,"","Privacy & Data","Notifiable data breaches report highlights legal and finance sectors"],["2025-11-23","AUSTRAC","Medium","Reviewed",0,"","AML/CTF","Reminder: threshold transaction reports for cash of $10,000 or more"],["2025-11-25","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2025-11-26","ATO","High","Actioned",1,"2026-03-22","Superannuation, Payroll","Payday super: employers need to prepare for more frequent super guarantee payments"],["2025-12-03","ATO","High","Actioned",1,"2026-01-03","Superannuation, Payroll","Payday super: employers need to prepare for more frequent super guarantee payments"],["2025-12-04","ATO","Medium","Reviewed",0,"","Tax, Property","Capital gains tax: reminder for property sellers"],["2025-12-04","OAIC","High","Reviewed",0,"","Privacy & Data","Notifiable data breaches report highlights legal and finance sectors"],["2025-12-08","Law Society","High","Actioned",1,"2025-12-30","Trust Accounts","Trust account reminder: annual external examination and statutory deposit rules"],["2025-12-09","AUSTRAC","Medium","Actioned",1,"","AML/CTF, Trust Accounts","Guidance published on suspicious matter reporting for legal practitioners"],["2025-12-18","AUSTRAC","Medium","Reviewed",1,"","AML/CTF","Guidance published on suspicious matter reporting for law firms"],["2025-12-18","AUSTRAC","High","Reviewed",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2025-12-19","ATO","High","Reviewed",1,"2026-01-03","Payroll, Employment","Annual wage review: new minimum wage and modern award increases"],["2025-12-19","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2025-12-23","DFAT","Medium","Reviewed",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2025-12-27","AUSTRAC","Medium","Actioned",1,"2026-03-12","AML/CTF","Consultation opens on draft rules for customer due diligence"],["2025-12-28","ATO","Medium","Actioned",1,"2026-05-20","Tax","BAS lodgement due dates and common errors for tax agents and bookkeepers"],["2026-01-02","ATO","Medium","Actioned",1,"2026-04-23","Superannuation","Unpaid superannuation: penalties and the super guarantee charge"],["2026-01-05","AUSTRAC","High","Reviewed",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2026-01-06","DFAT","Medium","Reviewed",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2026-01-08","AUSTRAC","Medium","Reviewed",0,"","AML/CTF","Reminder: threshold transaction reports for cash of $10,000 or more"],["2026-01-09","Fair Work","High","Actioned",1,"","Employment","Enforcement: employer penalised for underpayment of employees"],["2026-01-15","ATO","Medium","Actioned",1,"2026-02-10","Tax","BAS lodgement due dates and common errors for tax agents and bookkeepers"],["2026-01-17","AUSTRAC","High","Reviewed",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2026-01-19","ATO","High","Actioned",1,"2026-04-23","Superannuation, Payroll","Payday super: employers need to prepare for more frequent super guarantee payments"],["2026-01-20","OAIC","High","Reviewed",0,"","Privacy & Data","Notifiable data breaches report highlights legal and finance sectors"],["2026-01-26","Fair Work","Medium","Actioned",1,"","Employment","Modern award changes for clerks and legal services employees"],["2026-01-26","DFAT","Low","Reviewed",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-01-26","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2026-01-28","ATO","Medium","Reviewed",0,"2026-03-08","Payroll","PAYG withholding: updated tax tables for the new year"],["2026-02-01","DFAT","Medium","Actioned",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2026-02-03","ATO","High","Reviewed",1,"2026-04-28","Superannuation, Payroll","Payday super: employers need to prepare for more frequent super guarantee payments"],["2026-02-05","ATO","Medium","Reviewed",0,"","Tax","Fringe benefits tax: draft guidance released"],["2026-02-07","Fair Work","High","Actioned",1,"","Employment","Enforcement: employer penalised for underpayment of employees"],["2026-02-08","DFAT","Medium","Reviewed",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2026-02-10","ATO","Medium","Reviewed",1,"2026-03-06","Tax","BAS lodgement due dates and common errors for tax agents and bookkeepers"],["2026-02-15","ATO","High","Actioned",1,"2026-07-14","Payroll, Employment","Annual wage review: new minimum wage and modern award increases"],["2026-02-18","ATO","Medium","Reviewed",0,"","Tax, Property","Capital gains tax: reminder for property sellers"],["2026-02-18","DFAT","Medium","Actioned",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2026-02-21","AUSTRAC","Medium","Actioned",1,"","AML/CTF","Guidance published on suspicious matter reporting for real estate agents"],["2026-02-22","ATO","Medium","Actioned",1,"","Superannuation, Payroll","Super guarantee rate and maximum contribution base update"],["2026-02-22","Fair Work","High","Reviewed",1,"","Employment","Enforcement: employer penalised for underpayment of employees"],["2026-02-22","ATO","Medium","Actioned",1,"","Superannuation, Payroll","Super guarantee rate and maximum contribution base update"],["2026-02-24","AUSTRAC","High","Reviewed",1,"2026-05-18","AML/CTF","Reporting entities must update AML/CTF programs for new obligations"],["2026-03-04","Law Society","High","Actioned",1,"2026-03-27","AML/CTF, Trust Accounts","Tranche 2 reforms: what legal practitioners need to prepare for"],["2026-03-06","AUSTRAC","Medium","Reviewed",1,"2026-03-29","AML/CTF","Consultation opens on draft rules for customer due diligence"],["2026-03-09","ATO","High","Actioned",1,"2026-07-12","Payroll, Employment","Annual wage review: new minimum wage and modern award increases"],["2026-03-10","Fair Work","Medium","Actioned",1,"","Employment","Casual employment: updated information statement requirements"],["2026-03-11","Law Society","High","Actioned",1,"2026-05-27","AML/CTF, Trust Accounts","Tranche 2 reforms: what legal practitioners need to prepare for"],["2026-03-12","AUSTRAC","High","Reviewed",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2026-03-12","DFAT","Low","Reviewed",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-03-12","ATO","Medium","Actioned",1,"","Payroll, Tax, Property","GST treatment of residential property settlements"],["2026-03-13","AUSTRAC","Medium","Actioned",1,"","AML/CTF","Guidance published on suspicious matter reporting for real estate agents"],["2026-03-13","Law Society","Low","Reviewed",0,"","AML/CTF, Trust Accounts","Trust money: guidance on receiving cash and third-party payments"],["2026-03-17","ATO","Medium","Reviewed",1,"","Payroll, Tax, Property","GST treatment of residential property settlements"],["2026-03-21","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2026-03-22","ATO","Medium","Reviewed",0,"2026-06-21","Payroll","PAYG withholding: updated tax tables for the new year"],["2026-03-24","Fair Work","High","Reviewed",1,"","Employment","Enforcement: employer penalised for underpayment of employees"],["2026-03-24","Fair Work","Medium","Actioned",1,"","Employment","Casual employment: updated information statement requirements"],["2026-04-01","OAIC","High","Reviewed",0,"","Privacy & Data","Notifiable data breaches report highlights legal and finance sectors"],["2026-04-03","ATO","Medium","Reviewed",1,"","Superannuation, Employment","Stapled super funds: choice of fund reminder for new employees"],["2026-04-05","ATO","Medium","Actioned",1,"","Payroll, Tax, Property","GST treatment of residential property settlements"],["2026-04-05","OAIC","High","Reviewed",0,"","Privacy & Data","Notifiable data breaches report highlights legal and finance sectors"],["2026-04-07","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2026-04-08","AUSTRAC","Medium","Actioned",1,"2026-07-16","AML/CTF","Consultation opens on draft rules for customer due diligence"],["2026-04-14","ATO","Medium","Reviewed",1,"2026-06-19","Superannuation","Unpaid superannuation: penalties and the super guarantee charge"],["2026-04-15","Fair Work","Medium","Actioned",1,"","Employment","Casual employment: updated information statement requirements"],["2026-04-15","DFAT","Medium","Actioned",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2026-04-15","Law Society","Low","Reviewed",0,"","AML/CTF, Trust Accounts","Trust money: guidance on receiving cash and third-party payments"],["2026-04-16","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2026-04-17","AUSTRAC","High","Actioned",1,"2026-05-13","AML/CTF, Trust Accounts","Tranche 2 reforms: what legal practitioners need to prepare for"],["2026-04-20","DFAT","Low","Reviewed",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-04-25","DFAT","Low","Reviewed",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-04-28","ATO","Medium","Reviewed",0,"","Payroll","Single Touch Payroll reporting reminder"],["2026-05-04","Law Society","High","Actioned",1,"2026-09-14","AML/CTF","Tranche 2 reforms: what accountants need to prepare for"],["2026-05-06","AUSTRAC","High","Reviewed",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2026-05-07","Law Society","High","Reviewed",1,"2026-06-29","Trust Accounts","Trust account reminder: annual external examination and statutory deposit rules"],["2026-05-09","Law Society","Low","Reviewed",0,"","AML/CTF, Trust Accounts","Trust money: guidance on receiving cash and third-party payments"],["2026-05-10","AUSTRAC","High","Reviewed",1,"2026-09-02","AML/CTF","Reporting entities must update AML/CTF programs for new obligations"],["2026-05-11","ATO","Medium","Actioned",1,"2026-08-30","Superannuation","Unpaid superannuation: penalties and the super guarantee charge"],["2026-05-12","Law Society","High","Reviewed",1,"2026-06-12","Trust Accounts","Trust account reminder: annual external examination and statutory deposit rules"],["2026-05-13","DFAT","Medium","Actioned",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2026-05-14","ATO","Medium","Reviewed",0,"","Tax","Fringe benefits tax: draft guidance released"],["2026-05-14","OAIC","High","Reviewed",0,"","Privacy & Data","Notifiable data breaches report highlights legal and finance sectors"],["2026-05-17","Fair Work","Medium","Actioned",1,"","Employment","Casual employment: updated information statement requirements"],["2026-05-20","Law Society","High","Actioned",1,"2026-07-14","Trust Accounts","Trust account reminder: annual external examination and statutory deposit rules"],["2026-05-20","Fair Work","Medium","Actioned",1,"","Employment","Modern award changes for clerks and legal services employees"],["2026-05-24","ATO","Medium","Actioned",1,"2026-10-04","Superannuation","Unpaid superannuation: penalties and the super guarantee charge"],["2026-05-26","OAIC","High","Reviewed",0,"","Privacy & Data","Notifiable data breaches report highlights legal and finance sectors"],["2026-05-27","Law Society","High","Actioned",1,"2026-07-06","AML/CTF","Tranche 2 reforms: what accountants need to prepare for"],["2026-06-01","ATO","Medium","Actioned",1,"","Superannuation, Employment","Stapled super funds: choice of fund reminder for new employees"],["2026-06-03","Law Society","Low","Reviewed",0,"","AML/CTF, Trust Accounts","Trust money: guidance on receiving cash and third-party payments"],["2026-06-04","Fair Work","High","Actioned",1,"","Employment","Enforcement: employer penalised for underpayment of employees"],["2026-06-06","AUSTRAC","Medium","Actioned",1,"2026-08-13","AML/CTF","Consultation opens on draft rules for customer due diligence"],["2026-06-07","Fair Work","Low","Reviewed",0,"","Employment","Unfair dismissal: guidance for small business employers"],["2026-06-08","ATO","Medium","Actioned",1,"2026-09-27","Superannuation","Unpaid superannuation: penalties and the super guarantee charge"],["2026-06-09","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2026-06-09","Law Society","Low","Reviewed",0,"","AML/CTF, Trust Accounts","Trust money: guidance on receiving cash and third-party payments"],["2026-06-09","AUSTRAC","High","Reviewed",1,"2026-07-22","AML/CTF","Reporting entities must update AML/CTF programs for new obligations"],["2026-06-10","ATO","Medium","Actioned",1,"","Superannuation, Payroll","Super guarantee rate and maximum contribution base update"],["2026-06-12","Fair Work","Medium","Actioned",1,"","Employment","Modern award changes for clerks and legal services employees"],["2026-06-14","Law Society","High","Actioned",1,"2026-08-28","AML/CTF, Trust Accounts","Tranche 2 reforms: what legal practitioners need to prepare for"],["2026-06-15","Fair Work","Medium","Reviewed",1,"2026-07-22","Payroll, Employment, Property","New leave entitlement rules for employees commence"],["2026-06-16","OAIC","High","Reviewed",0,"","Privacy & Data","Privacy Act amendments: strengthened penalties and new obligations"],["2026-06-19","ATO","Medium","Reviewed",0,"","Payroll","Single Touch Payroll reporting reminder"],["2026-06-23","DFAT","Low","Reviewed",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-06-24","ATO","High","Actioned",1,"2026-09-26","Superannuation, Payroll","Payday super: employers need to prepare for more frequent super guarantee payments"],["2026-07-03","Fair Work","Medium","Reviewed",1,"2026-09-22","Payroll, Employment, Property","New leave entitlement rules for employees commence"],["2026-07-06","AUSTRAC","High","Actioned",1,"2026-11-01","AML/CTF","Reporting entities must update AML/CTF programs for new obligations"],["2026-07-10","ATO","Medium","Actioned",1,"2026-08-18","Superannuation","Unpaid superannuation: penalties and the super guarantee charge"],["2026-07-10","Fair Work","Medium","Reviewed",1,"2026-09-21","Payroll, Employment, Property","New leave entitlement rules for employees commence"],["2026-07-10","Law Society","High","Actioned",1,"2026-10-01","AML/CTF, Trust Accounts","Tranche 2 reforms: what legal practitioners need to prepare for"],["2026-07-10","ATO","Medium","Reviewed",1,"2026-08-02","Superannuation","Unpaid superannuation: penalties and the super guarantee charge"],["2026-07-11","ATO","Medium","Actioned",1,"","Superannuation, Employment","Stapled super funds: choice of fund reminder for new employees"],["2026-07-11","AUSTRAC","Medium","Reviewed",1,"2026-11-05","AML/CTF","Consultation opens on draft rules for customer due diligence"],["2026-07-14","ATO","Medium","Reviewed",0,"","Payroll","Single Touch Payroll reporting reminder"],["2026-07-14","ATO","Medium","Reviewed",0,"","Tax, Property","Capital gains tax: reminder for property sellers"],["2026-07-16","Law Society","High","Reviewed",1,"2026-10-09","Trust Accounts","Trust account reminder: annual external examination and statutory deposit rules"],["2026-07-21","ATO","Medium","New",1,"","Superannuation, Payroll","Super guarantee rate and maximum contribution base update"],["2026-07-21","DFAT","Low","Reviewed",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-07-21","ATO","Medium","Reviewed",0,"","Tax, Property","Capital gains tax: reminder for property sellers"],["2026-07-22","ATO","Medium","Reviewed",0,"","Tax","Fringe benefits tax: draft guidance released"],["2026-07-25","ATO","Medium","New",1,"","Payroll, Tax, Property","GST treatment of residential property settlements"],["2026-07-26","AUSTRAC","Medium","Actioned",1,"","AML/CTF","Guidance published on suspicious matter reporting for real estate agents"],["2026-07-27","AUSTRAC","High","Reviewed",1,"2026-10-17","AML/CTF","Tranche 2 reforms: what law firms need to prepare for"],["2026-08-01","AUSTRAC","High","Reviewed",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2026-08-03","ATO","Medium","Reviewed",0,"","Tax, Property","Capital gains tax: reminder for property sellers"],["2026-08-05","ATO","Medium","Reviewed",0,"","Payroll","Single Touch Payroll reporting reminder"],["2026-08-10","AUSTRAC","Medium","Reviewed",1,"","AML/CTF, Trust Accounts","Guidance published on suspicious matter reporting for legal practitioners"],["2026-08-10","Law Society","High","Actioned",1,"2026-09-16","AML/CTF","Tranche 2 reforms: what accountants need to prepare for"],["2026-08-10","AUSTRAC","High","New",1,"2026-11-27","AML/CTF","Reporting entities must update AML/CTF programs for new obligations"],["2026-08-11","AUSTRAC","Medium","Reviewed",1,"2026-09-14","AML/CTF","Consultation opens on draft rules for customer due diligence"],["2026-08-11","OAIC","High","Reviewed",0,"","Privacy & Data","Privacy Act amendments: strengthened penalties and new obligations"],["2026-08-14","AUSTRAC","Medium","Reviewed",0,"","AML/CTF","Reminder: threshold transaction reports for cash of $10,000 or more"],["2026-08-15","ATO","Medium","Reviewed",1,"2026-10-16","Superannuation","Unpaid superannuation: penalties and the super guarantee charge"],["2026-08-15","DFAT","Medium","Reviewed",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2026-08-16","DFAT","Medium","Actioned",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2026-08-16","ATO","Medium","Reviewed",0,"2026-12-24","Payroll","PAYG withholding: updated tax tables for the new year"],["2026-08-20","Law Society","High","Reviewed",1,"2026-10-13","AML/CTF","Tranche 2 reforms: what accountants need to prepare for"],["2026-08-26","Law Society","Low","Reviewed",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2026-08-27","ATO","Medium","New",1,"","Superannuation, Employment","Stapled super funds: choice of fund reminder for new employees"],["2026-08-28","ATO","Medium","Actioned",1,"","Superannuation, Payroll","Super guarantee rate and maximum contribution base update"],["2026-08-28","OAIC","High","Reviewed",0,"","Privacy & Data","Privacy Act amendments: strengthened penalties and new obligations"],["2026-08-28","ATO","Medium","Reviewed",1,"","Payroll, Tax, Property","GST treatment of residential property settlements"],["2026-09-01","AUSTRAC","High","Reviewed",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2026-09-01","Fair Work","Medium","New",1,"2026-11-10","Payroll, Employment, Property","New leave entitlement rules for employees commence"],["2026-09-02","AUSTRAC","High","Reviewed",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2026-09-05","ATO","Medium","Reviewed",0,"","Payroll","Single Touch Payroll reporting reminder"],["2026-09-05","AUSTRAC","Medium","Reviewed",0,"","AML/CTF","Reminder: threshold transaction reports for cash of $10,000 or more"],["2026-09-09","AUSTRAC","High","New",1,"2026-11-27","AML/CTF, Trust Accounts","Tranche 2 reforms: what legal practitioners need to prepare for"],["2026-09-09","DFAT","Low","Reviewed",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-09-10","OAIC","High","Reviewed",0,"","Privacy & Data","Privacy Act amendments: strengthened penalties and new obligations"],["2026-09-10","AUSTRAC","High","Reviewed",1,"2026-10-23","AML/CTF","Reporting entities must update AML/CTF programs for new obligations"],["2026-09-12","AUSTRAC","Medium","Reviewed",0,"","AML/CTF","Reminder: threshold transaction reports for cash of $10,000 or more"],["2026-09-13","OAIC","High","Reviewed",0,"","Privacy & Data","Notifiable data breaches report highlights legal and finance sectors"],["2026-09-19","ATO","Medium","New",1,"","Superannuation, Employment","Stapled super funds: choice of fund reminder for new employees"],["2026-09-19","ATO","Medium","New",1,"","Superannuation, Employment","Stapled super funds: choice of fund reminder for new employees"],["2026-09-20","AUSTRAC","High","New",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2026-09-21","DFAT","Low","New",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-09-22","Fair Work","High","New",1,"","Employment","Enforcement: employer penalised for underpayment of employees"],["2026-09-23","Fair Work","Medium","New",1,"2027-01-19","Payroll, Employment, Property","New leave entitlement rules for employees commence"],["2026-09-24","DFAT","Low","New",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-09-25","OAIC","High","New",0,"","Privacy & Data","Privacy Act amendments: strengthened penalties and new obligations"],["2026-09-26","DFAT","Low","New",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-10-02","Fair Work","Medium","New",1,"2027-01-30","Payroll, Employment, Property","New leave entitlement rules for employees commence"],["2026-10-02","OAIC","High","New",0,"","Privacy & Data","Privacy Act amendments: strengthened penalties and new obligations"],["2026-10-02","Fair Work","High","Reviewed",1,"2026-11-10","Payroll, Employment","Annual wage review: new minimum wage and modern award increases"],["2026-10-02","ATO","Medium","New",0,"","Tax","Fringe benefits tax: draft guidance released"],["2026-10-02","DFAT","Low","New",0,"","Sanctions","Sanctions compliance guidance for legal and accounting service providers"],["2026-10-02","Law Society","High","New",1,"2026-11-02","Trust Accounts","Trust account reminder: annual external examination and statutory deposit rules"],["2026-10-02","ATO","Medium","New",1,"","Payroll, Tax, Property","GST treatment of residential property settlements"],["2026-10-02","OAIC","High","New",0,"","Privacy & Data","Notifiable data breaches report highlights legal and finance sectors"],["2026-10-02","Fair Work","Medium","New",1,"","Employment","Casual employment: updated information statement requirements"],["2026-10-02","ATO","Medium","New",1,"2026-10-29","Tax","BAS lodgement due dates and common errors for tax agents and bookkeepers"],["2026-10-02","Law Society","Low","New",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2026-10-02","Law Society","Low","New",0,"","Trust Accounts, Property","Conveyancing risk update: settlement redirection scams"],["2026-10-02","DFAT","Medium","Reviewed",1,"","Sanctions","Autonomous sanctions: new designations announced"],["2026-10-02","AUSTRAC","High","New",0,"","AML/CTF","Enforcement action against a reporting entity for breach of the AML/CTF Act"],["2026-10-02","ATO","Medium","New",0,"2027-01-06","Payroll","PAYG withholding: updated tax tables for the new year"],["2026-10-02","AUSTRAC","Medium","New",1,"2027-01-21","AML/CTF","Consultation opens on draft rules for customer due diligence"],["2026-10-02","ATO","Medium","New",0,"2026-12-10","Payroll","PAYG withholding: updated tax tables for the new year"],["2026-10-02","Fair Work","High","New",1,"2027-02-09","Payroll, Employment","Annual wage review: new minimum wage and modern award increases"],["2026-10-02","ATO","Medium","New",0,"","Payroll","Single Touch Payroll reporting reminder"],["2026-10-02","ATO","Medium","New",1,"","Superannuation, Payroll","Super guarantee rate and maximum contribution base update"]];
+const TODAY=new Date('2026-10-03T00:00:00'),DAY=864e5;
+const cv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const DEPMAP={'AML/CTF':['Compliance & AML'],'Sanctions':['Compliance & AML'],'Trust Accounts':['Accounts & Trust'],'Tax':['Accounts & Trust'],'Payroll':['HR & Payroll','Accounts & Trust'],'Superannuation':['HR & Payroll','Accounts & Trust'],'Employment':['HR & Payroll'],'Property':['Property'],'Privacy & Data':['Privacy & IT']};
+const DEPS=['Accounts & Trust','Compliance & AML','HR & Payroll','Property','Privacy & IT'],DSH={'Accounts & Trust':'Accounts','Compliance & AML':'Compliance','HR & Payroll':'HR / Payroll','Property':'Property','Privacy & IT':'Privacy & IT'};
+const DICON=['coins','shield','people','building','lock'];
+const DSUB={'Accounts & Trust':'Trust accounting, BAS and tax obligations that reach the accounts team','Compliance & AML':'AML/CTF and sanctions obligations that reach the compliance team','HR & Payroll':'Employment, payroll and superannuation changes that reach HR and payroll','Property':'Conveyancing and property settlement changes','Privacy & IT':'Privacy, data handling and security changes'};
+const AGS=['ATO','AUSTRAC','Law Society','Fair Work','DFAT','OAIC'],ASH={ATO:'ATO',AUSTRAC:'AUSTRAC','Law Society':'Law Soc.','Fair Work':'Fair Work',DFAT:'DFAT',OAIC:'OAIC'},AHM={ATO:'ATO',AUSTRAC:'AUS','Law Society':'LAW','Fair Work':'FWC',DFAT:'DFAT',OAIC:'OAIC'};
+const BK=['Overdue','Due in 30 days','31 - 90 days','Over 90 days'];
+const bucket=r=>r.dl==null?null:r.dl<0?BK[0]:r.dl<=30?BK[1]:r.dl<=90?BK[2]:BK[3];
+const ROWS=RAW.map((r,i)=>{const tp=r[6].split(',').map(s=>s.trim());const dl=r[5]?Math.round((new Date(r[5]+'T00:00:00')-TODAY)/DAY):null;
+ const o={id:i,d:r[0],src:r[1],imp:r[2],st:r[3],act:r[4],dlDate:r[5],dl,tp,dep:[...new Set(tp.flatMap(t=>DEPMAP[t]||[]))],title:r[7]};o.open=r[4]==1&&r[3]!=='Actioned';o.bk=o.open?bucket(o):null;return o});
+const IMPS=['High','Medium','Low'],IMC={High:'var(--gold)',Medium:'var(--navy3)',Low:'var(--mute)'};
+const F={src:null,dep:null,tp:null,imp:null,bk:null,act:null,day:null};
+const LBL={src:'Agency',dep:'Department',tp:'Topic',imp:'Impact',bk:'Deadline',act:'Type',day:'Day'};
+let FLAT=false,PAGE='overview',BUILT=null,PICK=null,SORT={col:'dl',dir:1};
+const match=(r,k,v)=>k==='src'?r.src===v:k==='dep'?r.dep.includes(v):k==='tp'?r.tp.includes(v):k==='imp'?r.imp===v:k==='bk'?r.bk===v:k==='day'?r.dlDate===v:k==='act'?(v==='Action required'?r.act==1:r.act==0):true;
+const rowsFor=(ex=[])=>ROWS.filter(r=>Object.keys(F).every(k=>ex.includes(k)||F[k]==null||match(r,k,F[k])));
+const isDept=()=>PAGE.startsWith('dep:');const curDep=()=>isDept()?PAGE.slice(4):null;
+const toggle=(k,v)=>{if(k==='dep'&&isDept())return;F[k]=F[k]===v?null:v;PICK=null;render()};
+const $=s=>document.querySelector(s),tip=$('#tip');
+const showTip=(e,h)=>{tip.innerHTML=h;tip.style.opacity=1;const w=tip.offsetWidth;tip.style.left=Math.max(8,Math.min(e.clientX+14,innerWidth-w-8))+'px';tip.style.top=(e.clientY+14)+'px'};
+const hideTip=()=>tip.style.opacity=0;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct=(a,b)=>b?Math.round(a*100/b):0;
+const fmtD=r=>new Date(r.dlDate+'T00:00:00').toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'2-digit'});
+const key=(el,f)=>{el.onclick=f;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}}};
+const IC={coins:'<circle cx="9" cy="9" r="5"/><path d="M13 7a5 5 0 1 1-3.5 8.5M7.5 9h3M9 7.2v3.6"/>',shield:'<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',people:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c3 0 5 1.6 5 5.2"/>',building:'<path d="M4 21V8l8-5 8 5v13M4 21h16M9 21v-6h6v6M9 11h.01M15 11h.01"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',home:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',doc:'<path d="M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',alert:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/>',list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>'};
+const ic=(n,s=17)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+const PAGES=[{k:'overview',n:'Overview',i:'home',t:'Regulatory Change Monitor'},...DEPS.map((d,i)=>({k:'dep:'+d,n:d,i:DICON[i],t:d})),{k:'tracker',n:'Action tracker',i:'clock',t:'Action Tracker'},{k:'about',n:'About',i:'info',t:'About this project'}];
+const card=(t,inner,cls='')=>`<section class="card ${cls}"><div class="fr"><div class="in"></div></div><h2>${t}</h2>${inner}</section>`;
+const panel=(cls,rib,a,b)=>`<section class="panel ${cls}"><div class="fr"><div class="in"></div></div><div class="ribbon">${rib}</div><div class="pbody"><div id="${a}"></div><div class="tw" id="${b}"></div></div></section>`;
+
+/* ---------- chrome ---------- */
+function go(k){PAGE=k;Object.keys(F).forEach(x=>F[x]=null);if(isDept())F.dep=curDep();PICK=null;SORT={col:'dl',dir:1};render();scrollTo({top:0})}
+function nav(){$('#nav').innerHTML=PAGES.map(p=>`<button data-k="${esc(p.k)}">${ic(p.i)}${p.n}</button>`).join('');$('#nav').onclick=e=>{const b=e.target.closest('button');if(b)go(b.dataset.k)}}
+function chrome(){
+ document.querySelectorAll('#nav button').forEach(b=>{const on=b.dataset.k===PAGE;b.setAttribute('aria-pressed',on);on?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current')});
+ $('#ttl').textContent=PAGES.find(p=>p.k===PAGE).t;
+ const act=Object.keys(F).filter(k=>F[k]!=null&&!(k==='dep'&&isDept()));
+ const sub=isDept()?DSUB[curDep()]:PAGE==='overview'?'Click any bar, block or cell to filter every chart.':PAGE==='tracker'?'Open actions that have a stated deadline.':'';
+ $('#barl').innerHTML=act.length?act.map(k=>`<span class="chip">${LBL[k]}: ${esc(k==='day'?fmtD({dlDate:F[k]}):F[k])}<button data-k="${k}" aria-label="Remove ${LBL[k]} filter">✕</button></span>`).join('')+`<button id="reset">Clear all</button>`:`<span class="hint">${sub}</span>`;
+ $('#barl').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='reset')Object.keys(F).forEach(k=>{if(!(k==='dep'&&isDept()))F[k]=null});else F[b.dataset.k]=null;PICK=null;render()};
+}
+function pop(){const pe=document.querySelector('.pop');if(pe)pe.style.visibility=(PAGE==='tracker'||PAGE==='about')?'hidden':'visible';
+ let p,icn,lab,txt=null;const R=rowsFor();
+ if(PAGE==='overview'){p=pct(R.filter(r=>r.st==='Actioned').length,R.length);icn='shield';lab='ACTIONED · ALL '+R.length}
+ else if(isDept()){p=pct(R.length,ROWS.length);icn=DICON[DEPS.indexOf(curDep())];lab='OF ALL CHANGES'}
+ else if(PAGE==='tracker'){const O=rowsFor().filter(r=>r.open&&r.dl!=null);p=pct(O.filter(r=>r.dl<0).length,O.length);icn='clock';lab='OVERDUE'}
+ else{p=100;icn='info';lab='DATA ANALYST';txt='BP'}
+ const S=204,c=S/2,r0=68,r1=47;const hex=r=>[0,1,2,3,4,5].map(k=>{const a=(-90+60*k)*Math.PI/180;return (c+r*Math.cos(a)).toFixed(1)+','+(c+r*Math.sin(a)).toFixed(1)}).join(' ');
+ const a=d3.arc().innerRadius(r1).outerRadius(r0).cornerRadius(5).startAngle(0);
+ $('#pop').innerHTML=`<svg viewBox="0 0 ${S} ${S}" width="${S}" height="${S}" style="display:block;margin:auto"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--gold3)"/><stop offset="1" stop-color="var(--gold)"/></linearGradient><radialGradient id="rc" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="var(--navy3)"/><stop offset="1" stop-color="var(--navy)"/></radialGradient><linearGradient id="hx" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--navy2)"/><stop offset="1" stop-color="var(--navy0)"/></linearGradient></defs><polygon points="${hex(100)}" fill="#fff" stroke="#fff" stroke-width="8" stroke-linejoin="round"/><polygon points="${hex(93)}" fill="var(--gold)" stroke="var(--gold)" stroke-width="3" stroke-linejoin="round"/><polygon points="${hex(87)}" fill="url(#hx)" stroke="url(#hx)" stroke-width="3" stroke-linejoin="round"/><g transform="translate(${c},${c})"><path d="${a.endAngle(2*Math.PI)()}" fill="var(--navy2)"/><path d="${a.endAngle(2*Math.PI*p/100)()}" fill="url(#rg)"/><circle r="${r1-4}" fill="url(#rc)"/></g>${txt?`<text x="${c}" y="${c+9}" text-anchor="middle" style="fill:var(--gold2);font:800 26px var(--display)">${txt}</text>`:`<g transform="translate(${c-14},${c-34})" style="color:var(--gold2)">${ic(icn,28)}</g><text x="${c}" y="${c+22}" text-anchor="middle" style="fill:#fff;font:800 22px var(--display)">${p}%</text>`}</svg><small>${lab}</small>`;
+}
+
+/* ---------- reusable charts ---------- */
+function combo(host,o){
+ const W=host.clientWidth||340,H=o.H||250,m={l:8,r:10,t:8,b:o.xh||34},D=FLAT?0:7,n=o.cats.length;
+ if(!n){host.innerHTML='<div class="hint" style="padding:30px;text-align:center">No data for this filter.</div>';return}
+ const x=d3.scaleBand().domain(o.cats).range([m.l,W-m.r-D]).padding(.36),mx=Math.max(1,...o.vals);const band=o.rates?78:0;const base=H-m.b;
+ const y=d3.scaleLinear().domain([0,mx]).range([base,m.t+band+14]);
+ let s=`<defs><linearGradient id="${o.id}f" x1="0" x2="1"><stop offset="0" stop-color="var(--navy3)"/><stop offset="1" stop-color="var(--navy)"/></linearGradient></defs>`;
+ o.cats.forEach((c,i)=>{const bx=x(c),bw=x.bandwidth(),by=y(o.vals[i]),h=Math.max(2,base-by);const op=o.sel==null||o.sel===c?1:.38;const inside=h>20;
+  s+=`<g class="hit" data-c="${esc(c)}" opacity="${op}" tabindex="0" role="button" aria-label="${esc(c)} ${o.vals[i]}"><rect x="${bx}" y="${by}" width="${bw}" height="${h}" fill="url(#${o.id}f)"/><polygon points="${bx},${by} ${bx+D},${by-D} ${bx+bw+D},${by-D} ${bx+bw},${by}" fill="var(--bt)"/><polygon points="${bx+bw},${by} ${bx+bw+D},${by-D} ${bx+bw+D},${base-D} ${bx+bw},${base}" fill="var(--bs)"/>${o.sel===c?`<rect x="${bx-2}" y="${by-2}" width="${bw+4}" height="${h+4}" fill="none" stroke="var(--gold)" stroke-width="2.5" rx="2"/>`:''}<text x="${bx+bw/2}" y="${inside?base-7:by-D-4}" text-anchor="middle" style="fill:${inside?'#fff':'var(--navy)'};font:700 11px var(--body)">${o.vals[i]}</text></g><text x="${bx+bw/2+D/2}" y="${base+16}" text-anchor="middle" style="font:600 10.5px var(--body)">${esc(o.lab?o.lab[i]:c)}</text>`});
+ if(o.rates){const lo=Math.max(0,Math.min(...o.rates)-14),hi=Math.max(...o.rates)+8;const ry=d3.scaleLinear().domain([lo,hi||1]).range([m.t+band-8,m.t+22]);
+  const pts=o.rates.map((r,i)=>[x(o.cats[i])+x.bandwidth()/2+D/2,ry(r)]);
+  s+=`<text x="${m.l}" y="${m.t+8}" style="font:600 9.5px var(--body);fill:var(--mut)">${esc(o.rname)} rate →</text><path d="${d3.line().curve(d3.curveMonotoneX)(pts)}" fill="none" stroke="var(--gold)" stroke-width="3" stroke-linecap="round" style="filter:drop-shadow(0 2px 2px rgba(13,24,56,.35))"/>`;
+  pts.forEach((p,i)=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#fff" stroke="var(--gold)" stroke-width="2.5"/><rect x="${p[0]-17}" y="${p[1]-25}" width="34" height="17" rx="3" fill="var(--pill)"/><text x="${p[0]}" y="${p[1]-12.5}" text-anchor="middle" style="fill:var(--pillt);font:700 10.5px var(--body)">${o.rates[i]}%</text>`})}
+ host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}" height="${H}">${s}</svg>`;
+ host.querySelectorAll('.hit').forEach(g=>{const c=g.dataset.c,i=o.cats.indexOf(c);key(g,()=>o.click(c));g.onmousemove=e=>showTip(e,`<b>${esc(c)}</b><br>${o.vals[i]} ${o.unit}${o.rates?` · ${o.rates[i]}% ${o.rname}`:''}`);g.onmouseleave=hideTip});
+}
+function tile(host,big,capHtml,a,b,keyF){
+ const tot=a.n+b.n||1,S=104,r0=44,r1=30;const arc=d3.arc().innerRadius(r1).outerRadius(r0).padAngle(.02);const ang=a.n/tot*2*Math.PI;
+ host.innerHTML=`<div class="ptile"><div class="big">${big}</div><div class="cap">${capHtml}</div><svg viewBox="0 0 ${S} ${S}" width="${S}" height="${S}" style="margin:auto;display:block"><g transform="translate(${S/2},${S/2})"><path d="${arc({startAngle:0,endAngle:ang})}" fill="var(--navy2)"/><path d="${arc({startAngle:ang,endAngle:2*Math.PI})}" fill="var(--mute)"/><g transform="translate(-14,-12)" style="color:var(--navy2)">${ic(a.icon,14)}</g><g transform="translate(0,-12)" style="color:#7d8a86">${ic(b.icon,14)}</g><text y="14" text-anchor="middle" style="font:700 10.5px var(--body)">${pct(a.n,tot)}%</text></g></svg><div class="split"><button data-v="${esc(a.name)}" aria-pressed="${F[keyF]===a.name}">${a.name}</button><button data-v="${esc(b.name)}" aria-pressed="${F[keyF]===b.name}">${b.name}</button></div><div style="display:flex;justify-content:space-between;font:600 11px var(--body);padding:0 4px"><span>${a.n}</span><span>${b.n}</span></div></div>`;
+ host.querySelectorAll('.split button').forEach(bt=>bt.onclick=()=>toggle(keyF,bt.dataset.v));
+}
+function profilePanels(){
+ const RA=rowsFor(['imp']);const sA=IMPS.map(i=>RA.filter(r=>r.imp===i));
+ combo($('#pA'),{id:'xa',cats:IMPS,vals:sA.map(a=>a.length),rates:sA.map(a=>pct(a.filter(r=>r.st==='Actioned').length,a.length)),rname:'Actioned',unit:'changes',sel:F.imp,H:262,click:v=>toggle('imp',v)});
+ const R=rowsFor(),hi=R.filter(r=>r.imp==='High').length,RT=rowsFor(['act']),yes=RT.filter(r=>r.act==1).length;
+ tile($('#tA'),R.length,`<b>${pct(hi,R.length)}%</b> are High impact`,{n:yes,name:'Action required',icon:'flag'},{n:RT.length-yes,name:'Info only',icon:'info'},'act');
+ const RB=rowsFor(['bk']).filter(r=>r.open&&r.dl!=null),sB=BK.map(b=>RB.filter(r=>r.bk===b));
+ combo($('#pB'),{id:'xb',cats:BK,vals:sB.map(a=>a.length),rates:sB.map(a=>pct(a.filter(r=>r.imp==='High').length,a.length)),rname:'High impact',unit:'open actions',sel:F.bk,H:262,xh:40,lab:['Overdue','≤ 30 days','31-90 d','90+ days'],click:v=>toggle('bk',v)});
+ const O=rowsFor().filter(r=>r.open),od=O.filter(r=>r.dl!=null&&r.dl<0).length,hiO=O.filter(r=>r.imp==='High').length;
+ tile($('#tB'),O.length,`<b>${pct(od,O.length)}%</b> already overdue`,{n:hiO,name:'High',icon:'alert'},{n:O.length-hiO,name:'Other',icon:'doc'},'imp');
+}
+function treemap(host,H0){
+ const R=rowsFor(['tp']);const cnt=d3.rollup(R.flatMap(r=>r.tp).filter(t=>!isDept()||(DEPMAP[t]||[]).includes(curDep())),v=>v.length,t=>t);const items=[...cnt].map(([name,value])=>({name,value})).sort((a,b)=>b.value-a.value);
+ if(!items.length){host.innerHTML='<div class="hint" style="padding:30px;text-align:center">No data for this filter.</div>';return items}
+ const W=host.clientWidth||320,H=H0;const root=d3.hierarchy({children:items}).sum(d=>d.value);d3.treemap().size([W,H]).paddingInner(3).round(true)(root);
+ const col=d3.scaleLinear().domain([0,items[0].value]).range([cv('--tm0'),cv('--tm1')]);
+ host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="tmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#000" stop-opacity=".1"/></linearGradient></defs>`+root.leaves().map((l,i)=>{const d=l.data,w=l.x1-l.x0,h=l.y1-l.y0,on=F.tp==null||F.tp===d.name;
+  return `<g class="tm" data-c="${esc(d.name)}" opacity="${on?1:.4}" tabindex="0" role="button" aria-label="${esc(d.name)} ${d.value}"><clipPath id="cp${i}"><rect x="${l.x0}" y="${l.y0}" width="${w}" height="${h}" rx="4"/></clipPath><rect x="${l.x0}" y="${l.y0}" width="${w}" height="${h}" rx="4" fill="${col(d.value)}" ${F.tp===d.name?'stroke="var(--navy)" stroke-width="3"':''}/><rect x="${l.x0}" y="${l.y0}" width="${w}" height="${h}" rx="4" fill="url(#tmg)"/><g clip-path="url(#cp${i})"><text x="${l.x0+8}" y="${l.y0+17}" style="font:700 ${w>110?12:10.5}px var(--body);fill:var(--navy)">${w>44?esc(d.name.length*(w>110?7:6.2)>w-12?d.name.slice(0,Math.max(3,Math.floor((w-12)/(w>110?7:6.2))-1))+'…':d.name):''}</text><text x="${l.x0+8}" y="${l.y1-8}" style="font:800 ${w>110&&h>70?20:13}px var(--display);fill:var(--navy)">${d.value}</text></g></g>`}).join('')+'</svg>';
+ host.querySelectorAll('.tm').forEach(g=>{key(g,()=>toggle('tp',g.dataset.c));g.onmousemove=e=>showTip(e,`<b>${esc(g.dataset.c)}</b><br>${cnt.get(g.dataset.c)} changes`);g.onmouseleave=hideTip});
+ return items;
+}
+
+function flow(host,H){
+ const R=rowsFor(['tp']);const ok=t=>!isDept()||(DEPMAP[t]||[]).includes(curDep());
+ const recs=R.flatMap(r=>r.tp.filter(ok).map(t=>({t,i:r.imp,s:r.st})));
+ if(!recs.length){host.innerHTML='<div class="hint" style="padding:30px;text-align:center">No data for this filter.</div>';return []}
+ const W=host.clientWidth||320,nw=14,pad=8,top=34;
+ const tcount=d3.rollup(recs,v=>v.length,r=>r.t);const T=[...tcount].map(([name,value])=>({name,value})).sort((a,b)=>b.value-a.value);
+ const sts=[...new Set(recs.map(r=>r.s))].sort((a,b)=>(a==='Actioned'?-1:b==='Actioned'?1:a<b?-1:1));
+ const cols=[T.map(t=>t.name),IMPS.filter(i=>recs.some(r=>r.i===i)),sts];
+ const tot=recs.length,avail=H-top-8;
+ const KK=Math.min((avail-pad*(cols[0].length-1))/tot,(avail-18*Math.max(cols[1].length-1,cols[2].length-1))/tot);
+ const nodes=[];const pos={};
+ cols.forEach((names,ci)=>{const cnt=n=>recs.filter(r=>(ci===0?r.t:ci===1?r.i:r.s)===n).length;const gap=ci===0?pad:18;const k=KK;let y=top;
+  names.forEach(n=>{const v=cnt(n),h=Math.max(6,v*k);pos[ci+'|'+n]={ci,n,v,y,h,k,oy:y,iy:y};y+=h+gap;nodes.push(pos[ci+'|'+n])})});
+ const x=[0,(W-nw)/2,W-nw],labW=[0,0,0];
+ const links=[];const lk=(a,b,fa,fb)=>{d3.rollup(recs,v=>v.length,fa,fb).forEach((m,ka)=>m.forEach((v,kb)=>links.push({a:pos[a+'|'+ka],b:pos[b+'|'+kb],v,t:a===0?ka:null,i:a===0?null:ka,ci:a})))};
+ lk(0,1,r=>r.t,r=>r.i);lk(1,2,r=>r.i,r=>r.s);
+ // topic->impact and impact->status; stack links in node order
+ const order=(arr,ci)=>arr.filter(l=>l.ci===ci);
+ const place=ci=>{const L=order(links,ci);
+  nodes.filter(n=>n.ci===ci).forEach(n=>{L.filter(l=>l.a===n).sort((p,q)=>p.b.y-q.b.y).forEach(l=>{l.w=l.v*n.k;l.y0=n.oy+l.w/2;n.oy+=l.w})});
+  nodes.filter(n=>n.ci===ci+1).forEach(n=>{L.filter(l=>l.b===n).sort((p,q)=>p.a.y-q.a.y).forEach(l=>{l.y1=n.iy+l.w/2;n.iy+=l.w})})};
+ place(0);
+ // middle column: outgoing links use their own scale
+ nodes.filter(n=>n.ci===1).forEach(n=>{n.oy=n.y});place(1);
+ const lx=ci=>x[ci]+nw;
+ const path=l=>{const x0=lx(l.ci),x1=x[l.ci+1],m=(x0+x1)/2;return `M${x0},${l.y0}C${m},${l.y0} ${m},${l.y1} ${x1},${l.y1}`};
+ const sel=F.tp,selI=F.imp;
+ const linkOn=l=>(sel==null||(l.ci===0?l.t===sel:true))&&(selI==null||(l.ci===0?l.b.n===selI:l.a.n===selI));
+ const col=n=>n.ci===0?'var(--navy3)':n.ci===1?IMC[n.n]:(n.n==='Actioned'?'var(--gold)':'var(--navy)');
+ let g='<defs>'+'</defs>';
+ g+=links.map((l,i)=>{const c=l.ci===0?IMC[l.b.n]:(l.b.n==='Actioned'?'var(--gold)':'var(--navy3)');return `<path class="fl" data-ci="${l.ci}" data-k="${esc(l.ci===0?l.a.n:l.b.n)}" d="${path(l)}" fill="none" stroke="${c}" stroke-width="${Math.max(1,l.w)}" stroke-opacity="${linkOn(l)?.5:.12}"/>`}).join('');
+ g+=nodes.map(n=>{const on=n.ci===0?(sel==null||sel===n.n):n.ci===1?(selI==null||selI===n.n):true;const xx=x[n.ci];
+  const lab=n.ci===0?`<text x="${xx+nw+6}" y="${n.y+n.h/2+4}" style="font:600 11px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round">${esc(n.n)} <tspan style="font-weight:800">${n.v}</tspan></text>`:n.ci===1?`<text x="${xx+nw/2}" y="${n.y-5}" text-anchor="middle" style="font:700 11px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3px">${n.n}</text>`:`<text x="${xx-6}" y="${n.y+n.h/2+4}" text-anchor="end" style="font:600 11px var(--body);fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round">${n.n} <tspan style="font-weight:800">${n.v}</tspan></text>`;
+  return `<g class="nd" data-ci="${n.ci}" data-n="${esc(n.n)}" opacity="${on?1:.4}" tabindex="0" role="button" aria-label="${esc(n.n)} ${n.v}" style="cursor:pointer"><rect x="${xx}" y="${n.y}" width="${nw}" height="${n.h}" rx="3" fill="${col(n)}" ${(n.ci===0&&sel===n.n)||(n.ci===1&&selI===n.n)?'stroke="var(--gold)" stroke-width="2.5"':''}/>${lab}</g>`}).join('');
+ g+=`<text x="0" y="12" style="font:700 10px var(--body);fill:var(--mut)">TOPIC</text><text x="${W/2}" y="12" text-anchor="middle" style="font:700 10px var(--body);fill:var(--mut)">IMPACT</text><text x="${W}" y="12" text-anchor="end" style="font:700 10px var(--body);fill:var(--mut)">STATUS</text>`;
+ host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}" height="${H}">${g}</svg>`;
+ host.querySelectorAll('.nd').forEach(e=>{key(e,()=>e.dataset.ci!=='2'&&toggle(e.dataset.ci==='0'?'tp':e.dataset.ci==='1'?'imp':null,e.dataset.n));const n=pos[e.dataset.ci+'|'+e.dataset.n];e.onmousemove=ev=>showTip(ev,`<b>${esc(n.n)}</b><br>${n.v} topic mentions (${pct(n.v,tot)}%)`);e.onmouseleave=hideTip});
+ host.querySelectorAll('.fl').forEach(e=>{e.onmousemove=ev=>showTip(ev,'Flow: '+esc(e.dataset.k));e.onmouseleave=hideTip});
+ return T;
+}
+
+function sun(host,H){
+ const R=rowsFor(['tp']);const ok=t=>!isDept()||(DEPMAP[t]||[]).includes(curDep());
+ const recs=R.flatMap(r=>r.tp.filter(ok).map(t=>({t,i:r.imp})));
+ if(!recs.length){host.innerHTML='<div class="hint" style="padding:30px;text-align:center">No data for this filter.</div>';return []}
+ const W=host.clientWidth||320,S=Math.min(W,Math.max(300,H-170)),cx=W/2,cy=S/2,Rr=S/2-8;
+ const tc=d3.rollup(recs,v=>v.length,r=>r.t);const T=[...tc].map(([name,value])=>({name,value})).sort((a,b)=>b.value-a.value);
+ const tot=recs.length,n=T.length;const tcol=d3.scaleLinear().domain([0,n-1||1]).range([cv('--navy2'),cv('--gold')]).interpolate(d3.interpolateRgb);
+ const colT=nm=>tcol(T.findIndex(t=>t.name===nm));
+ const pie=d3.pie().sort(null).value(d=>d.value).padAngle(.012);const arcs=pie(T);
+ const a1=d3.arc().innerRadius(Rr*.34).outerRadius(Rr*.66).cornerRadius(4),a2=d3.arc().innerRadius(Rr*.69).outerRadius(Rr).cornerRadius(4);
+ let g=`<defs><radialGradient id="sg"><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></radialGradient></defs><g transform="translate(${cx},${cy})">`;
+ arcs.forEach(A=>{const t=A.data.name,on=F.tp==null||F.tp===t;
+  g+=`<g class="sb" data-t="${esc(t)}" opacity="${on?1:.35}" tabindex="0" role="button" aria-label="${esc(t)} ${A.data.value}" style="cursor:pointer"><path d="${a1(A)}" fill="${colT(t)}" ${F.tp===t?'stroke="var(--gold)" stroke-width="3"':'stroke="#fff" stroke-width="1"'}/><path d="${a1(A)}" fill="url(#sg)"/>`;
+  const frac=A.data.value/tot;if(frac>.07){const [x,y]=a1.centroid(A);g+=`<text x="${x}" y="${y+4}" text-anchor="middle" style="font:800 12px var(--body);fill:#fff;pointer-events:none">${Math.round(frac*100)}%</text>`}
+  g+='</g>';
+  const ic=d3.rollup(recs.filter(r=>r.t===t),v=>v.length,r=>r.i);let a0=A.startAngle,span=A.endAngle-A.startAngle-.02;let acc=A.startAngle+.01;
+  IMPS.forEach(im=>{const v=ic.get(im)||0;if(!v)return;const w=span*v/A.data.value;const B={startAngle:acc,endAngle:acc+w,padAngle:.01};acc+=w;const onI=on&&(F.imp==null||F.imp===im);
+   g+=`<path class="so" data-t="${esc(t)}" data-i="${im}" d="${a2(B)}" fill="${IMC[im]}" opacity="${onI?1:.3}" ${F.imp===im?'stroke="var(--gold)" stroke-width="2"':'stroke="#fff" stroke-width=".8"'} style="cursor:pointer"/>`})});
+ g+=`<circle r="${Rr*.3}" fill="var(--navy)"/><text id="sc1" y="-2" text-anchor="middle" style="font:800 26px var(--display);fill:#fff">${tot}</text><text id="sc2" y="17" text-anchor="middle" style="font:600 10px var(--body);fill:var(--gold2)">topic mentions</text></g>`;
+ host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${S}" height="${S}">${g}</svg><div class="sbleg" style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:10px;font-size:12px">${T.map(t=>`<button class="sbl" data-t="${esc(t.name)}" style="display:flex;align-items:center;gap:6px;background:none;border:0;padding:2px 0;font:inherit;cursor:pointer;opacity:${F.tp==null||F.tp===t.name?1:.45};text-align:left"><i style="width:11px;height:11px;border-radius:3px;background:${colT(t.name)};flex:none"></i>${esc(t.name)} <b style="margin-left:auto">${t.value}</b></button>`).join('')}</div><div class="leg" style="margin-top:8px"><span><i style="background:var(--gold)"></i>High</span><span><i style="background:var(--navy3)"></i>Medium</span><span><i style="background:var(--mute)"></i>Low</span><span style="color:var(--mut)">inner = topic · outer = impact</span></div>`;
+ host.querySelectorAll('.sb,.sbl').forEach(e=>{key(e,()=>toggle('tp',e.dataset.t))});
+ host.querySelectorAll('.sb').forEach(e=>{const t=e.dataset.t;e.onmousemove=ev=>{showTip(ev,`<b>${esc(t)}</b><br>${tc.get(t)} mentions (${pct(tc.get(t),tot)}%)`)};e.onmouseleave=hideTip});
+ host.querySelectorAll('.so').forEach(e=>{e.onclick=()=>toggle('imp',e.dataset.i);e.onmousemove=ev=>{const c=recs.filter(r=>r.t===e.dataset.t&&r.i===e.dataset.i).length;showTip(ev,`<b>${esc(e.dataset.t)}</b> · ${e.dataset.i}<br>${c} mentions`)};e.onmouseleave=hideTip});
+ return T;
+}
+function sortRows(R){const k=SORT.col,d=SORT.dir;const f={dl:r=>r.dl==null?1e9:r.dl,title:r=>r.title,src:r=>r.src,imp:r=>IMPS.indexOf(r.imp),st:r=>r.st}[k];return R.slice().sort((a,b)=>{const x=f(a),y=f(b);return (x<y?-1:x>y?1:0)*d})}
+function table(host,R,limit=60){
+ const cols=[['dl','DEADLINE'],['title','CHANGE'],['src','AGENCY'],['imp','IMPACT'],['st','STATUS']];R=sortRows(R);
+ const dls=r=>r.dl<0?`<span class="dl o">${-r.dl} d overdue</span>`:`<span class="dl ${r.dl<=30?'s':'k'}">${r.dl} d left</span>`;
+ host.innerHTML=R.length?`<table class="tbl2"><thead><tr>${cols.map(([k,n])=>`<th data-k="${k}" ${SORT.col===k?`aria-sort="${SORT.dir>0?'ascending':'descending'}"`:''} tabindex="0">${n}${SORT.col===k?(SORT.dir>0?' ▲':' ▼'):''}</th>`).join('')}</tr></thead><tbody>${R.slice(0,limit).map(r=>`<tr class="r ${PICK===r.id?'sel':''}" data-id="${r.id}"><td>${fmtD(r)}<br>${dls(r)}</td><td>${esc(r.title)}</td><td>${r.src}</td><td><span class="pill ${r.imp}">${r.imp}</span></td><td>${r.st}</td></tr>`).join('')}</tbody></table>`:'<div class="hint" style="padding:26px;text-align:center">No open actions match these filters.</div>';
+ host.querySelectorAll('th').forEach(th=>key(th,()=>{SORT=SORT.col===th.dataset.k?{col:th.dataset.k,dir:-SORT.dir}:{col:th.dataset.k,dir:1};draw()}));
+ host.querySelectorAll('tr.r').forEach(tr=>tr.onclick=()=>{PICK=+tr.dataset.id;draw()});
+}
+function detail(host){const p=PICK!=null?ROWS[PICK]:null;host.innerHTML=p?`<b>${esc(p.title)}</b><span>${p.src} · ${p.imp} impact · ${p.st} · deadline ${p.dlDate?fmtD(p):'none stated'}${p.dl!=null?` (${p.dl<0?-p.dl+' days overdue':p.dl+' days left'})`:''}<br>Topics: ${p.tp.join(', ')} → ${p.dep.join(', ')}</span>`:'<span>Select a row to read the change.</span>'}
+
+/* ---------- Overview ---------- */
+function viewOverview(){return `<div class="top">${panel('pa','Change profile','pA','tA')}${panel('pb','Open actions profile','pB','tB')}</div>
+<div class="ins" id="tk" style="margin:14px 0 4px;display:flex;flex-wrap:wrap;gap:6px 22px"></div>
+<div class="bot"><div class="col">${card('Which agency sends the most high-impact changes?','<div class="ins" id="iC"></div><div id="cC"></div>')}${card('Are high-impact changes being actioned?','<div class="ins" id="iD"></div><div id="cD"></div>')}</div>
+${card('Topic mix and impact','<div class="ins" id="iE"></div><div id="cE"></div>')}
+<div class="col">${card('Where do changes land?','<div class="ins" id="iF"></div><div id="cF"></div><div class="leg"><span><i style="background:var(--tm0)"></i>fewer</span><span><i style="background:var(--tm1)"></i>more changes</span></div>')}${card('Next deadlines','<div class="tw2" id="cG" style="max-height:260px"></div>')}</div></div>`}
+function agency(){
+ const R=rowsFor(['src']);const ov=pct(R.filter(r=>r.imp==='High').length,R.length);
+ const by=AGS.map(a=>R.filter(r=>r.src===a)),rates=by.map(a=>pct(a.filter(r=>r.imp==='High').length,a.length));
+ const top=AGS.map((a,i)=>[a,rates[i],by[i].length]).filter(x=>x[2]>=8).sort((a,b)=>b[1]-a[1])[0];
+ $('#iC').innerHTML=top?`<span><b>${top[0]}</b> changes are High impact ${top[1]}% of the time (n=${top[2]}), against ${ov}% across all ${R.length}.</span>`:'<span>No data for this filter.</span>';
+ combo($('#cC'),{id:'xc',cats:AGS,lab:AGS.map(a=>($('#cC').clientWidth<460?AHM:ASH)[a]),vals:by.map(a=>a.length),rates,rname:'High impact',unit:'changes',sel:F.src,H:262,xh:26,click:v=>toggle('src',v)});
+}
+function hbar(){
+ const R=rowsFor(['imp']);const rows=IMPS.map(i=>{const a=R.filter(r=>r.imp===i);return{i,n:a.length,p:pct(a.filter(r=>r.st==='Actioned').length,a.length)}});
+ const hi=rows[0],lo=rows[2];
+ $('#iD').innerHTML=hi.n?`<span>Only <b>${hi.p}%</b> of High-impact changes (n=${hi.n}) are actioned, against ${lo.p}% of Low-impact ones.</span>`:'<span>No data for this filter.</span>';
+ const host=$('#cD'),W=host.clientWidth||340,H=124,lw=64,bh=20,D=FLAT?0:5;let s='<defs><linearGradient id="hb" x1="0" x2="1"><stop offset="0" stop-color="var(--navy3)"/><stop offset="1" stop-color="var(--navy)"/></linearGradient></defs>';
+ const x=d3.scaleLinear().domain([0,Math.max(50,...rows.map(r=>r.p))]).range([0,W-lw-70]);
+ rows.forEach((r,k)=>{const y=10+k*38,on=F.imp==null||F.imp===r.i,w=Math.max(3,x(r.p));
+  s+=`<g class="hit" data-c="${r.i}" opacity="${on?1:.4}" tabindex="0" role="button"><text x="${lw-8}" y="${y+bh/2+4}" text-anchor="end" style="font-weight:600">${r.i}</text><rect x="${lw}" y="${y}" width="${w}" height="${bh}" fill="url(#hb)"/><polygon points="${lw},${y} ${lw+D},${y-D} ${lw+w+D},${y-D} ${lw+w},${y}" fill="var(--bt)"/><polygon points="${lw+w},${y} ${lw+w+D},${y-D} ${lw+w+D},${y+bh-D} ${lw+w},${y+bh}" fill="var(--bs)"/><text x="${lw+w+D+6}" y="${y+bh/2+4}" style="font:700 11px var(--body)">${r.p}%</text></g>`});
+ host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}" height="${H}">${s}</svg>`;
+ host.querySelectorAll('.hit').forEach(g=>{key(g,()=>toggle('imp',g.dataset.c));const r=rows.find(q=>q.i===g.dataset.c);g.onmousemove=e=>showTip(e,`<b>${r.i}</b><br>${r.p}% actioned of ${r.n}`);g.onmouseleave=hideTip});
+}
+function heat(){
+ const R=rowsFor(['dep','src']);const M=DEPS.map(d=>AGS.map(a=>R.filter(r=>r.dep.includes(d)&&r.src===a).length));
+ const tot=DEPS.map(d=>R.filter(r=>r.dep.includes(d)).length);const bi=tot.indexOf(Math.max(...tot));const ba=AGS.map((a,j)=>M[bi][j]);const bj=ba.indexOf(Math.max(...ba));
+ $('#iF').innerHTML=tot[bi]?`<span><b>${DEPS[bi]}</b> receives the most changes (${tot[bi]}); its heaviest source is <b>${AGS[bj]}</b> with ${ba[bj]}.</span>`:'<span>No data for this filter.</span>';
+ const host=$('#cF'),W=host.clientWidth||320,lw=92,cw=(W-lw)/6,rh=40,H=24+DEPS.length*rh;const mx=Math.max(1,...M.flat());const col=d3.scaleLinear().domain([0,mx]).range([cv('--tm0'),cv('--tm1')]);
+ let s=AGS.map((a,j)=>`<text x="${lw+j*cw+cw/2}" y="15" text-anchor="middle" style="font:700 11px var(--body)">${AHM[a]}</text>`).join('');
+ DEPS.forEach((d,i)=>{s+=`<text x="${lw-6}" y="${24+i*rh+rh/2+3}" text-anchor="end" style="font:600 12px var(--body);${F.dep===d?'fill:var(--pillt)':''}">${DSH[d]}</text>`;
+  AGS.forEach((a,j)=>{const v=M[i][j],on=(F.dep==null||F.dep===d)&&(F.src==null||F.src===a);
+   s+=`<g class="hm" data-d="${esc(d)}" data-a="${esc(a)}" opacity="${on?1:.4}"><rect x="${lw+j*cw+1.5}" y="${24+i*rh+1.5}" width="${cw-3}" height="${rh-3}" rx="4" fill="${v?col(v):'#e9efec'}"/>${v?`<text x="${lw+j*cw+cw/2}" y="${24+i*rh+rh/2+4}" text-anchor="middle" style="font:700 13px var(--body);fill:${v/mx>.6?'#fff':'var(--navy)'}">${v}</text>`:''}</g>`})});
+ host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}" height="${H}">${s}</svg>`;
+ host.querySelectorAll('.hm').forEach(g=>{g.onclick=()=>{const d=g.dataset.d,a=g.dataset.a;if(F.dep===d&&F.src===a){F.dep=null;F.src=null}else{F.dep=d;F.src=a}render()};g.onmousemove=e=>showTip(e,`<b>${esc(g.dataset.d)}</b> × ${esc(g.dataset.a)}`);g.onmouseleave=hideTip});
+}
+function takeaways(){const R=rowsFor(),O=R.filter(r=>r.open),hi=R.filter(r=>r.imp==='High'),od=O.filter(r=>r.dl!=null&&r.dl<0).length;
+ const t=d3.rollup(R.flatMap(r=>r.tp),v=>v.length,x=>x),tp=[...t].sort((a,b)=>b[1]-a[1])[0];
+ $('#tk').innerHTML=R.length?`<span><b>Key takeaways</b></span><span>1 · ${pct(hi.length,R.length)}% of ${R.length} changes are High impact; only ${pct(hi.filter(r=>r.st==='Actioned').length,hi.length)}% of those are actioned.</span><span>2 · ${od} of ${O.length} open actions are overdue.</span><span>3 · ${tp?tp[0]+' is the busiest topic ('+tp[1]+').':''}</span>`:''}
+function deadlinesList(){
+ const R=rowsFor().filter(r=>r.open&&r.dl!=null&&r.dl>=0).sort((a,b)=>a.dl-b.dl).slice(0,8);
+ $('#cG').innerHTML=R.length?R.map(r=>`<div class="row"><span class="d">${fmtD(r)}</span><span>${esc(r.title)}<small>${r.src} · ${r.dl} days left</small></span><span class="pill ${r.imp}">${r.imp}</span></div>`).join(''):'<div class="hint" style="padding:16px;text-align:center">No upcoming deadlines for this filter.</div>';
+}
+function drawOverview(){
+ profilePanels();agency();hbar();heat();deadlinesList();takeaways();
+ const wide=innerWidth>1180;const L=document.querySelector('.bot .col');
+ const fit=()=>{if(wide){$('#cG').style.maxHeight='140px';const lh=Math.max(...[...document.querySelectorAll('.bot .col')].map(c=>c.offsetHeight));const heatC=$('#cF').closest('.card').offsetHeight;$('#cG').style.maxHeight=Math.max(150,lh-heatC-92)+'px'}};
+ $('#cE').innerHTML='';fit();const lh=Math.max(...[...document.querySelectorAll('.bot .col')].map(c=>c.offsetHeight));const cardE=$('#cE').closest('.card');
+ $('#cE').innerHTML='';const insH=($('#cE').getBoundingClientRect().top-cardE.getBoundingClientRect().top)+20;
+ const H=wide?Math.max(300,lh-insH):Math.max(360,($('#cE').clientWidth||320)*1.05);
+ const items=sun($('#cE'),H);const R=rowsFor(['tp']);const all=items.reduce((s,x)=>s+x.value,0),t3=items.slice(0,3).reduce((s,x)=>s+x.value,0);
+ $('#iE').innerHTML=items.length?`<span><b>${items[0].name}</b> drives ${items[0].value} changes (${pct(items[0].value,R.length)}% of the total). The top three topics make up ${pct(t3,all)}% of the workload.</span>`:'<span>No data for this filter.</span>';
+}
+
+/* ---------- Department page ---------- */
+function viewDept(){return `<div class="top">${panel('pa','Change profile','pA','tA')}${panel('pb','Deadline profile','pB','tB')}</div>
+<div class="g3">${card('Which agencies send these changes?','<div class="ins" id="dI1"></div><div id="dC1"></div>')}${card('How has the volume moved by month?','<div class="ins" id="dI2"></div><div id="dC2"></div><div class="leg"><span><i style="background:var(--gold)"></i>High</span><span><i style="background:var(--navy3)"></i>Medium</span><span><i style="background:var(--mute)"></i>Low</span></div>')}${card('Which topics sit in this department?','<div class="ins" id="dI3"></div><div id="dC3"></div>')}</div>
+${card('Open actions with a deadline','<div class="detail" id="dDet"></div><div class="tw2" id="dTab"></div><p class="note2" id="dNote" style="margin-top:8px"></p>')}`}
+function drawDept(){
+ profilePanels();const dep=curDep();
+ const R=rowsFor(['src']);const by=AGS.map(a=>R.filter(r=>r.src===a)).map((v,i)=>({a:AGS[i],v})).filter(x=>x.v.length).sort((p,q)=>q.v.length-p.v.length);
+ $('#dI1').innerHTML=by.length?`<span><b>${by[0].a}</b> is the main source, with ${by[0].v.length} of ${R.length} changes (${pct(by[0].v.length,R.length)}%).</span>`:'<span>No data for this filter.</span>';
+ combo($('#dC1'),{id:'d1',cats:by.map(x=>x.a),lab:by.map(x=>($('#dC1').clientWidth<460?AHM:ASH)[x.a]),vals:by.map(x=>x.v.length),rates:by.map(x=>pct(x.v.filter(r=>r.imp==='High').length,x.v.length)),rname:'High impact',unit:'changes',sel:F.src,H:262,xh:26,click:v=>toggle('src',v)});
+ // monthly stacked area
+ const Rm=rowsFor(['imp']);const months=[...new Set(ROWS.map(r=>r.d.slice(0,7)))].sort();const data=months.map(m=>{const o={m};IMPS.forEach(i=>o[i]=Rm.filter(r=>r.d.slice(0,7)===m&&r.imp===i).length);return o});
+ const host=$('#dC2'),W=host.clientWidth||340,H=250,mg={l:26,r:10,t:10,b:26};const st=d3.stack().keys(['Low','Medium','High'])(data);
+ const x=d3.scalePoint().domain(months).range([mg.l,W-mg.r]);const mxv=Math.max(2,d3.max(st[2],d=>d[1]));const y=d3.scaleLinear().domain([0,mxv]).nice().range([H-mg.b,mg.t]);
+ const area=d3.area().x((d,i)=>x(months[i])).y0(d=>y(d[0])).y1(d=>y(d[1])).curve(d3.curveMonotoneX);
+ const cols={Low:'var(--mute)',Medium:'var(--navy3)',High:'var(--gold)'};
+ let s=y.ticks(4).map(t=>`<line x1="${mg.l}" x2="${W-mg.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)"/><text x="${mg.l-5}" y="${y(t)+3}" text-anchor="end" style="font-size:9px">${t}</text>`).join('');
+ s+=st.map(l=>`<path class="hit" data-c="${l.key}" d="${area(l)}" fill="${cols[l.key]}" fill-opacity="${F.imp&&F.imp!==l.key?.3:.92}" stroke="#fff" stroke-width="1"/>`).join('');
+ s+=months.map((m,i)=>i%2===0?`<text x="${x(m)}" y="${H-8}" text-anchor="middle" style="font-size:9px">${new Date(m+'-01').toLocaleString('en-AU',{month:'short'})}</text>`:'').join('');
+ s+=`<g id="xh" style="display:none"><line y1="${mg.t}" y2="${H-mg.b}" stroke="var(--navy)" stroke-dasharray="3 3"/></g>`;
+ host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}" height="${H}">${s}<rect x="${mg.l}" y="${mg.t}" width="${W-mg.l-mg.r}" height="${H-mg.t-mg.b}" fill="transparent" id="ov"/></svg>`;
+ host.querySelectorAll('path.hit').forEach(p=>key(p,()=>toggle('imp',p.dataset.c)));
+ const ov=host.querySelector('#ov'),xh=host.querySelector('#xh');ov.onmousemove=e=>{const r=ov.getBoundingClientRect();const px=(e.clientX-r.left)/r.width*(W-mg.l-mg.r)+mg.l;let bi=0;months.forEach((m,i)=>{if(Math.abs(x(m)-px)<Math.abs(x(months[bi])-px))bi=i});const d=data[bi];xh.style.display='';xh.firstChild.setAttribute('x1',x(months[bi]));xh.firstChild.setAttribute('x2',x(months[bi]));showTip(e,`<b>${new Date(months[bi]+'-01').toLocaleString('en-AU',{month:'long',year:'numeric'})}</b><br>High ${d.High} · Medium ${d.Medium} · Low ${d.Low}`)};ov.onmouseleave=()=>{xh.style.display='none';hideTip()};
+ const tot=data.map(d=>d.High+d.Medium+d.Low),pk=tot.indexOf(Math.max(...tot));
+ $('#dI2').innerHTML=Math.max(...tot)?`<span>Busiest month: <b>${new Date(months[pk]+'-01').toLocaleString('en-AU',{month:'long',year:'numeric'})}</b> with ${tot[pk]} changes.</span>`:'<span>No data for this filter.</span>';
+ // topics donut
+ const Rt=rowsFor(['tp']);const cnt=d3.rollup(Rt.flatMap(r=>r.tp).filter(t=>(DEPMAP[t]||[]).includes(dep)),v=>v.length,t=>t);const items=[...cnt].map(([name,value])=>({name,value})).sort((a,b)=>b.value-a.value);
+ const th=$('#dC3'),TW=th.clientWidth||320,TH=250;const tc=[cv('--navy'),cv('--gold'),cv('--navy3'),cv('--tm1'),cv('--mute'),cv('--bt')];
+ if(!items.length){th.innerHTML='<div class="hint" style="padding:30px;text-align:center">No data for this filter.</div>';$('#dI3').innerHTML='<span>No data for this filter.</span>'}else{
+  const tt=items.reduce((s,x)=>s+x.value,0);const arc=d3.arc().innerRadius(52).outerRadius(86).padAngle(.02).cornerRadius(3);const pie=d3.pie().value(d=>d.value).sort(null)(items);
+  let t2=`<g transform="translate(${TW/2},112)">`+pie.map((p,i)=>`<path class="hit" data-c="${esc(p.data.name)}" d="${arc(p)}" fill="${tc[i%tc.length]}" opacity="${F.tp&&F.tp!==p.data.name?.38:1}" ${F.tp===p.data.name?'stroke="var(--gold)" stroke-width="3"':''} tabindex="0" role="button"/>`).join('')+`<text text-anchor="middle" y="4" style="font:800 22px var(--display);fill:var(--navy)">${tt}</text><text text-anchor="middle" y="20" style="font-size:9.5px">topic mentions</text></g>`;
+  const lg=items.map((it,i)=>`<g transform="translate(${8+(i%2)*(TW/2)},${216+Math.floor(i/2)*16})"><rect width="9" height="9" rx="2" fill="${tc[i%tc.length]}"/><text x="14" y="8.5" style="font-size:10px">${esc(it.name)} ${it.value}</text></g>`).join('');
+  th.innerHTML=`<svg class="chart" viewBox="0 0 ${TW} ${230+Math.ceil(items.length/2)*16}" height="${230+Math.ceil(items.length/2)*16}">${t2}${lg}</svg>`;
+  th.querySelectorAll('.hit').forEach(p=>{key(p,()=>toggle('tp',p.dataset.c));const it=items.find(q=>q.name===p.dataset.c);p.onmousemove=e=>showTip(e,`<b>${esc(it.name)}</b><br>${it.value} changes (${pct(it.value,tt)}%)`);p.onmouseleave=hideTip});
+  $('#dI3').innerHTML=`<span><b>${items[0].name}</b> makes up ${pct(items[0].value,tt)}% of the topic mentions in ${dep}.</span>`}
+ const O=rowsFor().filter(r=>r.open);const T=O.filter(r=>r.dlDate);table($('#dTab'),T);detail($('#dDet'));
+ $('#dNote').textContent=`${O.length-T.length} more open action${O.length-T.length===1?'':'s'} in this view have no stated deadline.`;
+}
+
+/* ---------- Action tracker ---------- */
+function viewTracker(){return `<div class="g21">${card('Deadline calendar','<div class="ins" id="tI1"></div><div id="tCal"></div><div class="leg" id="tLeg"></div>')}${card('Deadline radar','<div class="ins" id="tI2"></div><div id="tBub"></div><div class="leg"><span><i style="background:var(--gold)"></i>High</span><span><i style="background:var(--navy3)"></i>Medium</span><span><i style="background:var(--mute)"></i>Low</span></div>')}</div>
+${card('All open actions with a deadline','<div class="fb" id="tFb"></div><div class="detail" id="tDet"></div><div class="tw2" id="tTab"></div>')}`}
+function drawTracker(){
+ const RC=rowsFor(['day']).filter(r=>r.open&&r.dlDate);const host=$('#tCal'),W=host.clientWidth||440;
+ const start=new Date(TODAY);start.setDate(start.getDate()-((start.getDay()+6)%7));const WK=17,cs=Math.min(24,(W-30)/WK),gap=3;
+ const by=d3.rollup(RC,v=>v.length,r=>r.dlDate);const mx=Math.max(1,...by.values(),1);const col=d3.scaleLinear().domain([0,mx]).range([cv('--tm0'),cv('--tm1')]);let s='';
+ ['M','T','W','T','F','S','S'].forEach((l,i)=>s+=`<text x="0" y="${20+i*(cs+gap)+cs*.7}" style="font-size:9px">${l}</text>`);
+ let lastM=-1,lastW=-9;
+ for(let w=0;w<WK;w++)for(let d=0;d<7;d++){const dt=new Date(start);dt.setDate(start.getDate()+w*7+d);const k=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;const n=by.get(k)||0;
+  if(d===0&&dt.getMonth()!==lastM){lastM=dt.getMonth();if(w-lastW>=3){lastW=w;s+=`<text x="${16+w*(cs+gap)}" y="10" style="font-size:9.5px">${dt.toLocaleString('en-AU',{month:'short'})}</text>`}}
+  const isT=dt.getTime()===TODAY.getTime();
+  s+=`<rect class="cell hm" x="${16+w*(cs+gap)}" y="${20+d*(cs+gap)}" width="${cs}" height="${cs}" rx="4" fill="${n?col(n):'#e9efec'}" ${F.day===k?'stroke="var(--navy)" stroke-width="2.5"':isT?'stroke="var(--pillt)" stroke-width="2"':''} data-k="${k}" data-n="${n}" style="cursor:${n?'pointer':'default'}"/>`}
+ host.innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${24+7*(cs+gap)}" height="${24+7*(cs+gap)}">${s}</svg>`;
+ host.querySelectorAll('.cell').forEach(c=>{c.onclick=()=>{if(+c.dataset.n||F.day===c.dataset.k)toggle('day',c.dataset.k)};c.onmousemove=e=>showTip(e,`<b>${fmtD({dlDate:c.dataset.k})}</b><br>${c.dataset.n} open action${c.dataset.n==='1'?'':'s'}`);c.onmouseleave=hideTip});
+ const ovd=rowsFor(['day']).filter(r=>r.open&&r.dl!=null&&r.dl<0).length,nxt=rowsFor().filter(r=>r.open&&r.dl!=null&&r.dl>=0).sort((a,b)=>a.dl-b.dl)[0];
+ $('#tI1').innerHTML=nxt?`<span>Next deadline: <b>${fmtD(nxt)}</b> (${nxt.dl} days). <b>${ovd}</b> open actions are already overdue.</span>`:'<span>No upcoming deadlines for this filter.</span>';
+ $('#tLeg').innerHTML=`<span><i style="background:var(--tm0)"></i>1 deadline</span><span><i style="background:var(--tm1)"></i>${mx>1?mx+' deadlines':'more'}</span><span><i style="background:transparent;border:2px solid var(--pillt)"></i>today</span>`;
+ // bubble
+ const R=rowsFor().filter(r=>r.open&&r.dl!=null);const bh=$('#tBub'),BW=bh.clientWidth||440,BH=262,m={l:74,r:10,t:10,b:26};
+ const bx=d3.scaleLinear().domain([-300,120]).range([m.l,BW-m.r]),by2=d3.scaleBand().domain(AGS).range([m.t,BH-m.b]).padding(.1);
+ let b=`<rect x="${bx(-300)}" y="${m.t}" width="${bx(0)-bx(-300)}" height="${BH-m.t-m.b}" fill="var(--pillt)" fill-opacity=".08"/><rect x="${bx(0)}" y="${m.t}" width="${bx(30)-bx(0)}" height="${BH-m.t-m.b}" fill="var(--gold)" fill-opacity=".3"/>`;
+ AGS.forEach(a=>{b+=`<text x="${m.l-8}" y="${by2(a)+by2.bandwidth()/2}" text-anchor="end" dy=".35em" style="font:600 10.5px var(--body);${F.src===a?'fill:var(--pillt)':''}">${a}</text><line x1="${m.l}" x2="${BW-m.r}" y1="${by2(a)+by2.bandwidth()}" y2="${by2(a)+by2.bandwidth()}" stroke="var(--line)" stroke-dasharray="2 3"/>`});
+ [-300,-200,-100,0,100].forEach(t=>b+=`<text x="${bx(t)}" y="${BH-8}" text-anchor="middle" style="font-size:9px">${t}</text>`);
+ b+=`<line x1="${bx(0)}" x2="${bx(0)}" y1="${m.t}" y2="${BH-m.b}" stroke="var(--pillt)" stroke-width="1.5"/><text x="${bx(0)+4}" y="${m.t+10}" style="font:700 9px var(--body);fill:var(--pillt)">today</text><text x="${bx(-300)+4}" y="${BH-m.b-5}" style="font-size:9px">← overdue (days)</text>`;
+ R.forEach(r=>{const j=((r.id*37)%100)/100-.5;b+=`<circle class="hit" cx="${bx(Math.max(-300,Math.min(120,r.dl)))}" cy="${by2(r.src)+by2.bandwidth()/2+j*by2.bandwidth()*.7}" r="${r.id===PICK?8:5.5}" fill="${IMC[r.imp]}" stroke="${r.id===PICK?'var(--navy)':'#fff'}" stroke-width="${r.id===PICK?2.5:1}" data-id="${r.id}"/>`});
+ bh.innerHTML=`<svg class="chart" viewBox="0 0 ${BW} ${BH}" height="${BH}">${b}</svg>`;
+ bh.querySelectorAll('.hit').forEach(c=>{const r=ROWS[+c.dataset.id];c.onclick=()=>{PICK=r.id;draw()};c.onmousemove=e=>showTip(e,`<b>${esc(r.title)}</b><br>${r.src} · ${r.imp} · ${r.dl<0?-r.dl+' days overdue':r.dl+' days left'}`);c.onmouseleave=hideTip});
+ const hi=R.filter(r=>r.imp==='High'&&r.dl<0).length;$('#tI2').innerHTML=`<span><b>${hi}</b> High-impact actions are overdue. Each dot is one open action, placed by days to its deadline.</span>`;
+ // filters + table
+ const mk=(lbl,k,vals)=>`<small>${lbl}</small>`+vals.map(v=>`<button data-k="${k}" data-v="${esc(v)}" aria-pressed="${F[k]===v}">${esc(v)}</button>`).join('');
+ $('#tFb').innerHTML=mk('IMPACT','imp',IMPS)+'<span style="width:12px"></span>'+mk('AGENCY','src',AGS);
+ $('#tFb').onclick=e=>{const bt=e.target.closest('button');if(bt)toggle(bt.dataset.k,bt.dataset.v)};
+ const T=rowsFor().filter(r=>r.open&&r.dlDate);table($('#tTab'),T,80);detail($('#tDet'));
+}
+
+/* ---------- About ---------- */
+function viewAbout(){return `<div class="g2">${card('What this project does',`<p class="note2" style="color:var(--ink);font-size:13.5px">Law firms track changes from several regulators at once. This report classifies each change by agency, topic, impact and the department it reaches, then shows which actions are open and how soon they are due.</p><div class="steps"><div class="step"><b>COLLECT</b><span>Agency feeds and notices</span></div><div class="step"><b>CLASSIFY</b><span>Keyword rules set topic, impact, audience</span></div><div class="step"><b>MODEL</b><span>Star schema, DAX measures</span></div><div class="step"><b>REPORT</b><span>Power BI pages by department</span></div></div>`)}${card('Data and limits',`<p class="note2" style="color:var(--ink)">All records are <b>synthetic sample data</b> created for demonstration. They are not real announcements and not legal advice.</p><p class="note2" style="margin-top:8px">Impact and topic come from keyword rules, not legal review. A change can reach more than one department, so department counts add up to more than the total.</p>`)}</div>
+<div class="g21">${card('Definitions',`<div class="defs"><div><b>Impact</b>High, Medium or Low, set by keywords such as penalty, mandatory or must.</div><div><b>Action required</b>The change states an obligation or step the firm must take.</div><div><b>Open action</b>Action required and status is not Actioned.</div><div><b>Deadline</b>Date taken from the text of the change. Blank when none is stated.</div><div><b>Days left</b>Deadline minus today. Negative means overdue.</div><div><b>Actioned rate</b>Share of changes whose status is Actioned.</div></div>`)}${card('Sources and tools',`<div class="bdg" style="margin-bottom:12px">${AGS.map(a=>`<span>${a}</span>`).join('')}</div><div class="bdg"><span>Python</span><span>SQLite</span><span>Power Query</span><span>DAX</span><span>Power BI</span><span>Star schema</span></div><p class="note2" style="margin-top:12px">Agency badges are plain text labels. They are not official logos.</p>`)}</div>
+${card('Department mapping',`<div class="defs">${Object.entries(DEPMAP).map(([t,d])=>`<div><b>${t}</b>${d.join(' and ')}</div>`).join('')}</div>`)}`}
+
+/* ---------- router ---------- */
+function build(){const v=$('#view');v.innerHTML=PAGE==='overview'?viewOverview():isDept()?viewDept():PAGE==='tracker'?viewTracker():viewAbout();BUILT=PAGE}
+function draw(){if(PAGE==='overview')drawOverview();else if(isDept())drawDept();else if(PAGE==='tracker')drawTracker()}
+function render(){chrome();pop();if(BUILT!==PAGE)build();draw()}
+nav();render();
+
+const THEMES=[['1 · Emerald & Champagne',null],['8 · Forest & Terracotta',['#1d2f1f','#3f6b3a','#c9673a','#f1dfc6','#e8efe2']],['9 · Deep Teal & Coral',['#0b2e33','#1c6b6e','#ff7a64','#f6e3c8','#e2edee']],['10 · Indigo & Mint',['#1b1a4a','#3d3a9e','#5fd3b0','#e6f7f0','#e8e8f4']],['11 · Slate & Lime',['#1f2933','#46586b','#b6d94c','#eef5d3','#e6eaee']],['12 · Wine & Sage',['#3a1226','#7a2748','#9bb59a','#f0e6d8','#efe6ea']],['13 · Sand & Charcoal',['#2b2b2b','#6b5b4b','#c79a54','#f5ecd9','#f3efe8']],['14 · Royal Purple & Gold',['#22104a','#4b2aa0','#e0b64c','#f8ecc4','#e9e5f3']],['15 · Steel Blue & Amber',['#10263c','#2c5f8a','#f0a030','#fbe6bd','#e4ebf1']]];
+function applyTheme(i){const root=document.documentElement,t=THEMES[i][1];
+ ['--navy','--navy0','--navy1','--navy2','--navy3','--bt','--bs','--gold','--gold2','--gold3','--pg1','--pg2','--pg3','--page','--pill','--pillt','--mute','--tm0','--tm1','--ink','--mut','--line'].forEach(k=>root.style.removeProperty(k));
+ if(t){const [D,P,A,L,G]=t,m=(a,b,x)=>d3.interpolateRgb(a,b)(x);const o={'--navy':D,'--navy0':m(D,'#000',.45),'--navy1':m(D,P,.2),'--navy2':m(D,P,.5),'--navy3':P,'--bt':m(P,'#fff',.22),'--bs':m(D,'#000',.35),'--gold':A,'--gold2':m(A,'#fff',.4),'--gold3':m(A,'#fff',.65),'--pg1':m(L,'#fff',.7),'--pg2':L,'--pg3':A,'--page':G,'--pill':m(A,'#fff',.8),'--pillt':m(A,'#000',.6),'--mute':m(P,'#fff',.8),'--tm0':m(L,'#fff',.3),'--tm1':m(A,'#000',.2),'--ink':m(D,'#000',.3),'--mut':m(D,'#fff',.4),'--line':m(G,D,.12)};
+  Object.entries(o).forEach(([k,v])=>root.style.setProperty(k,v))}
+ render()}
+
+const sel=document.getElementById('thm');sel.innerHTML=THEMES.map((t,i)=>`<option value="${i}">${t[0]}</option>`).join('');sel.onchange=()=>applyTheme(+sel.value);sel.value='4';applyTheme(4);
+document.getElementById('flat').onclick=function(){FLAT=!FLAT;this.textContent='Bars: '+(FLAT?'Flat':'3D');this.setAttribute('aria-pressed',FLAT);draw()};
+let rt;new ResizeObserver(()=>{clearTimeout(rt);rt=setTimeout(draw,120)}).observe(document.querySelector('main'));
+</script>

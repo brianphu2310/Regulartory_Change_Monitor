@@ -1,5 +1,7 @@
 # Power BI guide: Regulatory Change Monitor
 
+> Build notes for the first version of the report. The final .pbix in `powerbi/` extends this with more pages, drill-through, tooltips and header slicers; see the README.
+
 ## 1. Export the data
 ```bash
 python export_for_bi.py --sample     # regenerate the synthetic dataset and export

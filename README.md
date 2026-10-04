@@ -4,7 +4,11 @@ A Power BI report (plus an interactive HTML design preview) that tracks regulato
 
 > **All data is synthetic.** The ~200 items are invented for demonstration and are not real agency announcements. Tags (topic, impact, audience, action required, deadline) come from transparent keyword rules in `classifier.py`, not from a model, and this is not legal advice. There is no web scraping in this project.
 
-![Overview](docs/screenshots/preview_0.png)
+![Overview of the interactive HTML design preview](docs/screenshots/preview_0.png)
+
+*Screenshot of the HTML design preview (`preview/dashboard_preview.html`), which shows the intended look. The Power BI report in `powerbi/` follows it; Power BI has no true 3D charts, so some panel shapes differ.*
+
+**Who it is for:** a compliance lead or practice manager who wants to see at a glance which regulatory changes matter, how urgent they are and who has to act, without reading every agency bulletin. A "Key takeaways" line on the overview states the three things to know in plain English.
 
 ## What is in the repo
 | Path | What it is |
@@ -28,6 +32,9 @@ Header dropdowns (Status, Year) are synced across pages; every chart cross-filte
 Model: `changes` fact table with `dim_date`, `dim_department`, `dim_topic` and bridge tables (`change_topics`, `change_audiences`, `topic_department`). Measures include Total Changes, High Impact, Open Actions, Overdue Actions, Due In 30 Days and Action Rate.
 
 Things to know: Power BI has no true 3D charts, so panel shapes are background images. In Power BI Desktop, sidebar navigation needs Ctrl+click; a single click works once published. Agency names are text, not official logos.
+
+## Tests and CI
+`python -m pytest -q` runs 9 tests: classifier rules (topics, impact, audiences, action required, deadline extraction), plus consistency checks on the committed star-schema CSVs (unique ids, every bridge row points at a real change, everything labelled `Sample`). CI also regenerates the synthetic data on every push. Field meanings are in [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md); skills map in [`docs/SKILLS_DEMONSTRATED.md`](docs/SKILLS_DEMONSTRATED.md).
 
 ## Run the Python side
 ```bash

@@ -4,9 +4,9 @@ A Power BI report (plus an interactive HTML design preview) that tracks regulato
 
 > **All data is synthetic.** The ~200 items are invented for demonstration and are not real agency announcements. Tags (topic, impact, audience, action required, deadline) come from transparent keyword rules in `classifier.py`, not from a model, and this is not legal advice. There is no web scraping in this project.
 
-![Overview of the interactive HTML design preview](docs/screenshots/preview_0.png)
+![Power BI report: Overview page](docs/powerbi/regulatory-1-overview.png)
 
-*Screenshot of the HTML design preview (`preview/dashboard_preview.html`), which shows the intended look. The Power BI report in `powerbi/` follows it; Power BI has no true 3D charts, so some panel shapes differ.*
+*Overview page of the Power BI report (`powerbi/regulatory_change_monitor.pbix`): 200 synthetic changes, 69 high impact, 54 open actions, 16 overdue. An interactive HTML design preview is in `preview/dashboard_preview.html`.*
 
 **Who it is for:** a compliance lead or practice manager who wants to see at a glance which regulatory changes matter, how urgent they are and who has to act, without reading every agency bulletin. A "Key takeaways" line on the overview states the three things to know in plain English.
 

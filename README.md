@@ -6,6 +6,8 @@ A Power BI report (plus an interactive HTML design preview) that tracks regulato
 
 ![Power BI report: Overview page](docs/powerbi/regulatory-1-overview.png)
 
+**Open the dashboard:** [Download the Power BI report (.pbix)](https://github.com/brianphu2310/Regulartory_Change_Monitor/raw/main/powerbi/regulatory_change_monitor.pbix) (open in Power BI Desktop) · [Interactive HTML preview](https://htmlpreview.github.io/?https://github.com/brianphu2310/Regulartory_Change_Monitor/blob/main/preview/dashboard_preview.html) (opens in the browser, no install)
+
 *Overview page of the Power BI report (`powerbi/regulatory_change_monitor.pbix`): 200 synthetic changes, 69 high impact, 54 open actions, 16 overdue. An interactive HTML design preview is in `preview/dashboard_preview.html`.*
 
 **Who it is for:** a compliance lead or practice manager who wants to see at a glance which regulatory changes matter, how urgent they are and who has to act, without reading every agency bulletin. A "Key takeaways" line on the overview states the three things to know in plain English.

@@ -10,6 +10,18 @@ A Power BI report (plus an interactive HTML design preview) that tracks regulato
 
 **Who it is for:** a compliance lead or practice manager who wants to see at a glance which regulatory changes matter, how urgent they are and who has to act, without reading every agency bulletin. A "Key takeaways" line on the overview states the three things to know in plain English.
 
+## At a glance
+
+[![CI](https://github.com/brianphu2310/Regulartory_Change_Monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/brianphu2310/Regulartory_Change_Monitor/actions)
+
+| | |
+|---|---|
+| **Question** | Which regulatory changes matter to a law firm, how urgent are they, and who has to act? |
+| **What I built** | Rule-based classifier (topic, impact, audience, action, deadline), star-schema CSVs and a Power BI report with drill-through pages. |
+| **Key results** | 200 synthetic changes across 6 agencies: 69 high impact, 54 open actions, 16 overdue. |
+| **Proof** | CI green, 9 tests; CI regenerates the dataset on every push. |
+| **Honest limits** | All data is synthetic and there is no scraping, by design. Tags come from transparent keyword rules, not a model. Not legal advice. |
+
 ## What is in the repo
 | Path | What it is |
 |---|---|

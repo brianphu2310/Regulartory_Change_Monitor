@@ -19,3 +19,5 @@ jobs:
       - run: python -m pytest -q
       - name: Synthetic data generates and exports
         run: python export_for_bi.py --sample
+      - name: Impact model builds
+        run: python impact_model.py

@@ -1,0 +1,46 @@
+month_start,role,hours_required,hours_available,load_pct,hours_over_capacity
+2026-10-01,Principal,57.9,10.0,5.79,47.9
+2026-10-01,Solicitor,39.35,16.0,2.459,23.35
+2026-10-01,Conveyancer,5.13,12.0,0.428,0.0
+2026-10-01,Compliance Officer,118.63,40.0,2.966,78.63
+2026-10-01,Trust Account Manager,28.8,14.0,2.057,14.8
+2026-10-01,Accounts Officer,28.16,12.0,2.347,16.16
+2026-10-01,HR & Payroll Officer,58.82,12.0,4.902,46.82
+2026-10-01,Practice Manager,42.1,14.0,3.007,28.1
+2026-10-01,IT Consultant,21.3,10.0,2.13,11.3
+2026-11-01,Principal,7.8,10.0,0.78,0.0
+2026-11-01,Solicitor,4.85,16.0,0.303,0.0
+2026-11-01,Conveyancer,0.93,12.0,0.078,0.0
+2026-11-01,Compliance Officer,14.43,40.0,0.361,0.0
+2026-11-01,Trust Account Manager,5.4,14.0,0.386,0.0
+2026-11-01,Accounts Officer,3.6,12.0,0.3,0.0
+2026-11-01,HR & Payroll Officer,8.48,12.0,0.707,0.0
+2026-11-01,Practice Manager,5.5,14.0,0.393,0.0
+2026-11-01,IT Consultant,2.7,10.0,0.27,0.0
+2026-12-01,Principal,1.24,10.0,0.124,0.0
+2026-12-01,Solicitor,1.1,16.0,0.069,0.0
+2026-12-01,Conveyancer,0.58,12.0,0.049,0.0
+2026-12-01,Compliance Officer,2.43,40.0,0.061,0.0
+2026-12-01,Trust Account Manager,0.0,14.0,0.0,0.0
+2026-12-01,Accounts Officer,1.0,12.0,0.084,0.0
+2026-12-01,HR & Payroll Officer,3.37,12.0,0.281,0.0
+2026-12-01,Practice Manager,1.35,14.0,0.096,0.0
+2026-12-01,IT Consultant,0.3,10.0,0.03,0.0
+2027-01-01,Principal,0.82,10.0,0.082,0.0
+2027-01-01,Solicitor,0.6,16.0,0.038,0.0
+2027-01-01,Conveyancer,0.35,12.0,0.029,0.0
+2027-01-01,Compliance Officer,1.5,40.0,0.038,0.0
+2027-01-01,Trust Account Manager,0.0,14.0,0.0,0.0
+2027-01-01,Accounts Officer,0.33,12.0,0.027,0.0
+2027-01-01,HR & Payroll Officer,1.68,12.0,0.14,0.0
+2027-01-01,Practice Manager,0.85,14.0,0.061,0.0
+2027-01-01,IT Consultant,0.3,10.0,0.03,0.0
+2027-02-01,Principal,0.2,10.0,0.02,0.0
+2027-02-01,Solicitor,0.0,16.0,0.0,0.0
+2027-02-01,Conveyancer,0.0,12.0,0.0,0.0
+2027-02-01,Compliance Officer,0.0,40.0,0.0,0.0
+2027-02-01,Trust Account Manager,0.0,14.0,0.0,0.0
+2027-02-01,Accounts Officer,0.18,12.0,0.015,0.0
+2027-02-01,HR & Payroll Officer,0.92,12.0,0.077,0.0
+2027-02-01,Practice Manager,0.3,14.0,0.021,0.0
+2027-02-01,IT Consultant,0.0,10.0,0.0,0.0

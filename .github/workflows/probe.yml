@@ -9,7 +9,10 @@ jobs:
     steps:
       - run: |
           UA="RegulatoryChangeMonitor/1.0 (portfolio project; +https://github.com/brianphu2310/Regulartory_Change_Monitor)"
-          for u in https://asic.gov.au/newsroom/media-releases/ https://asic.gov.au/robots.txt https://www.legislation.gov.au/ https://legislation.nsw.gov.au/ https://legislation.nsw.gov.au/robots.txt https://www.treasury.gov.au/consultation https://www.treasury.gov.au/robots.txt https://www.dfat.gov.au/international-relations/security/sanctions https://www.dfat.gov.au/robots.txt https://www.lawsociety.com.au/news-and-publications/news-media-releases https://www.olsc.nsw.gov.au/ https://www.revenue.nsw.gov.au/news-media-releases https://www.revenue.nsw.gov.au/robots.txt https://news.google.com/robots.txt; do
-            code=$(curl -s -L -o /tmp/b -w "%{http_code}" -m 25 -A "$UA" "$u"); echo "== $code $(wc -c </tmp/b)B $u"
-            case "$u" in *robots*) grep -i -E "^(user-agent|disallow)" /tmp/b | grep -i -E "user-agent: \*|rss|news|^disallow: /$" -A0 | head -8;; esac
+          for u in https://asic.gov.au/newsroom/media-releases/ https://www.treasury.gov.au/consultation; do
+            curl -s -L -m 25 -A "$UA" "$u" -o /tmp/p.html; echo "== $u"
+            grep -o -i '<link[^>]*rss[^>]*>' /tmp/p.html | head -3
+            grep -o 'href="[^"]*"' /tmp/p.html | sort -u | grep -v -E "\.(css|js|png|svg|ico)" | grep -E "media-release|/consultation/|newsroom|rss" | head -25
+            grep -o -E "[0-9]{1,2} (January|February|March|April|May|June|July|August|September|October|November|December) 20[0-9]{2}" /tmp/p.html | head -5
           done
+          curl -s -m 25 -A "$UA" https://www.treasury.gov.au/robots.txt | head -30

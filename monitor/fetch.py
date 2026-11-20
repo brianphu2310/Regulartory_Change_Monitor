@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 from .sources import Source
 
 UA = "RegulatoryChangeMonitor/1.0 (portfolio project; +https://github.com/brianphu2310/Regulartory_Change_Monitor)"
-TIMEOUT = 20
+TIMEOUT = 12
 _DATE = re.compile(r"\b(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+(20\d{2})\b", re.I)
 _robots: dict[str, robotparser.RobotFileParser] = {}
 
@@ -53,8 +53,8 @@ def parse_date(text: str) -> date | None:
         return None
 
 
-def from_rss(src: Source) -> list[dict]:
-    feed = feedparser.parse(_get(src.rss).content)
+def from_rss(src: Source, url: str | None = None) -> list[dict]:
+    feed = feedparser.parse(_get(url or src.rss).content)
     if not feed.entries:
         raise ValueError("feed has no entries")
     out = []
@@ -68,7 +68,10 @@ def from_rss(src: Source) -> list[dict]:
                     published = parse_date(e[key])
                 break
         summary = BeautifulSoup(e.get("summary", ""), "html.parser").get_text(" ", strip=True)
-        out.append({"title": e.get("title", "").strip(), "summary": summary[:600], "link": e.get("link", ""),
+        title = e.get("title", "").strip()
+        if url and " - " in title:  # Google News appends " - <site name>"
+            title = title.rsplit(" - ", 1)[0]
+        out.append({"title": title, "summary": summary[:600], "link": e.get("link", ""),
                     "published": published})
     return out
 
@@ -94,7 +97,9 @@ def from_page(src: Source) -> list[dict]:
 def fetch(src: Source) -> tuple[list[dict], str]:
     """Return (items, status). Never raises: a failing source is reported, not fatal."""
     errors = []
-    for kind, url, fn in (("rss", src.rss, from_rss), ("page", src.page, from_page)):
+    attempts = (("rss", src.rss, from_rss), ("page", src.page, from_page),
+                ("google-news", src.gnews, lambda s: from_rss(s, s.gnews)))
+    for kind, url, fn in attempts:
         if not url:
             continue
         if not allowed(url):

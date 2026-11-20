@@ -27,7 +27,9 @@ jobs:
 
       - name: Fetch, classify and cost new changes
         id: run
-        run: docker run --rm --user "$(id -u):$(id -g)" -v "$PWD/data:/app/data" -v "$PWD/reports:/app/reports" -v "$GITHUB_OUTPUT:/tmp/gh_output" -e GITHUB_OUTPUT=/tmp/gh_output reg-monitor
+        run: |
+          mkdir -p data/live reports
+          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD/data:/app/data" -v "$PWD/reports:/app/reports" -v "$GITHUB_OUTPUT:/tmp/gh_output" -e GITHUB_OUTPUT=/tmp/gh_output reg-monitor
 
       - name: Commit live data and report
         run: |

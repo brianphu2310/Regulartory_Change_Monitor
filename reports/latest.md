@@ -1,6 +1,6 @@
 # Regulatory change report: 20 Nov 2026
 
-Sources checked: 5 (1 ok). **Baseline run:** existing items loaded, nothing flagged as new.
+Sources checked: 5 (1 ok). New relevant changes: **0**.
 
 
 ## Source health

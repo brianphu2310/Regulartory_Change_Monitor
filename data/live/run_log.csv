@@ -10,3 +10,8 @@ run_at,agency,feed,status,items
 2026-11-20T05:45:19+00:00,Fair Work,Fair Work Ombudsman news,"page: ReadTimeout: HTTPSConnectionPool(host='www.fairwork.gov.au', port=443): Read timed out. (read timeout=12)",0
 2026-11-20T05:45:20+00:00,OAIC,OAIC news and media,page: HTTPError: 403 Client Error: Forbidden for url: https://www.oaic.gov.au/news/media-centre,0
 2026-11-20T05:45:21+00:00,Treasury,Open consultations,ok via page (10 items),10
+2026-11-20T05:46:52+00:00,AUSTRAC,Media releases and updates,"rss: ReadTimeout: HTTPSConnectionPool(host='www.austrac.gov.au', port=443): Read timed out. (read timeout=12); page: ReadTimeout: HTTPSConnectionPool(host='www.austrac.gov.au', port=443): Read timed out. (read timeout=12)",0
+2026-11-20T05:46:53+00:00,ATO,Business and organisations news,rss: HTTPError: 403 Client Error: Forbidden for url: https://www.ato.gov.au/rss.aspx?category=210; page: HTTPError: 403 Client Error: Forbidden for url: https://www.ato.gov.au/businesses-and-organisations/business-bulletins-newsroom,0
+2026-11-20T05:47:18+00:00,Fair Work,Fair Work Ombudsman news,"page: ReadTimeout: HTTPSConnectionPool(host='www.fairwork.gov.au', port=443): Read timed out. (read timeout=12)",0
+2026-11-20T05:47:19+00:00,OAIC,OAIC news and media,page: HTTPError: 403 Client Error: Forbidden for url: https://www.oaic.gov.au/news/media-centre,0
+2026-11-20T05:47:21+00:00,Treasury,Open consultations,ok via page (10 items),10

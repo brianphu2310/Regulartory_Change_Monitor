@@ -56,10 +56,11 @@ def _owner(split: dict) -> str:
     return max(split, key=split.get)
 
 
-def build(out: Path = OUT) -> dict[str, pd.DataFrame]:
+def build(out: Path = OUT, as_of: pd.Timestamp | None = None) -> dict[str, pd.DataFrame]:
+    """Write the five impact tables next to changes.csv in `out`. `as_of` defaults to the latest published date."""
     changes = pd.read_csv(out / "changes.csv", parse_dates=["published", "deadline"])
     topics = pd.read_csv(out / "change_topics.csv")
-    as_of = changes["published"].max()
+    as_of = pd.Timestamp(as_of) if as_of is not None else changes["published"].max()
 
     assumptions = pd.DataFrame([
         {"topic": t, "one_off_hours_medium": h, "ongoing_hours_yr": oh, "external_one_off": e1,
@@ -71,7 +72,11 @@ def build(out: Path = OUT) -> dict[str, pd.DataFrame]:
 
     eff, ext = [], {}
     for _, ch in changes.iterrows():
-        ts = topics.loc[topics["id"] == ch["id"], "topic"].tolist() or ["AML/CTF"]
+        ts = [t for t in topics.loc[topics["id"] == ch["id"], "topic"] if t in TOPICS]
+        if not ts:   # no known topic: someone still reads and files it
+            eff.append((ch["id"], "Practice Manager", AWARENESS_HOURS, 0.0))
+            ext[ch["id"]] = (0.0, 0.0)
+            continue
         f = IMPACT_FACTOR[ch["impact"]]
         e1 = e2 = 0.0
         for t in ts:

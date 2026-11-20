@@ -1,0 +1,50 @@
+name: Regulatory monitor
+
+# Runs every morning, builds the monitor's Docker image and runs it; commits live data and opens a report issue.
+on:
+  schedule:
+    - cron: "17 20 * * *"   # 07:17 Sydney (AEDT)
+  workflow_dispatch:
+  push:   # TEMP: test run on the feature branch
+    branches: [feature/live-monitor]
+    paths: ["monitor/**", ".github/workflows/monitor.yml", "Dockerfile"]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: regulatory-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the monitor image
+        run: docker build -t reg-monitor .
+
+      - name: Fetch, classify and cost new changes
+        id: run
+        run: docker run --rm --user "$(id -u):$(id -g)" -v "$PWD/data:/app/data" -v "$PWD/reports:/app/reports" -v "$GITHUB_OUTPUT:/tmp/gh_output" -e GITHUB_OUTPUT=/tmp/gh_output reg-monitor
+
+      - name: Commit live data and report
+        run: |
+          git config user.name "regulatory-monitor[bot]"
+          git config user.email "regulatory-monitor@users.noreply.github.com"
+          git add data/live reports
+          if git diff --cached --quiet; then echo "No data changes"; exit 0; fi
+          git commit -m "Monitor run $(date -u +%F): ${{ steps.run.outputs.new_changes }} new changes"
+          git push
+
+      - name: Open a report issue when something new is found
+        if: steps.run.outputs.new_changes != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create regulatory-report --color 9AE600 --force >/dev/null
+          gh issue create \
+            --title "Regulatory changes $(TZ=Australia/Sydney date +'%d %b %Y'): ${{ steps.run.outputs.new_changes }} new, ${{ steps.run.outputs.high_impact }} high impact" \
+            --label regulatory-report \
+            --body-file reports/latest.md

@@ -1,0 +1,15 @@
+name: probe (temp)
+on:
+  push:
+    branches: [feature/live-monitor]
+    paths: [".github/workflows/probe.yml"]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          UA="RegulatoryChangeMonitor/1.0 (portfolio project; +https://github.com/brianphu2310/Regulartory_Change_Monitor)"
+          for u in https://asic.gov.au/newsroom/media-releases/ https://asic.gov.au/robots.txt https://www.legislation.gov.au/ https://legislation.nsw.gov.au/ https://legislation.nsw.gov.au/robots.txt https://www.treasury.gov.au/consultation https://www.treasury.gov.au/robots.txt https://www.dfat.gov.au/international-relations/security/sanctions https://www.dfat.gov.au/robots.txt https://www.lawsociety.com.au/news-and-publications/news-media-releases https://www.olsc.nsw.gov.au/ https://www.revenue.nsw.gov.au/news-media-releases https://www.revenue.nsw.gov.au/robots.txt https://news.google.com/robots.txt; do
+            code=$(curl -s -L -o /tmp/b -w "%{http_code}" -m 25 -A "$UA" "$u"); echo "== $code $(wc -c </tmp/b)B $u"
+            case "$u" in *robots*) grep -i -E "^(user-agent|disallow)" /tmp/b | grep -i -E "user-agent: \*|rss|news|^disallow: /$" -A0 | head -8;; esac
+          done

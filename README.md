@@ -24,6 +24,10 @@ A Power BI report (plus an interactive HTML design preview) that tracks regulato
 | **Proof** | CI green, 9 tests; CI regenerates the dataset on every push. |
 | **Honest limits** | All data is synthetic and there is no scraping, by design. Tags come from transparent keyword rules, not a model. Not legal advice. |
 
+## v2: what each change costs in money, time and people
+
+[`impact_model.py`](impact_model.py) adds five tables to `bi_export/` so the report can answer the next questions: what will these changes **cost** (once and every year), how much **time** is left and what is already late, and which **people** do the work and whether they have the hours. On the synthetic data: about **$137K** one-off ($104K staff time, $33K external) and **$23K a year** ongoing; **473 outstanding hours**, 27 changes past their target date; October needs **400 hours against 140 available**, mostly the Compliance Officer and the Principal. Rules and limits: [docs/IMPACT_MODEL.md](docs/IMPACT_MODEL.md); Power BI model, DAX and page plan: [POWERBI_GUIDE.md](POWERBI_GUIDE.md#v2-finance-time-and-people-pages-impact-model).
+
 ## What is in the repo
 | Path | What it is |
 |---|---|
@@ -32,6 +36,7 @@ A Power BI report (plus an interactive HTML design preview) that tracks regulato
 | `bi_export/` | Star-schema CSV tables the report is built on |
 | `generate_synthetic.py` | Builds the synthetic dataset (seeded, reproducible shape) |
 | `classifier.py` | Rule-based tagging: topic, impact, audience, action required, deadline |
+| `impact_model.py` | Cost, time and capacity impact of each change (rule-based, assumptions in one place) |
 | `db.py`, `export_for_bi.py` | SQLite storage and CSV export for BI tools |
 | `app.py` | Small Streamlit explorer over the same data |
 | `POWERBI_GUIDE.md`, `TABLEAU_GUIDE.md` | Model, DAX measures and build notes |

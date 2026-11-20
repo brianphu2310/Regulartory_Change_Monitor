@@ -1,0 +1,545 @@
+id,role,one_off_hours,ongoing_hours_yr,one_off_cost,ongoing_cost_yr
+00e98283f3065dac,Compliance Officer,0.25,0.0,20.0,0.0
+00e98283f3065dac,Trust Account Manager,0.25,0.0,16.25,0.0
+00ee0856dc88f5e4,Accounts Officer,0.4,0.0,22.0,0.0
+00ee0856dc88f5e4,HR & Payroll Officer,1.6,0.0,88.0,0.0
+0108c647602ba821,Accounts Officer,3.2,0.0,176.0,0.0
+0108c647602ba821,Principal,0.8,0.0,200.0,0.0
+015f63a0bf90acae,Accounts Officer,1.2,0.4,66.0,22.0
+015f63a0bf90acae,Compliance Officer,6.0,2.0,480.0,160.0
+015f63a0bf90acae,IT Consultant,1.2,0.4,180.0,60.0
+015f63a0bf90acae,Practice Manager,1.2,0.4,84.0,28.0
+015f63a0bf90acae,Principal,3.0,1.0,750.0,250.0
+015f63a0bf90acae,Solicitor,1.8,0.6,216.0,72.0
+015f63a0bf90acae,Trust Account Manager,3.6,1.2,234.0,78.0
+03be2379160ffea4,Compliance Officer,0.25,0.0,20.0,0.0
+03be2379160ffea4,Trust Account Manager,0.25,0.0,16.25,0.0
+03be7c0dabc7de1e,Compliance Officer,6.0,0.0,480.0,0.0
+03be7c0dabc7de1e,IT Consultant,1.2,0.0,180.0,0.0
+03be7c0dabc7de1e,Practice Manager,1.2,0.0,84.0,0.0
+03be7c0dabc7de1e,Principal,1.8,0.0,450.0,0.0
+03be7c0dabc7de1e,Solicitor,1.8,0.0,216.0,0.0
+03cf66ea92ec6d98,Compliance Officer,0.5,0.0,40.0,0.0
+0569ddc452712f08,Conveyancer,0.25,0.0,18.75,0.0
+0569ddc452712f08,Trust Account Manager,0.25,0.0,16.25,0.0
+062cc921f2000083,HR & Payroll Officer,5.0,1.0,275.0,55.0
+062cc921f2000083,Practice Manager,3.0,0.6,210.0,42.0
+062cc921f2000083,Principal,2.0,0.4,500.0,100.0
+0a14b3933d526a7b,Accounts Officer,3.2,0.0,176.0,0.0
+0a14b3933d526a7b,Principal,0.8,0.0,200.0,0.0
+0b01d88001739525,IT Consultant,0.5,0.0,75.0,0.0
+0c0fc41ede201e42,Accounts Officer,0.65,0.0,35.75,0.0
+0c0fc41ede201e42,HR & Payroll Officer,1.85,0.0,101.75,0.0
+0c2353e57b00be6f,Accounts Officer,1.3,0.15,71.5,8.25
+0c2353e57b00be6f,HR & Payroll Officer,3.7,0.35,203.5,19.25
+0ea4da45e55da94c,Compliance Officer,12.0,4.0,960.0,320.0
+0ea4da45e55da94c,IT Consultant,2.4,0.8,360.0,120.0
+0ea4da45e55da94c,Practice Manager,2.4,0.8,168.0,56.0
+0ea4da45e55da94c,Principal,3.6,1.2,900.0,300.0
+0ea4da45e55da94c,Solicitor,3.6,1.2,432.0,144.0
+116fd90a28ba029e,Compliance Officer,6.0,0.0,480.0,0.0
+116fd90a28ba029e,IT Consultant,1.2,0.0,180.0,0.0
+116fd90a28ba029e,Practice Manager,1.2,0.0,84.0,0.0
+116fd90a28ba029e,Principal,1.8,0.0,450.0,0.0
+116fd90a28ba029e,Solicitor,1.8,0.0,216.0,0.0
+12578b73bed4b09b,Accounts Officer,0.65,0.0,35.75,0.0
+12578b73bed4b09b,HR & Payroll Officer,1.85,0.0,101.75,0.0
+12812b2101c86954,Accounts Officer,0.9,0.15,49.5,8.25
+12812b2101c86954,HR & Payroll Officer,4.6,0.85,253.0,46.75
+12812b2101c86954,Practice Manager,1.5,0.3,105.0,21.0
+12812b2101c86954,Principal,1.0,0.2,250.0,50.0
+15787667c86a4629,Accounts Officer,0.9,0.15,49.5,8.25
+15787667c86a4629,HR & Payroll Officer,4.6,0.85,253.0,46.75
+15787667c86a4629,Practice Manager,1.5,0.3,105.0,21.0
+15787667c86a4629,Principal,1.0,0.2,250.0,50.0
+16be070872958d0d,HR & Payroll Officer,5.0,1.0,275.0,55.0
+16be070872958d0d,Practice Manager,3.0,0.6,210.0,42.0
+16be070872958d0d,Principal,2.0,0.4,500.0,100.0
+18f3783279c7adbf,HR & Payroll Officer,0.5,0.0,27.5,0.0
+1952575e399e8552,Accounts Officer,0.2,0.0,11.0,0.0
+1952575e399e8552,HR & Payroll Officer,2.05,0.0,112.75,0.0
+1952575e399e8552,Practice Manager,0.75,0.0,52.5,0.0
+1952575e399e8552,Principal,0.5,0.0,125.0,0.0
+1bf7bd955ca8a7e4,IT Consultant,0.5,0.0,75.0,0.0
+1c58918d3d3e78c3,Accounts Officer,0.9,0.15,49.5,8.25
+1c58918d3d3e78c3,HR & Payroll Officer,4.6,0.85,253.0,46.75
+1c58918d3d3e78c3,Practice Manager,1.5,0.3,105.0,21.0
+1c58918d3d3e78c3,Principal,1.0,0.2,250.0,50.0
+1c7674a5aeaacbb3,Compliance Officer,0.5,0.0,40.0,0.0
+1df66f550fa746b8,Compliance Officer,6.0,0.0,480.0,0.0
+1df66f550fa746b8,IT Consultant,1.2,0.0,180.0,0.0
+1df66f550fa746b8,Practice Manager,1.2,0.0,84.0,0.0
+1df66f550fa746b8,Principal,1.8,0.0,450.0,0.0
+1df66f550fa746b8,Solicitor,1.8,0.0,216.0,0.0
+2099053b88e047c5,HR & Payroll Officer,0.5,0.0,27.5,0.0
+20f278e29a713e4e,Accounts Officer,0.9,0.15,49.5,8.25
+20f278e29a713e4e,HR & Payroll Officer,4.6,0.85,253.0,46.75
+20f278e29a713e4e,Practice Manager,1.5,0.3,105.0,21.0
+20f278e29a713e4e,Principal,1.0,0.2,250.0,50.0
+220722f19f1630d6,Accounts Officer,2.4,0.8,132.0,44.0
+220722f19f1630d6,Principal,2.4,0.8,600.0,200.0
+220722f19f1630d6,Trust Account Manager,7.2,2.4,468.0,156.0
+29b90f97b4d0d4f6,Accounts Officer,1.37,0.0,75.17,0.0
+29b90f97b4d0d4f6,Conveyancer,0.7,0.0,52.5,0.0
+29b90f97b4d0d4f6,HR & Payroll Officer,0.7,0.0,38.5,0.0
+29b90f97b4d0d4f6,Principal,0.27,0.0,66.67,0.0
+29b90f97b4d0d4f6,Solicitor,0.3,0.0,36.0,0.0
+2a872e1e8684c27d,Compliance Officer,12.0,4.0,960.0,320.0
+2a872e1e8684c27d,IT Consultant,2.4,0.8,360.0,120.0
+2a872e1e8684c27d,Practice Manager,2.4,0.8,168.0,56.0
+2a872e1e8684c27d,Principal,3.6,1.2,900.0,300.0
+2a872e1e8684c27d,Solicitor,3.6,1.2,432.0,144.0
+2bc8bc8182582ba5,Accounts Officer,1.37,0.0,75.17,0.0
+2bc8bc8182582ba5,Conveyancer,0.7,0.0,52.5,0.0
+2bc8bc8182582ba5,HR & Payroll Officer,0.7,0.0,38.5,0.0
+2bc8bc8182582ba5,Principal,0.27,0.0,66.67,0.0
+2bc8bc8182582ba5,Solicitor,0.3,0.0,36.0,0.0
+2cf4d1e871f2e2fa,HR & Payroll Officer,0.5,0.0,27.5,0.0
+2d7d318a1df9f6e7,IT Consultant,0.5,0.0,75.0,0.0
+2dd13af110797482,Conveyancer,0.25,0.0,18.75,0.0
+2dd13af110797482,Trust Account Manager,0.25,0.0,16.25,0.0
+2df5e1e8759ec6fd,Accounts Officer,0.4,0.0,22.0,0.0
+2df5e1e8759ec6fd,HR & Payroll Officer,1.6,0.0,88.0,0.0
+2ea263b08028c3d7,Compliance Officer,2.8,0.0,224.0,0.0
+2ea263b08028c3d7,Solicitor,1.2,0.0,144.0,0.0
+2ecde0b46cb1ff46,HR & Payroll Officer,2.5,0.0,137.5,0.0
+2ecde0b46cb1ff46,Practice Manager,1.5,0.0,105.0,0.0
+2ecde0b46cb1ff46,Principal,1.0,0.0,250.0,0.0
+2fcc52d76fa1a03e,Compliance Officer,2.8,0.0,224.0,0.0
+2fcc52d76fa1a03e,Solicitor,1.2,0.0,144.0,0.0
+302100832edb4df1,Conveyancer,0.25,0.0,18.75,0.0
+302100832edb4df1,Trust Account Manager,0.25,0.0,16.25,0.0
+34ce89259fa9b166,Accounts Officer,0.3,0.0,16.5,0.0
+34ce89259fa9b166,Conveyancer,0.7,0.0,52.5,0.0
+34ce89259fa9b166,HR & Payroll Officer,1.53,0.0,84.33,0.0
+34ce89259fa9b166,Practice Manager,0.5,0.0,35.0,0.0
+34ce89259fa9b166,Principal,0.33,0.0,83.33,0.0
+34ce89259fa9b166,Solicitor,0.3,0.0,36.0,0.0
+36de32a592fca6a8,Accounts Officer,0.6,0.0,33.0,0.0
+36de32a592fca6a8,Compliance Officer,3.0,0.0,240.0,0.0
+36de32a592fca6a8,IT Consultant,0.6,0.0,90.0,0.0
+36de32a592fca6a8,Practice Manager,0.6,0.0,42.0,0.0
+36de32a592fca6a8,Principal,1.5,0.0,375.0,0.0
+36de32a592fca6a8,Solicitor,0.9,0.0,108.0,0.0
+36de32a592fca6a8,Trust Account Manager,1.8,0.0,117.0,0.0
+38d2cffdd00a8775,Compliance Officer,6.0,0.0,480.0,0.0
+38d2cffdd00a8775,IT Consultant,1.2,0.0,180.0,0.0
+38d2cffdd00a8775,Practice Manager,1.2,0.0,84.0,0.0
+38d2cffdd00a8775,Principal,1.8,0.0,450.0,0.0
+38d2cffdd00a8775,Solicitor,1.8,0.0,216.0,0.0
+3a7f1f0b0cbd8cbd,Accounts Officer,2.4,0.8,132.0,44.0
+3a7f1f0b0cbd8cbd,Principal,2.4,0.8,600.0,200.0
+3a7f1f0b0cbd8cbd,Trust Account Manager,7.2,2.4,468.0,156.0
+3bfa7d74a76b642f,Accounts Officer,0.4,0.0,22.0,0.0
+3bfa7d74a76b642f,HR & Payroll Officer,1.6,0.0,88.0,0.0
+3c7e1ad65482f811,Accounts Officer,2.4,0.8,132.0,44.0
+3c7e1ad65482f811,Principal,2.4,0.8,600.0,200.0
+3c7e1ad65482f811,Trust Account Manager,7.2,2.4,468.0,156.0
+3f061d3c2bc8f8be,Accounts Officer,0.2,0.0,11.0,0.0
+3f061d3c2bc8f8be,HR & Payroll Officer,2.05,0.0,112.75,0.0
+3f061d3c2bc8f8be,Practice Manager,0.75,0.0,52.5,0.0
+3f061d3c2bc8f8be,Principal,0.5,0.0,125.0,0.0
+3fef62f640098c5e,Accounts Officer,1.2,0.4,66.0,22.0
+3fef62f640098c5e,Compliance Officer,6.0,2.0,480.0,160.0
+3fef62f640098c5e,IT Consultant,1.2,0.4,180.0,60.0
+3fef62f640098c5e,Practice Manager,1.2,0.4,84.0,28.0
+3fef62f640098c5e,Principal,3.0,1.0,750.0,250.0
+3fef62f640098c5e,Solicitor,1.8,0.6,216.0,72.0
+3fef62f640098c5e,Trust Account Manager,3.6,1.2,234.0,78.0
+4036bd5dc2108845,Accounts Officer,0.3,0.0,16.5,0.0
+4036bd5dc2108845,Conveyancer,0.7,0.0,52.5,0.0
+4036bd5dc2108845,HR & Payroll Officer,1.53,0.0,84.33,0.0
+4036bd5dc2108845,Practice Manager,0.5,0.0,35.0,0.0
+4036bd5dc2108845,Principal,0.33,0.0,83.33,0.0
+4036bd5dc2108845,Solicitor,0.3,0.0,36.0,0.0
+42242b49017b19e1,Accounts Officer,0.2,0.0,11.0,0.0
+42242b49017b19e1,HR & Payroll Officer,2.05,0.0,112.75,0.0
+42242b49017b19e1,Practice Manager,0.75,0.0,52.5,0.0
+42242b49017b19e1,Principal,0.5,0.0,125.0,0.0
+426ef2a6e3700799,Compliance Officer,12.0,4.0,960.0,320.0
+426ef2a6e3700799,IT Consultant,2.4,0.8,360.0,120.0
+426ef2a6e3700799,Practice Manager,2.4,0.8,168.0,56.0
+426ef2a6e3700799,Principal,3.6,1.2,900.0,300.0
+426ef2a6e3700799,Solicitor,3.6,1.2,432.0,144.0
+4353b76b8114fc1c,Compliance Officer,6.0,0.0,480.0,0.0
+4353b76b8114fc1c,IT Consultant,1.2,0.0,180.0,0.0
+4353b76b8114fc1c,Practice Manager,1.2,0.0,84.0,0.0
+4353b76b8114fc1c,Principal,1.8,0.0,450.0,0.0
+4353b76b8114fc1c,Solicitor,1.8,0.0,216.0,0.0
+438fd0e4c1586d93,HR & Payroll Officer,2.5,0.0,137.5,0.0
+438fd0e4c1586d93,Practice Manager,1.5,0.0,105.0,0.0
+438fd0e4c1586d93,Principal,1.0,0.0,250.0,0.0
+4632b4c7d064ce25,Compliance Officer,0.5,0.0,40.0,0.0
+48a1d5cf28ac57f4,Compliance Officer,0.5,0.0,40.0,0.0
+48f45fe470fb51fe,IT Consultant,0.5,0.0,75.0,0.0
+4b65bb8cf133513c,Accounts Officer,1.2,0.4,66.0,22.0
+4b65bb8cf133513c,Compliance Officer,6.0,2.0,480.0,160.0
+4b65bb8cf133513c,IT Consultant,1.2,0.4,180.0,60.0
+4b65bb8cf133513c,Practice Manager,1.2,0.4,84.0,28.0
+4b65bb8cf133513c,Principal,3.0,1.0,750.0,250.0
+4b65bb8cf133513c,Solicitor,1.8,0.6,216.0,72.0
+4b65bb8cf133513c,Trust Account Manager,3.6,1.2,234.0,78.0
+505df2cf2073e5f5,Accounts Officer,1.37,0.0,75.17,0.0
+505df2cf2073e5f5,Conveyancer,0.7,0.0,52.5,0.0
+505df2cf2073e5f5,HR & Payroll Officer,0.7,0.0,38.5,0.0
+505df2cf2073e5f5,Principal,0.27,0.0,66.67,0.0
+505df2cf2073e5f5,Solicitor,0.3,0.0,36.0,0.0
+50b1a18b6473f44e,HR & Payroll Officer,2.5,0.0,137.5,0.0
+50b1a18b6473f44e,Practice Manager,1.5,0.0,105.0,0.0
+50b1a18b6473f44e,Principal,1.0,0.0,250.0,0.0
+51e1b1935c259abe,Conveyancer,0.25,0.0,18.75,0.0
+51e1b1935c259abe,Trust Account Manager,0.25,0.0,16.25,0.0
+52bd93a5f01cc630,Accounts Officer,0.25,0.0,13.75,0.0
+52bd93a5f01cc630,Conveyancer,0.25,0.0,18.75,0.0
+53025d119e5664c2,Compliance Officer,2.8,0.0,224.0,0.0
+53025d119e5664c2,Solicitor,1.2,0.0,144.0,0.0
+5500c1f26028bcd1,HR & Payroll Officer,5.0,1.0,275.0,55.0
+5500c1f26028bcd1,Practice Manager,3.0,0.6,210.0,42.0
+5500c1f26028bcd1,Principal,2.0,0.4,500.0,100.0
+560c6156ccd47da6,Compliance Officer,0.25,0.0,20.0,0.0
+560c6156ccd47da6,Trust Account Manager,0.25,0.0,16.25,0.0
+5693f9a770a3d211,Accounts Officer,0.25,0.0,13.75,0.0
+5693f9a770a3d211,Conveyancer,0.25,0.0,18.75,0.0
+587aed6fd3faf50b,Accounts Officer,0.5,0.0,27.5,0.0
+5a06c8786729fec7,Compliance Officer,12.0,4.0,960.0,320.0
+5a06c8786729fec7,IT Consultant,2.4,0.8,360.0,120.0
+5a06c8786729fec7,Practice Manager,2.4,0.8,168.0,56.0
+5a06c8786729fec7,Principal,3.6,1.2,900.0,300.0
+5a06c8786729fec7,Solicitor,3.6,1.2,432.0,144.0
+5b12fe314b8f411e,Accounts Officer,0.25,0.0,13.75,0.0
+5b12fe314b8f411e,Conveyancer,0.25,0.0,18.75,0.0
+5b2e752e7cc6465c,Compliance Officer,2.8,0.0,224.0,0.0
+5b2e752e7cc6465c,Solicitor,1.2,0.0,144.0,0.0
+5cdc97fb36e1d325,Conveyancer,0.25,0.0,18.75,0.0
+5cdc97fb36e1d325,Trust Account Manager,0.25,0.0,16.25,0.0
+5e0bf9ee2b4be179,Accounts Officer,0.5,0.0,27.5,0.0
+5e47de8d855b1b7e,Accounts Officer,0.5,0.0,27.5,0.0
+5e77e3ae197fee9e,HR & Payroll Officer,0.5,0.0,27.5,0.0
+5e8a7d457e2a63c3,Compliance Officer,2.8,0.0,224.0,0.0
+5e8a7d457e2a63c3,Solicitor,1.2,0.0,144.0,0.0
+60211243f2eea5ab,HR & Payroll Officer,5.0,1.0,275.0,55.0
+60211243f2eea5ab,Practice Manager,3.0,0.6,210.0,42.0
+60211243f2eea5ab,Principal,2.0,0.4,500.0,100.0
+607fd433440c7292,Accounts Officer,1.37,0.0,75.17,0.0
+607fd433440c7292,Conveyancer,0.7,0.0,52.5,0.0
+607fd433440c7292,HR & Payroll Officer,0.7,0.0,38.5,0.0
+607fd433440c7292,Principal,0.27,0.0,66.67,0.0
+607fd433440c7292,Solicitor,0.3,0.0,36.0,0.0
+6208445cbf4f9ed5,Accounts Officer,0.4,0.0,22.0,0.0
+6208445cbf4f9ed5,HR & Payroll Officer,1.6,0.0,88.0,0.0
+6301d4ca2aa11477,Compliance Officer,2.8,0.0,224.0,0.0
+6301d4ca2aa11477,Solicitor,1.2,0.0,144.0,0.0
+64c1715094c9a9cb,Compliance Officer,2.8,0.0,224.0,0.0
+64c1715094c9a9cb,Solicitor,1.2,0.0,144.0,0.0
+651204544d186e1d,Accounts Officer,0.4,0.0,22.0,0.0
+651204544d186e1d,HR & Payroll Officer,1.6,0.0,88.0,0.0
+65c1f3150839c88b,Accounts Officer,3.2,0.0,176.0,0.0
+65c1f3150839c88b,Principal,0.8,0.0,200.0,0.0
+66a32f24743fdee0,Conveyancer,0.25,0.0,18.75,0.0
+66a32f24743fdee0,Trust Account Manager,0.25,0.0,16.25,0.0
+67ecd60ac584e4ac,HR & Payroll Officer,0.5,0.0,27.5,0.0
+683f31d0615b7fc8,HR & Payroll Officer,2.5,0.0,137.5,0.0
+683f31d0615b7fc8,Practice Manager,1.5,0.0,105.0,0.0
+683f31d0615b7fc8,Principal,1.0,0.0,250.0,0.0
+68723ae2b31bc79f,Compliance Officer,0.5,0.0,40.0,0.0
+687daeace5828e01,Accounts Officer,3.2,0.0,176.0,0.0
+687daeace5828e01,Principal,0.8,0.0,200.0,0.0
+68b07fc96e1097af,Conveyancer,0.25,0.0,18.75,0.0
+68b07fc96e1097af,Trust Account Manager,0.25,0.0,16.25,0.0
+6b4a1241a4f724ae,HR & Payroll Officer,2.5,0.0,137.5,0.0
+6b4a1241a4f724ae,Practice Manager,1.5,0.0,105.0,0.0
+6b4a1241a4f724ae,Principal,1.0,0.0,250.0,0.0
+6bccd76ac845495d,IT Consultant,0.5,0.0,75.0,0.0
+6ea9ecc5eb392530,Compliance Officer,0.5,0.0,40.0,0.0
+718d3037212aa7bc,Accounts Officer,0.5,0.0,27.5,0.0
+721c31b08abd2283,IT Consultant,0.5,0.0,75.0,0.0
+72602f580fb6ce4c,HR & Payroll Officer,5.0,1.0,275.0,55.0
+72602f580fb6ce4c,Practice Manager,3.0,0.6,210.0,42.0
+72602f580fb6ce4c,Principal,2.0,0.4,500.0,100.0
+729fc43fd6abe592,Compliance Officer,0.5,0.0,40.0,0.0
+734efbb4a6b33405,HR & Payroll Officer,2.5,0.0,137.5,0.0
+734efbb4a6b33405,Practice Manager,1.5,0.0,105.0,0.0
+734efbb4a6b33405,Principal,1.0,0.0,250.0,0.0
+73e9d51d39c8dea5,Compliance Officer,0.5,0.0,40.0,0.0
+74d99f7adb4dc6de,HR & Payroll Officer,2.5,0.0,137.5,0.0
+74d99f7adb4dc6de,Practice Manager,1.5,0.0,105.0,0.0
+74d99f7adb4dc6de,Principal,1.0,0.0,250.0,0.0
+7558626ae3f6771b,Accounts Officer,0.65,0.0,35.75,0.0
+7558626ae3f6771b,HR & Payroll Officer,1.85,0.0,101.75,0.0
+77fc6a6ab915bb04,HR & Payroll Officer,0.5,0.0,27.5,0.0
+7bccb6b572a1b009,Conveyancer,0.25,0.0,18.75,0.0
+7bccb6b572a1b009,Trust Account Manager,0.25,0.0,16.25,0.0
+7d9f8ca4a6bca20a,Accounts Officer,1.3,0.15,71.5,8.25
+7d9f8ca4a6bca20a,HR & Payroll Officer,3.7,0.35,203.5,19.25
+82fb70b75b931232,Compliance Officer,6.0,0.0,480.0,0.0
+82fb70b75b931232,IT Consultant,1.2,0.0,180.0,0.0
+82fb70b75b931232,Practice Manager,1.2,0.0,84.0,0.0
+82fb70b75b931232,Principal,1.8,0.0,450.0,0.0
+82fb70b75b931232,Solicitor,1.8,0.0,216.0,0.0
+8412d80ac9475c1c,Accounts Officer,1.3,0.15,71.5,8.25
+8412d80ac9475c1c,HR & Payroll Officer,3.7,0.35,203.5,19.25
+8895c5e65cc35fe5,Compliance Officer,12.0,4.0,960.0,320.0
+8895c5e65cc35fe5,IT Consultant,2.4,0.8,360.0,120.0
+8895c5e65cc35fe5,Practice Manager,2.4,0.8,168.0,56.0
+8895c5e65cc35fe5,Principal,3.6,1.2,900.0,300.0
+8895c5e65cc35fe5,Solicitor,3.6,1.2,432.0,144.0
+890622313f126fdd,Accounts Officer,2.4,0.8,132.0,44.0
+890622313f126fdd,Principal,2.4,0.8,600.0,200.0
+890622313f126fdd,Trust Account Manager,7.2,2.4,468.0,156.0
+893fc48a8b30494b,Accounts Officer,0.65,0.0,35.75,0.0
+893fc48a8b30494b,HR & Payroll Officer,1.85,0.0,101.75,0.0
+89b7bc82016abda4,Accounts Officer,0.5,0.0,27.5,0.0
+8a8e9874a080bb9c,Accounts Officer,0.2,0.0,11.0,0.0
+8a8e9874a080bb9c,HR & Payroll Officer,2.05,0.0,112.75,0.0
+8a8e9874a080bb9c,Practice Manager,0.75,0.0,52.5,0.0
+8a8e9874a080bb9c,Principal,0.5,0.0,125.0,0.0
+8ac6bc6ccb1d5818,Compliance Officer,6.0,0.0,480.0,0.0
+8ac6bc6ccb1d5818,IT Consultant,1.2,0.0,180.0,0.0
+8ac6bc6ccb1d5818,Practice Manager,1.2,0.0,84.0,0.0
+8ac6bc6ccb1d5818,Principal,1.8,0.0,450.0,0.0
+8ac6bc6ccb1d5818,Solicitor,1.8,0.0,216.0,0.0
+8c7d03fd1bb0ae1b,Accounts Officer,0.3,0.0,16.5,0.0
+8c7d03fd1bb0ae1b,Conveyancer,0.7,0.0,52.5,0.0
+8c7d03fd1bb0ae1b,HR & Payroll Officer,1.53,0.0,84.33,0.0
+8c7d03fd1bb0ae1b,Practice Manager,0.5,0.0,35.0,0.0
+8c7d03fd1bb0ae1b,Principal,0.33,0.0,83.33,0.0
+8c7d03fd1bb0ae1b,Solicitor,0.3,0.0,36.0,0.0
+8dc77edc2f8c7417,Accounts Officer,0.3,0.0,16.5,0.0
+8dc77edc2f8c7417,Conveyancer,0.7,0.0,52.5,0.0
+8dc77edc2f8c7417,HR & Payroll Officer,1.53,0.0,84.33,0.0
+8dc77edc2f8c7417,Practice Manager,0.5,0.0,35.0,0.0
+8dc77edc2f8c7417,Principal,0.33,0.0,83.33,0.0
+8dc77edc2f8c7417,Solicitor,0.3,0.0,36.0,0.0
+8e4502ceca801295,Accounts Officer,1.3,0.15,71.5,8.25
+8e4502ceca801295,HR & Payroll Officer,3.7,0.35,203.5,19.25
+8f19aa80aebaaf32,Compliance Officer,6.0,0.0,480.0,0.0
+8f19aa80aebaaf32,IT Consultant,1.2,0.0,180.0,0.0
+8f19aa80aebaaf32,Practice Manager,1.2,0.0,84.0,0.0
+8f19aa80aebaaf32,Principal,1.8,0.0,450.0,0.0
+8f19aa80aebaaf32,Solicitor,1.8,0.0,216.0,0.0
+90f405a9d8cb7056,Compliance Officer,2.8,0.0,224.0,0.0
+90f405a9d8cb7056,Solicitor,1.2,0.0,144.0,0.0
+9128cc592d461f98,HR & Payroll Officer,2.5,0.0,137.5,0.0
+9128cc592d461f98,Practice Manager,1.5,0.0,105.0,0.0
+9128cc592d461f98,Principal,1.0,0.0,250.0,0.0
+92c3ec7247714048,Compliance Officer,12.0,4.0,960.0,320.0
+92c3ec7247714048,IT Consultant,2.4,0.8,360.0,120.0
+92c3ec7247714048,Practice Manager,2.4,0.8,168.0,56.0
+92c3ec7247714048,Principal,3.6,1.2,900.0,300.0
+92c3ec7247714048,Solicitor,3.6,1.2,432.0,144.0
+942b393855a4b9b9,IT Consultant,0.5,0.0,75.0,0.0
+94e8d4a74d84a129,Compliance Officer,6.0,0.0,480.0,0.0
+94e8d4a74d84a129,IT Consultant,1.2,0.0,180.0,0.0
+94e8d4a74d84a129,Practice Manager,1.2,0.0,84.0,0.0
+94e8d4a74d84a129,Principal,1.8,0.0,450.0,0.0
+94e8d4a74d84a129,Solicitor,1.8,0.0,216.0,0.0
+976feef4c62fb966,HR & Payroll Officer,2.5,0.0,137.5,0.0
+976feef4c62fb966,Practice Manager,1.5,0.0,105.0,0.0
+976feef4c62fb966,Principal,1.0,0.0,250.0,0.0
+9936ab8e4630a9d7,IT Consultant,0.5,0.0,75.0,0.0
+99456c3d0bd87c23,Accounts Officer,1.3,0.15,71.5,8.25
+99456c3d0bd87c23,HR & Payroll Officer,3.7,0.35,203.5,19.25
+99b20307dd34b0b9,IT Consultant,0.5,0.0,75.0,0.0
+9b79a35cba0fb971,IT Consultant,0.5,0.0,75.0,0.0
+9c40cd0a05317654,Conveyancer,0.25,0.0,18.75,0.0
+9c40cd0a05317654,Trust Account Manager,0.25,0.0,16.25,0.0
+9d09d7e0e67c2529,Accounts Officer,1.37,0.0,75.17,0.0
+9d09d7e0e67c2529,Conveyancer,0.7,0.0,52.5,0.0
+9d09d7e0e67c2529,HR & Payroll Officer,0.7,0.0,38.5,0.0
+9d09d7e0e67c2529,Principal,0.27,0.0,66.67,0.0
+9d09d7e0e67c2529,Solicitor,0.3,0.0,36.0,0.0
+9d4cdb1d51e2144c,HR & Payroll Officer,0.5,0.0,27.5,0.0
+9db183495c5f0134,Compliance Officer,0.5,0.0,40.0,0.0
+9f2d1ec009128a31,Accounts Officer,0.65,0.0,35.75,0.0
+9f2d1ec009128a31,HR & Payroll Officer,1.85,0.0,101.75,0.0
+9f7bd11fe4dc2cf6,Accounts Officer,2.4,0.8,132.0,44.0
+9f7bd11fe4dc2cf6,Principal,2.4,0.8,600.0,200.0
+9f7bd11fe4dc2cf6,Trust Account Manager,7.2,2.4,468.0,156.0
+a32cb4b4b17b6aef,Compliance Officer,0.5,0.0,40.0,0.0
+a6cb671600bb19d5,Accounts Officer,0.4,0.0,22.0,0.0
+a6cb671600bb19d5,HR & Payroll Officer,1.6,0.0,88.0,0.0
+a79445fe891ba1f0,Compliance Officer,0.5,0.0,40.0,0.0
+a9c054b56227fc2d,HR & Payroll Officer,0.5,0.0,27.5,0.0
+abdc9a821dbeb347,Accounts Officer,0.2,0.0,11.0,0.0
+abdc9a821dbeb347,HR & Payroll Officer,2.05,0.0,112.75,0.0
+abdc9a821dbeb347,Practice Manager,0.75,0.0,52.5,0.0
+abdc9a821dbeb347,Principal,0.5,0.0,125.0,0.0
+ae53d0fe36bdfb9c,Accounts Officer,0.25,0.0,13.75,0.0
+ae53d0fe36bdfb9c,Conveyancer,0.25,0.0,18.75,0.0
+aeaa164f5035d13b,IT Consultant,0.5,0.0,75.0,0.0
+af27b3555aa97b82,HR & Payroll Officer,5.0,1.0,275.0,55.0
+af27b3555aa97b82,Practice Manager,3.0,0.6,210.0,42.0
+af27b3555aa97b82,Principal,2.0,0.4,500.0,100.0
+af57a5c20ea96845,Accounts Officer,0.65,0.0,35.75,0.0
+af57a5c20ea96845,HR & Payroll Officer,1.85,0.0,101.75,0.0
+b1246efb7eb8c2b7,IT Consultant,0.5,0.0,75.0,0.0
+b1380ffc1b186793,Compliance Officer,0.5,0.0,40.0,0.0
+b1c76e418931317d,Compliance Officer,0.5,0.0,40.0,0.0
+b2a199b50e13648f,Accounts Officer,0.2,0.0,11.0,0.0
+b2a199b50e13648f,HR & Payroll Officer,2.05,0.0,112.75,0.0
+b2a199b50e13648f,Practice Manager,0.75,0.0,52.5,0.0
+b2a199b50e13648f,Principal,0.5,0.0,125.0,0.0
+b4c1e3a4d1fc9f44,Accounts Officer,1.3,0.15,71.5,8.25
+b4c1e3a4d1fc9f44,HR & Payroll Officer,3.7,0.35,203.5,19.25
+b6a1ade39ceb4445,Compliance Officer,12.0,4.0,960.0,320.0
+b6a1ade39ceb4445,IT Consultant,2.4,0.8,360.0,120.0
+b6a1ade39ceb4445,Practice Manager,2.4,0.8,168.0,56.0
+b6a1ade39ceb4445,Principal,3.6,1.2,900.0,300.0
+b6a1ade39ceb4445,Solicitor,3.6,1.2,432.0,144.0
+b6aa99e8c0d74b82,Accounts Officer,0.9,0.15,49.5,8.25
+b6aa99e8c0d74b82,HR & Payroll Officer,4.6,0.85,253.0,46.75
+b6aa99e8c0d74b82,Practice Manager,1.5,0.3,105.0,21.0
+b6aa99e8c0d74b82,Principal,1.0,0.2,250.0,50.0
+b8ed7059af3a918b,Accounts Officer,0.25,0.0,13.75,0.0
+b8ed7059af3a918b,Conveyancer,0.25,0.0,18.75,0.0
+ba749adc027dd34d,Compliance Officer,6.0,0.0,480.0,0.0
+ba749adc027dd34d,IT Consultant,1.2,0.0,180.0,0.0
+ba749adc027dd34d,Practice Manager,1.2,0.0,84.0,0.0
+ba749adc027dd34d,Principal,1.8,0.0,450.0,0.0
+ba749adc027dd34d,Solicitor,1.8,0.0,216.0,0.0
+bcffb3ea90547fe4,Accounts Officer,0.65,0.0,35.75,0.0
+bcffb3ea90547fe4,HR & Payroll Officer,1.85,0.0,101.75,0.0
+be90b951853b7ae5,HR & Payroll Officer,0.5,0.0,27.5,0.0
+befd28b30529133d,HR & Payroll Officer,2.5,0.0,137.5,0.0
+befd28b30529133d,Practice Manager,1.5,0.0,105.0,0.0
+befd28b30529133d,Principal,1.0,0.0,250.0,0.0
+bff946b66d73a68f,IT Consultant,0.5,0.0,75.0,0.0
+c00f77c5e857c392,Accounts Officer,1.2,0.4,66.0,22.0
+c00f77c5e857c392,Compliance Officer,6.0,2.0,480.0,160.0
+c00f77c5e857c392,IT Consultant,1.2,0.4,180.0,60.0
+c00f77c5e857c392,Practice Manager,1.2,0.4,84.0,28.0
+c00f77c5e857c392,Principal,3.0,1.0,750.0,250.0
+c00f77c5e857c392,Solicitor,1.8,0.6,216.0,72.0
+c00f77c5e857c392,Trust Account Manager,3.6,1.2,234.0,78.0
+c01e6cf0dfd80d11,Accounts Officer,0.25,0.0,13.75,0.0
+c01e6cf0dfd80d11,Conveyancer,0.25,0.0,18.75,0.0
+c04795d8f181e611,Compliance Officer,0.5,0.0,40.0,0.0
+c04f4848cf138f91,IT Consultant,0.5,0.0,75.0,0.0
+c59165b6b10203c3,Conveyancer,0.25,0.0,18.75,0.0
+c59165b6b10203c3,Trust Account Manager,0.25,0.0,16.25,0.0
+c74759dc896d594f,Compliance Officer,0.5,0.0,40.0,0.0
+c98ccb698f926c33,Conveyancer,0.25,0.0,18.75,0.0
+c98ccb698f926c33,Trust Account Manager,0.25,0.0,16.25,0.0
+cb1c9f4af3b5fd91,Accounts Officer,0.4,0.0,22.0,0.0
+cb1c9f4af3b5fd91,HR & Payroll Officer,1.6,0.0,88.0,0.0
+ccb105d830cdd019,Compliance Officer,0.25,0.0,20.0,0.0
+ccb105d830cdd019,Trust Account Manager,0.25,0.0,16.25,0.0
+cf5a506cb43880f8,Compliance Officer,0.5,0.0,40.0,0.0
+cf9b942d6b48cd5c,Accounts Officer,0.9,0.15,49.5,8.25
+cf9b942d6b48cd5c,HR & Payroll Officer,4.6,0.85,253.0,46.75
+cf9b942d6b48cd5c,Practice Manager,1.5,0.3,105.0,21.0
+cf9b942d6b48cd5c,Principal,1.0,0.2,250.0,50.0
+d2b99fbc7a17a4ce,Accounts Officer,1.37,0.0,75.17,0.0
+d2b99fbc7a17a4ce,Conveyancer,0.7,0.0,52.5,0.0
+d2b99fbc7a17a4ce,HR & Payroll Officer,0.7,0.0,38.5,0.0
+d2b99fbc7a17a4ce,Principal,0.27,0.0,66.67,0.0
+d2b99fbc7a17a4ce,Solicitor,0.3,0.0,36.0,0.0
+d39171184b407054,HR & Payroll Officer,5.0,1.0,275.0,55.0
+d39171184b407054,Practice Manager,3.0,0.6,210.0,42.0
+d39171184b407054,Principal,2.0,0.4,500.0,100.0
+d5177bd3db42e51f,Accounts Officer,1.2,0.4,66.0,22.0
+d5177bd3db42e51f,Compliance Officer,6.0,2.0,480.0,160.0
+d5177bd3db42e51f,IT Consultant,1.2,0.4,180.0,60.0
+d5177bd3db42e51f,Practice Manager,1.2,0.4,84.0,28.0
+d5177bd3db42e51f,Principal,3.0,1.0,750.0,250.0
+d5177bd3db42e51f,Solicitor,1.8,0.6,216.0,72.0
+d5177bd3db42e51f,Trust Account Manager,3.6,1.2,234.0,78.0
+d5a666f5134dccf9,Compliance Officer,0.5,0.0,40.0,0.0
+d66743110fac3a1f,Compliance Officer,0.5,0.0,40.0,0.0
+d787253b0a236e7c,HR & Payroll Officer,0.5,0.0,27.5,0.0
+d7a48bcefb056d49,Compliance Officer,6.0,0.0,480.0,0.0
+d7a48bcefb056d49,IT Consultant,1.2,0.0,180.0,0.0
+d7a48bcefb056d49,Practice Manager,1.2,0.0,84.0,0.0
+d7a48bcefb056d49,Principal,1.8,0.0,450.0,0.0
+d7a48bcefb056d49,Solicitor,1.8,0.0,216.0,0.0
+d7fe5852c3bb4977,Compliance Officer,0.5,0.0,40.0,0.0
+d82a46b747f47e6a,Accounts Officer,0.25,0.0,13.75,0.0
+d82a46b747f47e6a,Conveyancer,0.25,0.0,18.75,0.0
+d8b5f47400369f20,Compliance Officer,0.5,0.0,40.0,0.0
+d8e52c4baf3f8f24,Accounts Officer,0.9,0.15,49.5,8.25
+d8e52c4baf3f8f24,HR & Payroll Officer,4.6,0.85,253.0,46.75
+d8e52c4baf3f8f24,Practice Manager,1.5,0.3,105.0,21.0
+d8e52c4baf3f8f24,Principal,1.0,0.2,250.0,50.0
+d916dc0a40f366a6,HR & Payroll Officer,0.5,0.0,27.5,0.0
+dc20bed9da9a2ebd,Compliance Officer,0.25,0.0,20.0,0.0
+dc20bed9da9a2ebd,Trust Account Manager,0.25,0.0,16.25,0.0
+dddf9f712bf5b46a,Accounts Officer,0.6,0.0,33.0,0.0
+dddf9f712bf5b46a,Compliance Officer,3.0,0.0,240.0,0.0
+dddf9f712bf5b46a,IT Consultant,0.6,0.0,90.0,0.0
+dddf9f712bf5b46a,Practice Manager,0.6,0.0,42.0,0.0
+dddf9f712bf5b46a,Principal,1.5,0.0,375.0,0.0
+dddf9f712bf5b46a,Solicitor,0.9,0.0,108.0,0.0
+dddf9f712bf5b46a,Trust Account Manager,1.8,0.0,117.0,0.0
+de31414ae7648cc2,Compliance Officer,0.5,0.0,40.0,0.0
+df41b04d8e94e467,HR & Payroll Officer,2.5,0.0,137.5,0.0
+df41b04d8e94e467,Practice Manager,1.5,0.0,105.0,0.0
+df41b04d8e94e467,Principal,1.0,0.0,250.0,0.0
+dfe9472fb55597a8,Compliance Officer,2.8,0.0,224.0,0.0
+dfe9472fb55597a8,Solicitor,1.2,0.0,144.0,0.0
+e22afb701214212c,Compliance Officer,0.5,0.0,40.0,0.0
+e24ea18b4be30e6f,Accounts Officer,0.3,0.0,16.5,0.0
+e24ea18b4be30e6f,Conveyancer,0.7,0.0,52.5,0.0
+e24ea18b4be30e6f,HR & Payroll Officer,1.53,0.0,84.33,0.0
+e24ea18b4be30e6f,Practice Manager,0.5,0.0,35.0,0.0
+e24ea18b4be30e6f,Principal,0.33,0.0,83.33,0.0
+e24ea18b4be30e6f,Solicitor,0.3,0.0,36.0,0.0
+e2f8a71350c59d74,Accounts Officer,1.2,0.4,66.0,22.0
+e2f8a71350c59d74,Compliance Officer,6.0,2.0,480.0,160.0
+e2f8a71350c59d74,IT Consultant,1.2,0.4,180.0,60.0
+e2f8a71350c59d74,Practice Manager,1.2,0.4,84.0,28.0
+e2f8a71350c59d74,Principal,3.0,1.0,750.0,250.0
+e2f8a71350c59d74,Solicitor,1.8,0.6,216.0,72.0
+e2f8a71350c59d74,Trust Account Manager,3.6,1.2,234.0,78.0
+e471f58fb4c93d14,Accounts Officer,0.3,0.0,16.5,0.0
+e471f58fb4c93d14,Conveyancer,0.7,0.0,52.5,0.0
+e471f58fb4c93d14,HR & Payroll Officer,1.53,0.0,84.33,0.0
+e471f58fb4c93d14,Practice Manager,0.5,0.0,35.0,0.0
+e471f58fb4c93d14,Principal,0.33,0.0,83.33,0.0
+e471f58fb4c93d14,Solicitor,0.3,0.0,36.0,0.0
+e4bd7b28fc80db40,Compliance Officer,0.5,0.0,40.0,0.0
+e4cbdc55dbb01c60,Compliance Officer,0.5,0.0,40.0,0.0
+e4fa7b080f7403e6,Accounts Officer,0.4,0.0,22.0,0.0
+e4fa7b080f7403e6,HR & Payroll Officer,1.6,0.0,88.0,0.0
+e5633bc274277127,Compliance Officer,12.0,4.0,960.0,320.0
+e5633bc274277127,IT Consultant,2.4,0.8,360.0,120.0
+e5633bc274277127,Practice Manager,2.4,0.8,168.0,56.0
+e5633bc274277127,Principal,3.6,1.2,900.0,300.0
+e5633bc274277127,Solicitor,3.6,1.2,432.0,144.0
+e7ff73d469479463,Accounts Officer,0.4,0.0,22.0,0.0
+e7ff73d469479463,HR & Payroll Officer,1.6,0.0,88.0,0.0
+e82eaede1d6aa388,Compliance Officer,0.5,0.0,40.0,0.0
+ea82987cbc6eb1f5,Conveyancer,0.25,0.0,18.75,0.0
+ea82987cbc6eb1f5,Trust Account Manager,0.25,0.0,16.25,0.0
+ec9a420424cbaacc,Compliance Officer,0.5,0.0,40.0,0.0
+ed720ead3483a404,IT Consultant,0.5,0.0,75.0,0.0
+eead488806c069e5,IT Consultant,0.5,0.0,75.0,0.0
+efb9bd31723be80b,Compliance Officer,12.0,4.0,960.0,320.0
+efb9bd31723be80b,IT Consultant,2.4,0.8,360.0,120.0
+efb9bd31723be80b,Practice Manager,2.4,0.8,168.0,56.0
+efb9bd31723be80b,Principal,3.6,1.2,900.0,300.0
+efb9bd31723be80b,Solicitor,3.6,1.2,432.0,144.0
+f0e9276b6e00c77a,Compliance Officer,6.0,0.0,480.0,0.0
+f0e9276b6e00c77a,IT Consultant,1.2,0.0,180.0,0.0
+f0e9276b6e00c77a,Practice Manager,1.2,0.0,84.0,0.0
+f0e9276b6e00c77a,Principal,1.8,0.0,450.0,0.0
+f0e9276b6e00c77a,Solicitor,1.8,0.0,216.0,0.0
+f1d293e3d2b9d688,Compliance Officer,2.8,0.0,224.0,0.0
+f1d293e3d2b9d688,Solicitor,1.2,0.0,144.0,0.0
+f43db03711fe2a72,HR & Payroll Officer,0.5,0.0,27.5,0.0
+fb0a548d348e56ee,Accounts Officer,0.2,0.0,11.0,0.0
+fb0a548d348e56ee,HR & Payroll Officer,2.05,0.0,112.75,0.0
+fb0a548d348e56ee,Practice Manager,0.75,0.0,52.5,0.0
+fb0a548d348e56ee,Principal,0.5,0.0,125.0,0.0
+fbd63858329f1df9,Compliance Officer,12.0,4.0,960.0,320.0
+fbd63858329f1df9,IT Consultant,2.4,0.8,360.0,120.0
+fbd63858329f1df9,Practice Manager,2.4,0.8,168.0,56.0
+fbd63858329f1df9,Principal,3.6,1.2,900.0,300.0
+fbd63858329f1df9,Solicitor,3.6,1.2,432.0,144.0
+fe0391f45118e451,Accounts Officer,2.4,0.8,132.0,44.0
+fe0391f45118e451,Principal,2.4,0.8,600.0,200.0
+fe0391f45118e451,Trust Account Manager,7.2,2.4,468.0,156.0
+ffad072298edee2f,Compliance Officer,12.0,4.0,960.0,320.0
+ffad072298edee2f,IT Consultant,2.4,0.8,360.0,120.0
+ffad072298edee2f,Practice Manager,2.4,0.8,168.0,56.0
+ffad072298edee2f,Principal,3.6,1.2,900.0,300.0
+ffad072298edee2f,Solicitor,3.6,1.2,432.0,144.0

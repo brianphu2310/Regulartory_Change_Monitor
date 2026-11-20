@@ -1,0 +1,28 @@
+name: probe (temp)
+on:
+  push:
+    branches: [feature/live-monitor]
+    paths: [".github/workflows/probe.yml"]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          UA="RegulatoryChangeMonitor/1.0 (portfolio project; +https://github.com/brianphu2310/Regulartory_Change_Monitor)"
+          for u in \
+            "https://news.google.com/rss/search?q=site:austrac.gov.au&hl=en-AU&gl=AU&ceid=AU:en" \
+            "https://news.google.com/rss/search?q=site:ato.gov.au&hl=en-AU&gl=AU&ceid=AU:en" \
+            "https://news.google.com/rss/search?q=site:fairwork.gov.au&hl=en-AU&gl=AU&ceid=AU:en" \
+            "https://news.google.com/rss/search?q=site:oaic.gov.au&hl=en-AU&gl=AU&ceid=AU:en" \
+            "https://news.google.com/rss/search?q=site:lawsociety.com.au&hl=en-AU&gl=AU&ceid=AU:en" \
+            "https://www.legislation.gov.au/robots.txt" \
+            "https://www.aph.gov.au/robots.txt" \
+            "https://www.asic.gov.au/robots.txt" \
+            "https://www.lawsociety.com.au/robots.txt" \
+            "https://www.fairwork.gov.au/robots.txt" \
+            "https://www.ato.gov.au/robots.txt" \
+            "https://www.oaic.gov.au/robots.txt" \
+            "https://www.austrac.gov.au/robots.txt" ; do
+            code=$(curl -s -o /tmp/b -w "%{http_code}" -m 20 -A "$UA" "$u"); echo "$code $(wc -c </tmp/b)B $u"
+            case "$u" in *google*) grep -o "<title>[^<]*</title>" /tmp/b | sed -n 2,4p;; *robots*) grep -i -E "^(user-agent|disallow: /$|crawl)" /tmp/b | head -6;; esac
+          done

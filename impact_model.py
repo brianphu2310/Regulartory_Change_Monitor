@@ -135,8 +135,16 @@ def build(out: Path = OUT, as_of: pd.Timestamp | None = None) -> dict[str, pd.Da
     cap["hours_over_capacity"] = (cap["hours_required"] - cap["hours_available"]).clip(lower=0).round(2)
     cap["hours_required"] = cap["hours_required"].round(2)
 
+    # one wide table for the focused dashboard: the change, its cost and time, and who leads it
+    lead = effort.sort_values("one_off_hours", ascending=False).drop_duplicates("id").set_index("id")["role"]
+    dash = changes[["id", "published", "source", "title", "link", "impact", "impact_sort", "topics", "status", "action_req"]].drop(columns="published").merge(imp, on="id")
+    dash["lead_role"] = dash["id"].map(lead)
+    dash["lead_department"] = dash["lead_role"].map(roles.set_index("role")["department"])
+    dash["published"] = pd.to_datetime(dash["published"]).dt.date
+    effort = effort.merge(roles[["role", "department", "hourly_cost"]], on="role")
+
     tables = {"impact_assumptions": assumptions, "dim_role": roles, "change_effort": effort,
-              "change_impact": imp, "capacity_monthly": cap}
+              "change_impact": imp, "capacity_monthly": cap, "dashboard_changes": dash}
     for name, df in tables.items():
         df.to_csv(out / f"{name}.csv", index=False)
     return tables

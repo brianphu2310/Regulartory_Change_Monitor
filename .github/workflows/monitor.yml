@@ -5,9 +5,6 @@ on:
   schedule:
     - cron: "17 20 * * *"   # 07:17 Sydney (AEDT)
   workflow_dispatch:
-  push:   # TEMP: test run on the feature branch
-    branches: [feature/live-monitor]
-    paths: ["monitor/**", ".github/workflows/monitor.yml", "Dockerfile"]
 
 permissions:
   contents: write

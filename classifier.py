@@ -15,7 +15,8 @@ TOPIC_RULES = {
     "Payroll": ["payroll", "payg", "withholding", "stp", "single touch payroll",
                 "payslip", "wages"],
     "Tax": ["income tax", "gst", "fringe benefits", "land tax", "tax return",
-            "bas ", "ato ", "deduction", "capital gains"],
+            "bas ", "ato ", "deduction", "capital gains", " tax ", "taxation",
+            "tax transparency", "minimum tax"],
     "Employment": ["fair work", "award", "minimum wage", "modern award",
                    "unfair dismissal", "enterprise agreement", "leave entitlement",
                    "casual", "employee"],
@@ -24,7 +25,7 @@ TOPIC_RULES = {
     "Property": ["property", "settlement", "stamp duty", "pexa", "conveyanc",
                  "strata", "title"],
     "Privacy & Data": ["privacy", "data breach", "notifiable data", "oaic",
-                       "cyber security"],
+                       "cyber security", "consumer data right"],
     "Sanctions": ["sanction", "dfat", "autonomous sanctions", "pep "],
 }
 

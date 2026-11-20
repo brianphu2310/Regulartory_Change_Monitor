@@ -28,6 +28,10 @@ A Power BI report (plus an interactive HTML design preview) that tracks regulato
 
 [`impact_model.py`](impact_model.py) adds five tables to `bi_export/` so the report can answer the next questions: what will these changes **cost** (once and every year), how much **time** is left and what is already late, and which **people** do the work and whether they have the hours. On the synthetic data: about **$137K** one-off ($104K staff time, $33K external) and **$23K a year** ongoing; **473 outstanding hours**, 27 changes past their target date; October needs **400 hours against 140 available**, mostly the Compliance Officer and the Principal. Rules and limits: [docs/IMPACT_MODEL.md](docs/IMPACT_MODEL.md); Power BI model, DAX and page plan: [POWERBI_GUIDE.md](POWERBI_GUIDE.md#v2-finance-time-and-people-pages-impact-model).
 
+## v3: a live monitor that runs itself
+
+Every morning GitHub Actions builds a **Docker** image and runs [`monitor/`](monitor/): it reads official agency news (RSS first, news page fallback, robots.txt checked), keeps what is new and relevant, classifies it, costs it with the impact model, commits the results to `data/live/` and opens a **GitHub Issue** with the report when something new appears. Power BI reads the same CSVs over HTTPS, so **Refresh** brings in the latest run. Some agency sites refuse cloud runners; the run log says so and `run_local.ps1` runs the same image from a desktop. Details: [docs/LIVE_MONITOR.md](docs/LIVE_MONITOR.md).
+
 ## What is in the repo
 | Path | What it is |
 |---|---|

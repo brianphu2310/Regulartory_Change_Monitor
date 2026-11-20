@@ -56,3 +56,11 @@ def test_committed_export_is_consistent():
         assert set(t["id"]) <= set(ch["id"]), f
         assert t[col].notna().all(), f
     assert ch["impact"].isin(["High", "Medium", "Low"]).all()
+
+
+def test_real_treasury_titles_are_tagged():
+    # titles fetched from treasury.gov.au/consultation on 20 Nov 2026
+    assert "Tax" in classify("Crypto asset tax transparency - draft legislation", "", D)["topics"]
+    assert "Tax" in classify("Global and domestic minimum tax – amending legislation tranche 4", "", D)["topics"]
+    assert "Privacy & Data" in classify("Consumer Data Right FAPI 2.0 alignment – draft standards", "", D)["topics"]
+    assert classify("Reforms to the bankruptcy system", "", D)["topics"] == "Other"

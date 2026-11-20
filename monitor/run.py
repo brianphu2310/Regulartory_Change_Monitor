@@ -118,6 +118,8 @@ def main(dry: bool = False) -> int:
     changes.to_csv(LIVE / "changes.csv", index=False)
     _split(changes, "topics", "topic").to_csv(LIVE / "change_topics.csv", index=False)
     _split(changes, "audiences", "audience").to_csv(LIVE / "change_audiences.csv", index=False)
+    pd.DataFrame(items, columns=["source", "feed", "via", "published", "title", "link", "id"]).merge(
+        fresh[["id", "topics", "impact"]], on="id", how="left").to_csv(LIVE / "fetched_latest.csv", index=False)
     pd.concat([seen_df, pd.DataFrame({"id": fresh["id"], "first_seen": str(today)})]).to_csv(LIVE / "seen.csv", index=False)
     log_path = LIVE / "run_log.csv"
     pd.DataFrame(log).to_csv(log_path, mode="a", header=not log_path.exists(), index=False)

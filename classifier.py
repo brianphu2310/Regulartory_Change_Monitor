@@ -82,7 +82,7 @@ def extract_deadline(text: str, published: date) -> date | None:
             dt = date(int(y), MONTHS[m.lower()], int(d))
         except ValueError:
             continue
-        if dt >= published:
+        if dt > published:   # the publication date itself is not a deadline
             found.append(dt)
     return min(found) if found else None
 

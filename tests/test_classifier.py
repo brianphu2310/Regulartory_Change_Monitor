@@ -79,3 +79,9 @@ def test_card_titles_are_cleaned():
     a = BeautifulSoup('<a href="/x">announcement Preparing for land tax in 2027 16 November 2026 Revenue NSW will start '
                       'issuing land tax assessment notices.</a>', "html.parser").a
     assert clean_title(a) == "Preparing for land tax in 2027"
+
+
+def test_publication_date_is_not_a_deadline():
+    d = date(2026, 11, 16)
+    assert extract_deadline("Preparing for land tax 16 November 2026. Notices issue on 18 January 2027.", d) == date(2027, 1, 18)
+    assert extract_deadline("Revenue NSW update 16 November 2026", d) is None

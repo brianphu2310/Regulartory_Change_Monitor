@@ -12,3 +12,14 @@
 | Automated tests and CI | `tests/`, `.github/workflows/ci.yml` |
 
 Not claimed: no web scraping, no live agency data, no trained model, no cloud deployment.
+
+## v2 and v3 (impact model and live monitor)
+
+| Skill | Where |
+|---|---|
+| Cost and capacity modelling (staff time × loaded rate, external spend, monthly load by role) | `impact_model.py`, `docs/IMPACT_MODEL.md` |
+| Web data collection with robots.txt checks and per-source error handling | `monitor/fetch.py`, `monitor/sources.py` |
+| Containerisation | `Dockerfile`, `run_local.ps1` |
+| Scheduled orchestration, automated commits and issue reports | `.github/workflows/monitor.yml` |
+| Power BI as code: TMDL semantic model, PBIR report, DAX, Power Query M with parameters | `powerbi/live/build_pbip.py` |
+| System design with explicit trade-offs | `docs/ARCHITECTURE.md` |

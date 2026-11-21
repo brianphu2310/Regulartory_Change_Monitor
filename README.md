@@ -1,73 +1,86 @@
 # Regulatory Change Monitor
 
-A Power BI report (plus an interactive HTML design preview) that tracks regulatory changes from Australian agencies (AUSTRAC, ATO, Fair Work, Law Society, OAIC, DFAT) and maps them to the departments of a law firm: which changes matter, how urgent they are, and what still needs action.
+[![CI](https://github.com/brianphu2310/Regulartory_Change_Monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/brianphu2310/Regulartory_Change_Monitor/actions/workflows/ci.yml)
+[![Weekly monitor](https://github.com/brianphu2310/Regulartory_Change_Monitor/actions/workflows/monitor.yml/badge.svg)](https://github.com/brianphu2310/Regulartory_Change_Monitor/actions/workflows/monitor.yml)
 
-> **All data is synthetic.** The ~200 items are invented for demonstration and are not real agency announcements. Tags (topic, impact, audience, action required, deadline) come from transparent keyword rules in `classifier.py`, not from a model, and this is not legal advice. There is no web scraping in this project.
+Every Monday morning this project reads official Australian agency news, keeps what matters to a law firm, estimates
+what each change will **cost**, how much **time** is left and **who** has to do the work, opens a report as a GitHub
+Issue, and feeds a Power BI dashboard. Nobody has to open a browser.
 
 ![Power BI report: Overview page](docs/powerbi/regulatory-1-overview.png)
 
-**Open the dashboard:** [Download the Power BI report (.pbix)](https://github.com/brianphu2310/Regulartory_Change_Monitor/raw/main/powerbi/regulatory_change_monitor.pbix) (open in Power BI Desktop) · [Interactive HTML preview](https://htmlpreview.github.io/?https://github.com/brianphu2310/Regulartory_Change_Monitor/blob/main/preview/dashboard_preview.html) (opens in the browser, no install)
-
-*Overview page of the Power BI report (`powerbi/regulatory_change_monitor.pbix`): 200 synthetic changes, 69 high impact, 54 open actions, 16 overdue. An interactive HTML design preview is in `preview/dashboard_preview.html`.*
-
-**Who it is for:** a compliance lead or practice manager who wants to see at a glance which regulatory changes matter, how urgent they are and who has to act, without reading every agency bulletin. A "Key takeaways" line on the overview states the three things to know in plain English.
-
 ## At a glance
-
-[![CI](https://github.com/brianphu2310/Regulartory_Change_Monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/brianphu2310/Regulartory_Change_Monitor/actions)
 
 | | |
 |---|---|
-| **Question** | Which regulatory changes matter to a law firm, how urgent are they, and who has to act? |
-| **What I built** | Rule-based classifier (topic, impact, audience, action, deadline), star-schema CSVs and a Power BI report with drill-through pages. |
-| **Key results** | 200 synthetic changes across 6 agencies: 69 high impact, 54 open actions, 16 overdue. |
-| **Proof** | CI green, 9 tests; CI regenerates the dataset on every push. |
-| **Honest limits** | All data is synthetic and there is no scraping, by design. Tags come from transparent keyword rules, not a model. Not legal advice. |
+| **Question** | Which regulatory changes matter to a law firm, what will they cost, and does the team have the hours to deal with them? |
+| **What I built** | A weekly pipeline (Docker on GitHub Actions) that fetches agency news, de-duplicates, classifies with transparent rules, costs each change with an impact model, commits the results and raises a GitHub Issue; two Power BI reports on top. |
+| **Key results** | On the synthetic year: **$137K** one-off cost ($104K staff time, $33K external), **$23K a year** ongoing, **473 outstanding hours**, 27 changes past target. October needs **400 hours against 140 available**, mostly the Compliance Officer and the Principal: the money is manageable, the people are not. |
+| **Live proof** | First cloud run on 20 Nov 2026 fetched 10 real Treasury consultations; blocked sources are logged, not worked around. |
+| **Tech** | Python, pandas, requests, BeautifulSoup, feedparser · Docker · GitHub Actions · Power BI (TMDL + PBIR project, DAX, Power Query M) · pytest |
+| **Honest limits** | Tags and costs come from stated rules and assumptions, not legal advice or quotes. Several agency sites refuse cloud runners; those need a desktop run. The v1 report uses synthetic data. |
 
-## v2: what each change costs in money, time and people
+## How it works
 
-[`impact_model.py`](impact_model.py) adds five tables to `bi_export/` so the report can answer the next questions: what will these changes **cost** (once and every year), how much **time** is left and what is already late, and which **people** do the work and whether they have the hours. On the synthetic data: about **$137K** one-off ($104K staff time, $33K external) and **$23K a year** ongoing; **473 outstanding hours**, 27 changes past their target date; October needs **400 hours against 140 available**, mostly the Compliance Officer and the Principal. Rules and limits: [docs/IMPACT_MODEL.md](docs/IMPACT_MODEL.md); Power BI model, DAX and page plan: [POWERBI_GUIDE.md](POWERBI_GUIDE.md#v2-finance-time-and-people-pages-impact-model).
+```mermaid
+flowchart LR
+    A[GitHub Actions<br/>Monday 07:17] --> B[Docker<br/>reg-monitor]
+    B --> C[Fetch<br/>RSS, then news page<br/>robots.txt checked]
+    C --> D[New and relevant?]
+    D --> E[Classify<br/>topic, impact,<br/>action, deadline]
+    E --> F[Impact model<br/>cost, hours,<br/>owner, capacity]
+    F --> G[data/live CSVs<br/>committed]
+    F --> H[GitHub Issue<br/>weekly report]
+    G --> I[Power BI<br/>Refresh]
+```
 
-## v3: a live monitor that runs itself
+Design decisions, trade-offs and what I would change at scale: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-Every Monday morning GitHub Actions builds a **Docker** image and runs [`monitor/`](monitor/): it reads official agency news (RSS first, news page fallback, robots.txt checked), keeps what is new and relevant, classifies it, costs it with the impact model, commits the results to `data/live/` and opens a **GitHub Issue** with the report when something new appears. Power BI reads the same CSVs over HTTPS, so **Refresh** brings in the latest run. Some agency sites refuse cloud runners; the run log says so and `run_local.ps1` runs the same image from a desktop. Details: [docs/LIVE_MONITOR.md](docs/LIVE_MONITOR.md).
+## Three versions, one repo
 
-## What is in the repo
+| Version | Adds | Read more |
+|---|---|---|
+| **v1** Report | Rule-based classifier, star schema, 12-page Power BI report by department, synthetic year of 200 changes | [POWERBI_GUIDE.md](POWERBI_GUIDE.md) |
+| **v2** Impact model | Cost (staff time × loaded rate + external), target dates, owner role, monthly capacity by role | [docs/IMPACT_MODEL.md](docs/IMPACT_MODEL.md) |
+| **v3** Live monitor | Weekly fetch from real agency sites, Docker, GitHub Actions, GitHub Issue reports, a focused Power BI report defined as code | [docs/LIVE_MONITOR.md](docs/LIVE_MONITOR.md), [powerbi/live/](powerbi/live/) |
+
+## Dashboards
+
+- **v1 report** (synthetic year, by department): [download the .pbix](https://github.com/brianphu2310/Regulartory_Change_Monitor/raw/main/powerbi/regulatory_change_monitor.pbix) · [interactive HTML preview](https://htmlpreview.github.io/?https://github.com/brianphu2310/Regulartory_Change_Monitor/blob/main/preview/dashboard_preview.html) (no install)
+- **v3 live report** (Weekly briefing, Capacity & sources): open `powerbi/live/RegulatoryMonitorLive.pbip` in Power BI Desktop and press Refresh; it reads the CSVs from this repo and switches between sample and live data with one parameter. [Instructions](powerbi/live/README.md).
+
+## Repo map
+
 | Path | What it is |
 |---|---|
-| `powerbi/regulatory_change_monitor.pbix` | The Power BI report (open in Power BI Desktop) |
-| `preview/dashboard_preview.html` | Interactive HTML design preview (d3), opens in any browser |
-| `bi_export/` | Star-schema CSV tables the report is built on |
-| `generate_synthetic.py` | Builds the synthetic dataset (seeded, reproducible shape) |
+| `monitor/` | Live pipeline: sources, polite fetching, run orchestration and report |
 | `classifier.py` | Rule-based tagging: topic, impact, audience, action required, deadline |
-| `impact_model.py` | Cost, time and capacity impact of each change (rule-based, assumptions in one place) |
-| `db.py`, `export_for_bi.py` | SQLite storage and CSV export for BI tools |
-| `app.py` | Small Streamlit explorer over the same data |
-| `POWERBI_GUIDE.md`, `TABLEAU_GUIDE.md` | Model, DAX measures and build notes |
+| `impact_model.py` | Cost, hours, owner and capacity of each change; every assumption in one place |
+| `Dockerfile`, `run_local.ps1` | The monitor as a container, in the cloud or on a desktop |
+| `.github/workflows/monitor.yml` | Weekly run: build, fetch, commit, open the issue |
+| `data/live/`, `reports/` | Output of the live runs (created by the first run) |
+| `bi_export/` | Synthetic star schema and impact tables (sample data for both reports) |
+| `powerbi/` | v1 report (`.pbix`) and the v3 live project (`live/`, generated by `build_pbip.py`) |
+| `generate_synthetic.py`, `db.py`, `export_for_bi.py` | Synthetic data, SQLite storage, CSV export |
+| `app.py` | Small Streamlit explorer over the synthetic data |
+| `docs/` | Architecture, impact model, live monitor, data dictionary, skills map |
 
-## Power BI report
-8 visible pages: Overview, five department pages (Accounts & Trust, Compliance & AML, HR & Payroll, Privacy & IT, Property), Action tracker and About. Four hidden pages support interactivity:
-- **Change detail** and **Topic detail**: drill-through pages. Right-click an agency (or a topic) and choose *Drill through*; a Back button is included.
-- **Agency tooltip** and **Topic tooltip**: report-page tooltips shown on hover.
+## Run it
 
-Header dropdowns (Status, Year) are synced across pages; every chart cross-filters the others; the Action tracker colours deadlines by urgency.
+```bash
+pip install -r requirements-dev.txt
+python -m pytest -q                  # 30 tests: rules, impact model, fetcher (offline), Power BI project
+python -m monitor.run --dry-run      # fetch and print, write nothing
+python -m monitor.run                # one full run: data/live/ and reports/latest.md
+python impact_model.py               # rebuild the impact tables on the sample data
+python powerbi/live/build_pbip.py    # regenerate the live Power BI project
+```
 
-Model: `changes` fact table with `dim_date`, `dim_department`, `dim_topic` and bridge tables (`change_topics`, `change_audiences`, `topic_department`). Measures include Total Changes, High Impact, Open Actions, Overdue Actions, Due In 30 Days and Action Rate.
-
-Things to know: Power BI has no true 3D charts, so panel shapes are background images. In Power BI Desktop, sidebar navigation needs Ctrl+click; a single click works once published. Agency names are text, not official logos.
+Or the same run in Docker: `docker build -t reg-monitor . && docker run --rm -v "$PWD/data:/app/data" -v "$PWD/reports:/app/reports" reg-monitor`.
 
 ## Tests and CI
-`python -m pytest -q` runs 9 tests: classifier rules (topics, impact, audiences, action required, deadline extraction), plus consistency checks on the committed star-schema CSVs (unique ids, every bridge row points at a real change, everything labelled `Sample`). CI also regenerates the synthetic data on every push. Field meanings are in [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md); skills map in [`docs/SKILLS_DEMONSTRATED.md`](docs/SKILLS_DEMONSTRATED.md).
 
-## Run the Python side
-```bash
-pip install -r requirements.txt
-python export_for_bi.py --sample   # generate synthetic data and write bi_export/ CSVs
-streamlit run app.py               # optional explorer
-```
-Note: dates are generated relative to today, so re-running shifts them slightly compared with the CSVs committed here.
-
-## Design choices
-- Rule-based tagging so every label is explainable and auditable.
-- Star schema with separate bridge tables for the many-to-many topic and audience tags.
-- Deadline and heat colours are DAX measures, so the report stays dynamic.
+`python -m pytest -q` runs 30 tests: classifier rules (including real Treasury titles), consistency of the star schema,
+the impact model's totals (effort adds up, cost = internal + external, capacity balances), the fetcher offline
+(RSS and page parsing, robots.txt respected, a failing source does not stop the run, baseline then no duplicates), and
+the Power BI project (every field a visual uses exists in the model and matches the CSV). CI runs them on every push.

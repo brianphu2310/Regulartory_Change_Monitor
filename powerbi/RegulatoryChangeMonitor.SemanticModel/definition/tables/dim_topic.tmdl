@@ -1,0 +1,12 @@
+table dim_topic
+	lineageTag: 24aad25e-33f7-5708-9bfd-43cddbb40bb4
+
+	column topic
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [topic]
+		lineageTag: 625e3704-3727-5bd5-a597-c803a44b165b
+
+	partition dim_topic = calculated
+		mode: import
+		source = DISTINCT ( SELECTCOLUMNS ( change_topics, "topic", change_topics[topic] ) )

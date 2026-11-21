@@ -1,0 +1,163 @@
+table changes
+	lineageTag: a1dc5a75-528c-51d8-8d46-307ac1e5392f
+
+	measure 'Total Changes' = COUNTROWS ( changes )
+		formatString: #,0
+		displayFolder: Counts
+		lineageTag: 54414bc3-2464-5453-93da-3efcc69f2014
+
+	measure 'High Impact' = CALCULATE ( [Total Changes], changes[impact] = "High" )
+		formatString: #,0
+		displayFolder: Counts
+		lineageTag: 017d56cf-a774-53f4-8894-b7521b6ed38c
+
+	measure 'Open Actions' = CALCULATE ( [Total Changes], changes[action_req] = 1, changes[status] <> "Actioned" )
+		formatString: #,0
+		displayFolder: Actions
+		lineageTag: b51b2a48-96d7-5a67-bed5-02929fa9b093
+
+	measure 'Due In 30 Days' = CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] >= TODAY () && changes[deadline] <= TODAY () + 30 ) )
+		formatString: #,0
+		displayFolder: Actions
+		lineageTag: 3c82965a-1aaf-5bc3-b41f-9d55ebe4a788
+
+	measure 'Overdue Actions' = CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] < TODAY () ) )
+		formatString: #,0
+		displayFolder: Actions
+		lineageTag: 5aafad7d-b95e-5481-808b-ba4448db219c
+
+	measure 'Action Rate' = DIVIDE ( [Open Actions], [Total Changes] )
+		formatString: 0%
+		displayFolder: Actions
+		lineageTag: cb21d11d-430d-548e-931b-85044c4e6b12
+
+	measure 'Changes Last 30 Days' = CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > TODAY () - 30 && changes[published] <= TODAY () ) )
+		formatString: #,0
+		displayFolder: Trend
+		lineageTag: 28db887a-e517-5f37-b81c-48fb93643e41
+
+	measure 'Changes Prior 30 Days' = CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > TODAY () - 60 && changes[published] <= TODAY () - 30 ) )
+		formatString: #,0
+		displayFolder: Trend
+		lineageTag: 5ce30c14-36fb-5054-99d2-896f1dc46792
+
+	measure 'Change vs Prior 30 Days' = DIVIDE ( [Changes Last 30 Days] - [Changes Prior 30 Days], [Changes Prior 30 Days] )
+		formatString: 0%
+		displayFolder: Trend
+		lineageTag: 43eaceee-349c-56bf-91a2-75c6d1e04e15
+
+	measure 'Sample Data Note' = IF ( MAX ( changes[data_type] ) = "Live", "Live data from the weekly monitor. Keyword classification, not legal advice.", "Synthetic sample data. Keyword classification, not legal advice." )
+		displayFolder: Labels
+		lineageTag: 0163f79b-e3b2-5e84-975c-910fad4b2b45
+
+	measure 'Deadline Color' = VAR d = MIN ( changes[Days To Deadline] ) RETURN IF ( ISBLANK ( d ), BLANK (), IF ( d >= 9999, "#8A97A5", IF ( d < 0, "#C0392B", IF ( d <= 30, "#D98E04", "#1F2933" ) ) ) )
+		lineageTag: 812f9d20-db40-560d-ad9a-481f799ed44d
+
+	measure 'Heat Color' = VAR n = [Total Changes] RETURN IF ( ISBLANK ( n ), BLANK (), IF ( n <= 10, "#F1F7DA", IF ( n <= 25, "#DDEBA6", IF ( n <= 45, "#C8E070", "#A9CF3A" ) ) ) )
+		lineageTag: 527dcfe6-0e36-5a04-8950-867abcfaedd2
+
+	column id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: id
+		lineageTag: 6c7e6e57-f674-501c-ae26-0059d55316bc
+
+	column published
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: published
+		lineageTag: a8dce0d5-51f4-565f-ab98-83e224139ef2
+
+	column source
+		dataType: string
+		summarizeBy: none
+		sourceColumn: source
+		lineageTag: 2a91134d-098c-50c3-b6e9-437a33e0d922
+
+	column title
+		dataType: string
+		summarizeBy: none
+		sourceColumn: title
+		lineageTag: e10e5b63-d718-517b-be27-6b475354d28e
+
+	column summary
+		dataType: string
+		summarizeBy: none
+		sourceColumn: summary
+		lineageTag: 115e7c5a-e479-5b4a-90e4-dfc6c122c3c5
+
+	column link
+		dataType: string
+		summarizeBy: none
+		sourceColumn: link
+		lineageTag: 29b5ae92-4d45-5e1b-a6a5-a64ab12def12
+
+	column impact
+		dataType: string
+		summarizeBy: none
+		sourceColumn: impact
+		lineageTag: 3adb50af-b4cf-5a50-b4e5-f1b79e37b815
+
+	column action_req
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: action_req
+		lineageTag: e89bcd12-2973-51eb-b1af-590c1f18d990
+
+	column deadline
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: deadline
+		lineageTag: c5b2b2c5-2a78-5178-ac92-813c22e37237
+
+	column status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: status
+		lineageTag: 64ac789a-6ee9-5bf5-a26e-fe5c3c0bb1c4
+
+	column impact_sort
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: impact_sort
+		lineageTag: 9d088b03-d3ae-507c-897b-a522f3bbbfc9
+
+	column data_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: data_type
+		lineageTag: a7a8c2c3-c33a-5ad6-8b62-ba70f7ce153c
+
+	column topics
+		dataType: string
+		summarizeBy: none
+		sourceColumn: topics
+		lineageTag: db909d2f-dd3b-54b6-bb6e-79e2a01dffff
+
+	column audiences
+		dataType: string
+		summarizeBy: none
+		sourceColumn: audiences
+		lineageTag: b3dec68e-6b3d-52a0-9bad-67499284dcf6
+
+	column 'Days To Deadline' = IF ( ISBLANK ( changes[deadline] ), BLANK (), DATEDIFF ( TODAY (), changes[deadline], DAY ) )
+		dataType: int64
+		summarizeBy: none
+		lineageTag: 633b2d68-7dd4-5420-add2-8832847ae879
+
+	column 'Deadline Bucket' = IF ( ISBLANK ( changes[deadline] ), "No fixed date", IF ( changes[deadline] < TODAY (), "Overdue", IF ( changes[deadline] <= TODAY () + 30, "Due in 30 days", "Later" ) ) )
+		dataType: string
+		summarizeBy: none
+		lineageTag: 070362e1-868b-52b8-b07e-c8ebce938b45
+
+	partition changes = m
+		mode: import
+		source =
+				let
+				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/changes.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Picked = Table.SelectColumns(Raw, {"id", "published", "source", "title", "summary", "link", "impact", "action_req", "deadline", "status", "impact_sort", "data_type", "topics", "audiences"}, MissingField.UseNull),
+				    Typed = Table.TransformColumnTypes(Picked, {{"id", type text}, {"published", type date}, {"source", type text}, {"title", type text}, {"summary", type text}, {"link", type text}, {"impact", type text}, {"action_req", Int64.Type}, {"deadline", type date}, {"status", type text}, {"impact_sort", Int64.Type}, {"data_type", type text}, {"topics", type text}, {"audiences", type text}}, "en-AU")
+				in
+				    Typed

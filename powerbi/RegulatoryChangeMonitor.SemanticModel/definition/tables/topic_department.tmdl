@@ -1,0 +1,18 @@
+table topic_department
+	lineageTag: eead55f3-00a7-5aa8-b2ff-9d82c9d45c1e
+
+	column topic
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [topic]
+		lineageTag: 2cda04a5-d0ce-5ed2-97ea-8d9002ac89df
+
+	column department
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [department]
+		lineageTag: fc8099d7-e78b-5700-b131-0c9a08cd1221
+
+	partition topic_department = calculated
+		mode: import
+		source = DATATABLE ( "topic", STRING, "department", STRING, { { "AML/CTF", "Compliance & AML" }, { "Sanctions", "Compliance & AML" }, { "Trust Accounts", "Accounts & Trust" }, { "Tax", "Accounts & Trust" }, { "Payroll", "HR & Payroll" }, { "Payroll", "Accounts & Trust" }, { "Superannuation", "HR & Payroll" }, { "Superannuation", "Accounts & Trust" }, { "Employment", "HR & Payroll" }, { "Property", "Property" }, { "Privacy & Data", "Privacy & IT" } } )

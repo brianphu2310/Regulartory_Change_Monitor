@@ -1,0 +1,53 @@
+table run_log
+	lineageTag: b0d14504-4b9b-5726-8d4b-9fd985b9ba45
+
+	measure 'Sources Checked' = VAR d = INT ( MAX ( run_log[run_at] ) ) RETURN COUNTROWS ( FILTER ( run_log, INT ( run_log[run_at] ) = d ) ) + 0
+		formatString: #,0
+		lineageTag: 7f3b0cce-3c01-52be-9915-99f19d3ac860
+
+	measure 'Sources OK' = VAR d = INT ( MAX ( run_log[run_at] ) ) RETURN COUNTROWS ( FILTER ( run_log, INT ( run_log[run_at] ) = d && LEFT ( run_log[status], 2 ) = "ok" ) ) + 0
+		formatString: #,0
+		lineageTag: b675b98c-ff96-5ac8-b979-df701c017be7
+
+	measure 'Sources OK Label' = IF ( [Sources Checked] = 0, "n/a (sample)", FORMAT ( [Sources OK], "0" ) & " / " & FORMAT ( [Sources Checked], "0" ) )
+		lineageTag: 5142aca9-3611-5e01-b0a4-3f7c856e2055
+
+	column run_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: run_at
+		lineageTag: 901e97a3-cb7d-5c66-b221-640c2db85276
+
+	column agency
+		dataType: string
+		summarizeBy: none
+		sourceColumn: agency
+		lineageTag: a3077398-c774-5314-924d-3b7b927a4404
+
+	column feed
+		dataType: string
+		summarizeBy: none
+		sourceColumn: feed
+		lineageTag: 2c097cac-f4d6-56b2-b48c-6f43f8dcd9ed
+
+	column status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: status
+		lineageTag: 6aacc91a-345f-5529-98de-ad9117ab7a84
+
+	column items
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: items
+		lineageTag: 3923b025-31e9-5989-8a36-7d349856ef51
+
+	partition run_log = m
+		mode: import
+		source =
+				let
+				    Raw = try Table.Buffer(Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/run_log.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true])) otherwise #table(type table [run_at = text, agency = text, feed = text, status = text, items = text], {}),
+				    Picked = Table.SelectColumns(Raw, {"run_at", "agency", "feed", "status", "items"}, MissingField.UseNull),
+				    Typed = Table.TransformColumnTypes(Picked, {{"run_at", type datetimezone}, {"agency", type text}, {"feed", type text}, {"status", type text}, {"items", Int64.Type}}, "en-AU")
+				in
+				    Typed

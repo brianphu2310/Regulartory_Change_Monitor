@@ -1,0 +1,18 @@
+table dim_department
+	lineageTag: ec122a93-8d51-54a0-a139-a952e24407b8
+
+	column department
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [department]
+		lineageTag: d6f2f877-c0c1-53cc-bfd1-dbc5c333bcab
+
+	column sort
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: [sort]
+		lineageTag: 47633001-3157-549a-81d8-26e44ace7da2
+
+	partition dim_department = calculated
+		mode: import
+		source = DATATABLE ( "department", STRING, "sort", INTEGER, { { "Accounts & Trust", 1 }, { "Compliance & AML", 2 }, { "HR & Payroll", 3 }, { "Property", 4 }, { "Privacy & IT", 5 } } )

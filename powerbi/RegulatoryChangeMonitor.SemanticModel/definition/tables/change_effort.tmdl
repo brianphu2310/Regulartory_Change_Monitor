@@ -1,0 +1,64 @@
+table change_effort
+	lineageTag: 403e95d4-f551-5eb1-b1a0-a7e6102a539f
+
+	measure 'Outstanding Role Hours' = CALCULATE ( SUM ( change_effort[one_off_hours] ), dashboard_changes[work_status] = "Outstanding" )
+		formatString: #,0
+		lineageTag: 4dce60dc-6622-5fe2-b5f8-9fb381748780
+
+	column id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: id
+		lineageTag: 8cadf457-13e1-5f29-8fcb-b2595dbf50fa
+
+	column role
+		dataType: string
+		summarizeBy: none
+		sourceColumn: role
+		lineageTag: 0d3c5445-181c-57e8-8fc6-397268d1f292
+
+	column one_off_hours
+		dataType: double
+		summarizeBy: none
+		sourceColumn: one_off_hours
+		lineageTag: 1d985c4e-834e-5341-a233-b7b8634ac53d
+
+	column ongoing_hours_yr
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ongoing_hours_yr
+		lineageTag: 766d3a3c-2303-5246-8810-d7d600f5d19f
+
+	column one_off_cost
+		dataType: double
+		summarizeBy: none
+		sourceColumn: one_off_cost
+		lineageTag: 4ab20c0b-1daf-5e27-802e-6045e3f2bdb9
+
+	column ongoing_cost_yr
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ongoing_cost_yr
+		lineageTag: 4a18428d-c8f0-5f33-a8e1-9e61483aaa42
+
+	column department
+		dataType: string
+		summarizeBy: none
+		sourceColumn: department
+		lineageTag: acb7c2ab-ae14-5068-a2d8-35a51683087a
+
+	column hourly_cost
+		dataType: double
+		summarizeBy: none
+		sourceColumn: hourly_cost
+		lineageTag: 1825e740-a7eb-566f-b907-f9e8fdc37e81
+
+	partition change_effort = m
+		mode: import
+		source =
+				let
+				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/change_effort.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Picked = Table.SelectColumns(Raw, {"id", "role", "one_off_hours", "ongoing_hours_yr", "one_off_cost", "ongoing_cost_yr", "department", "hourly_cost"}, MissingField.UseNull),
+				    Typed = Table.TransformColumnTypes(Picked, {{"id", type text}, {"role", type text}, {"one_off_hours", type number}, {"ongoing_hours_yr", type number}, {"one_off_cost", type number}, {"ongoing_cost_yr", type number}, {"department", type text}, {"hourly_cost", type number}}, "en-AU")
+				in
+				    Typed

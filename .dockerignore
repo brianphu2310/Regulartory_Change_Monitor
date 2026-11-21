@@ -1,0 +1,9 @@
+.git
+__pycache__
+*.pyc
+data/*.db
+powerbi
+preview
+docs
+bi_export
+tests

@@ -1,0 +1,22 @@
+relationship 2fd90047-e7d8-5c4e-ba68-ec93cf7d4cf6
+	fromColumn: changes.published
+	toColumn: dim_date.date
+
+relationship 6ffa4e90-51df-532c-89c2-38041dc346f7
+	isActive: false
+	fromColumn: changes.deadline
+	toColumn: dim_date.date
+
+relationship e8206ea8-8212-5ff8-a7c5-2bbe0cdb4667
+	crossFilteringBehavior: bothDirections
+	fromColumn: change_topics.id
+	toColumn: changes.id
+
+relationship dd096323-1e4d-55d3-90a5-053fec329e28
+	crossFilteringBehavior: bothDirections
+	fromColumn: change_audiences.id
+	toColumn: changes.id
+
+relationship 91cbbaf0-0805-528d-8e1a-399c74743263
+	fromColumn: change_effort.id
+	toColumn: dashboard_changes.id

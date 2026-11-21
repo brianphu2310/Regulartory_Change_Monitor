@@ -1,0 +1,22 @@
+model Model
+	culture: en-AU
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-AU
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Branch", "Dataset", "changes", "change_topics", "change_audiences", "dim_date", "dashboard_changes", "change_effort", "capacity_monthly", "run_log"]
+
+ref table changes
+ref table change_topics
+ref table change_audiences
+ref table dim_date
+ref table dashboard_changes
+ref table change_effort
+ref table capacity_monthly
+ref table run_log
+ref table open_actions
+ref table dim_topic
+ref table dim_department
+ref table topic_department

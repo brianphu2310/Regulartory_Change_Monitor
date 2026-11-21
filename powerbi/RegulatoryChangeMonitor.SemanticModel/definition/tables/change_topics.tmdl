@@ -1,0 +1,24 @@
+table change_topics
+	lineageTag: 932c3f66-6c4e-588c-878c-699281ae8584
+
+	column id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: id
+		lineageTag: 2c1cf3cb-fd20-5371-b8e7-878e36116838
+
+	column topic
+		dataType: string
+		summarizeBy: none
+		sourceColumn: topic
+		lineageTag: 9ecf27fc-8450-52a9-b909-7b4bcf725092
+
+	partition change_topics = m
+		mode: import
+		source =
+				let
+				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/change_topics.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Picked = Table.SelectColumns(Raw, {"id", "topic"}, MissingField.UseNull),
+				    Typed = Table.TransformColumnTypes(Picked, {{"id", type text}, {"topic", type text}}, "en-AU")
+				in
+				    Typed

@@ -11,7 +11,7 @@
 | F3 | Tag each change: topic, impact, audience, action required, deadline | `classifier.py` |
 | F4 | Estimate the cost, staff hours, owner and capacity load of each change | `impact_model.py` |
 | F5 | Tell someone when something new arrives | GitHub Issue with `reports/latest.md` |
-| F6 | Give a manager a dashboard they can read without help | Power BI: `powerbi/live/` |
+| F6 | Give a manager a dashboard they can read without help | Power BI: `powerbi/RegulatoryChangeMonitor.pbip` |
 
 **Non-functional**
 
@@ -86,7 +86,7 @@ report's Source health table and the Power BI Capacity & sources page; the run s
 | Storage | CSV in Git | Snowflake, Supabase/Postgres | Free, versioned, diffable; every week is a commit | Not for millions of rows or concurrent writers |
 | Alerting | GitHub Issue | Email via SMTP, Teams | No secrets to store; GitHub emails the owner | Recipients need a GitHub account |
 | Classification | Keyword rules | ML / LLM classifier | Explainable and testable; an auditor can read the rule | Misses wording the rules do not cover |
-| BI | Power BI Desktop, PBIP in Git | Power BI Service, Tableau Public | Report defined as code and reviewable; no tenant needed | Refresh is a button press, not scheduled |
+| BI | Extend the v1 Power BI report as a PBIP in Git | A second, separate report; Tableau Public | One product for readers; the model and pages are code and reviewable; no tenant needed | Refresh is a button press, not scheduled |
 | Cadence | Weekly | Daily | Matches how the firm decides; less load on agency sites | A Tuesday announcement waits until Monday (manual run available) |
 
 ## 6. Scale and reliability

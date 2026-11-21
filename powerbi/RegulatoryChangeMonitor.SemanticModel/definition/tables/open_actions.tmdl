@@ -1,0 +1,48 @@
+table open_actions
+	lineageTag: dc558bde-440a-59a7-a988-5d3bb9a4ad33
+
+	column Title
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [Title]
+		lineageTag: d8895fa1-a7d9-507d-b780-b19e27720d35
+
+	column Agency
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [Agency]
+		lineageTag: f80542a7-32e4-5491-802e-fc3a53ae79a1
+
+	column Impact
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [Impact]
+		lineageTag: b72131be-0109-560c-b4d2-8d2d716fd78c
+
+	column Deadline
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: [Deadline]
+		lineageTag: 90a1baf7-56be-503e-a84c-0e07e7dec8c9
+
+	column 'Days To Deadline'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: [Days To Deadline]
+		lineageTag: ca5cbd36-4c79-56fd-8aef-5e78786e6c71
+
+	column Status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [Status]
+		lineageTag: 179be940-e745-510d-b191-380777112c4f
+
+	column 'Days Left' = IF ( ISBLANK ( open_actions[Days To Deadline] ), 9999, open_actions[Days To Deadline] )
+		dataType: int64
+		summarizeBy: none
+		lineageTag: 32812197-7321-5274-a70d-67273bc08f52
+
+	partition open_actions = calculated
+		mode: import
+		source = SELECTCOLUMNS ( FILTER ( changes, changes[action_req] = 1 && changes[status] <> "Actioned" ), "Title", changes[title], "Agency", changes[source], "Impact", changes[impact], "Deadline", changes[deadline], "Days To Deadline", changes[Days To Deadline], "Status", changes[status] )

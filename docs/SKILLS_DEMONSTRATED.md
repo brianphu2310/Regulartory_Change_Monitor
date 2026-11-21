@@ -21,5 +21,5 @@ Not claimed: no web scraping, no live agency data, no trained model, no cloud de
 | Web data collection with robots.txt checks and per-source error handling | `monitor/fetch.py`, `monitor/sources.py` |
 | Containerisation | `Dockerfile`, `run_local.ps1` |
 | Scheduled orchestration, automated commits and issue reports | `.github/workflows/monitor.yml` |
-| Power BI as code: TMDL semantic model, PBIR report, DAX, Power Query M with parameters | `powerbi/live/build_pbip.py` |
+| Power BI as code: TMDL semantic model, PBIR report, DAX, Power Query M with parameters | `powerbi/build_pbip.py` |
 | System design with explicit trade-offs | `docs/ARCHITECTURE.md` |

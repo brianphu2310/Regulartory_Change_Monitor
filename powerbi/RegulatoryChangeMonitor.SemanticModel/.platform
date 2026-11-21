@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "RegulatoryChangeMonitor"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "97926ec6-fb48-5cb9-8de1-1e3eb43146b8"
+  }
+}

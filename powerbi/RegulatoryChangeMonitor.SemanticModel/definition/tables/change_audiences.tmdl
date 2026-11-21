@@ -1,0 +1,24 @@
+table change_audiences
+	lineageTag: 277a3f6a-5509-5e7f-b9e1-b857bd3cadf0
+
+	column id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: id
+		lineageTag: 85d2054c-b3f9-5873-98d7-fc94425db45e
+
+	column audience
+		dataType: string
+		summarizeBy: none
+		sourceColumn: audience
+		lineageTag: 1ec7a5e3-121e-52d1-88e8-0441bc86508e
+
+	partition change_audiences = m
+		mode: import
+		source =
+				let
+				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/change_audiences.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Picked = Table.SelectColumns(Raw, {"id", "audience"}, MissingField.UseNull),
+				    Typed = Table.TransformColumnTypes(Picked, {{"id", type text}, {"audience", type text}}, "en-AU")
+				in
+				    Typed

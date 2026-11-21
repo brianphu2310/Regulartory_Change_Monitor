@@ -1,5 +1,6 @@
 """Offline tests for the live monitor: parsing, robots handling, de-duplication and the run end to end."""
 from datetime import date
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -84,3 +85,7 @@ def test_run_flags_only_new_relevant_changes(offline, monkeypatch, tmp_path):
     assert len(pd.read_csv(R.LIVE / "changes.csv")) == 1
     assert "New relevant changes: **0**" in R.REPORT.read_text()
     assert (R.LIVE / "change_impact.csv").exists() and len(pd.read_csv(R.LIVE / "run_log.csv")) == 2
+    # the v1 report's tables are written too, with the same columns as the sample data
+    for f in ("changes.csv", "change_topics.csv", "change_audiences.csv", "dim_date.csv", "dashboard_changes.csv"):
+        sample = set(pd.read_csv(Path(__file__).resolve().parent.parent / "bi_export" / f, nrows=1).columns)
+        assert sample <= set(pd.read_csv(R.LIVE / f, nrows=1).columns), f

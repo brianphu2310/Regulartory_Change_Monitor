@@ -1,0 +1,72 @@
+table capacity_monthly
+	lineageTag: d3de5455-36e9-53cb-97ad-ee9bf0326982
+
+	measure 'Hours Needed' = SUM ( capacity_monthly[hours_required] )
+		formatString: #,0
+		lineageTag: 3a0cc931-1ad2-5cde-af85-0c3b2bedb550
+
+	measure 'Hours Available' = SUM ( capacity_monthly[hours_available] )
+		formatString: #,0
+		lineageTag: a905df87-16cb-5f3b-91e8-aca566b7a143
+
+	measure 'Capacity Load' = DIVIDE ( [Hours Needed], [Hours Available] )
+		formatString: 0%
+		lineageTag: a3c71ec7-7e6f-5902-ade9-fd3af54edd65
+
+	measure 'Hours Over Capacity' = SUM ( capacity_monthly[hours_over_capacity] )
+		formatString: #,0
+		lineageTag: 286749ac-db14-509b-8e19-6e9b21a36c89
+
+	measure 'FTE Gap (months)' = DIVIDE ( [Hours Over Capacity], 152 )
+		formatString: 0.0
+		lineageTag: 35fb81ce-60c9-5ee8-9ea8-487b2c601281
+
+	measure 'Load Colour' = VAR l = [Capacity Load] RETURN SWITCH ( TRUE (), ISBLANK ( l ), BLANK (), l > 1, "#E8A29A", l > 0.8, "#F3D27A", "#D9EC9A" )
+		lineageTag: 6c7cee0d-6422-5760-96dd-7ef7b9096823
+
+	column month_start
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: month_start
+		lineageTag: 4d4bfe15-1930-57f8-8845-7e1c0512059a
+
+	column role
+		dataType: string
+		summarizeBy: none
+		sourceColumn: role
+		lineageTag: 186fda94-80a1-5e51-8479-103581e40edd
+
+	column hours_required
+		dataType: double
+		summarizeBy: none
+		sourceColumn: hours_required
+		lineageTag: eae67355-7b3f-54c5-9e20-c7c490a0ccf2
+
+	column hours_available
+		dataType: double
+		summarizeBy: none
+		sourceColumn: hours_available
+		lineageTag: 2aab86f3-07dc-5fdb-bb68-9dd0319bdfdf
+
+	column load_pct
+		dataType: double
+		summarizeBy: none
+		sourceColumn: load_pct
+		lineageTag: 841f3194-6c1b-59ed-bcec-823d1c44b99d
+
+	column hours_over_capacity
+		dataType: double
+		summarizeBy: none
+		sourceColumn: hours_over_capacity
+		lineageTag: f8e0c4b5-e952-51d3-8003-78c1130bf537
+
+	partition capacity_monthly = m
+		mode: import
+		source =
+				let
+				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/capacity_monthly.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Picked = Table.SelectColumns(Raw, {"month_start", "role", "hours_required", "hours_available", "load_pct", "hours_over_capacity"}, MissingField.UseNull),
+				    Typed = Table.TransformColumnTypes(Picked, {{"month_start", type date}, {"role", type text}, {"hours_required", type number}, {"hours_available", type number}, {"load_pct", type number}, {"hours_over_capacity", type number}}, "en-AU")
+				in
+				    Typed

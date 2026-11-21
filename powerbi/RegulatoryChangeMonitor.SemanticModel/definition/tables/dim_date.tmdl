@@ -1,0 +1,58 @@
+table dim_date
+	lineageTag: e6e0a93c-9650-5ee3-b43d-9692362c56a3
+
+	column date
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: date
+		lineageTag: d7f82b7a-3c63-5514-b521-4389aadaa806
+
+	column year
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: year
+		lineageTag: d0b0ddf5-170f-5da1-9656-0feae267e4aa
+
+	column month_num
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: month_num
+		lineageTag: 35fd7e49-33f1-503a-a6b5-b9d8a190d5b4
+
+	column month_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month_num
+		lineageTag: 584ff5c8-2f0a-585d-8add-1b218886db94
+
+	column year_month
+		dataType: string
+		summarizeBy: none
+		sourceColumn: year_month
+		lineageTag: 20df17ff-b6c2-576f-91b7-86f1c08482e3
+
+	column month_start
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: month_start
+		lineageTag: 94162b73-09d3-57f0-b601-e34242282749
+
+	column week_start
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: week_start
+		lineageTag: f1f7dd89-9ce5-5831-a5ec-55c21bd98d17
+
+	partition dim_date = m
+		mode: import
+		source =
+				let
+				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/dim_date.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Picked = Table.SelectColumns(Raw, {"date", "year", "month_num", "month_name", "year_month", "month_start", "week_start"}, MissingField.UseNull),
+				    Typed = Table.TransformColumnTypes(Picked, {{"date", type date}, {"year", Int64.Type}, {"month_num", Int64.Type}, {"month_name", type text}, {"year_month", type text}, {"month_start", type date}, {"week_start", type date}}, "en-AU")
+				in
+				    Typed

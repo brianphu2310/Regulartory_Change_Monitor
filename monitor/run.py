@@ -70,6 +70,22 @@ def _split(df: pd.DataFrame, col: str, name: str) -> pd.DataFrame:
     return r[(r[col] != "") & (r[col] != "Other") & (r[col] != "General")].rename(columns={col: name}).drop_duplicates()
 
 
+def dim_date(changes: pd.DataFrame) -> pd.DataFrame:
+    """Calendar for the v1 report: first published date to 180 days after the latest date seen."""
+    pub = pd.to_datetime(changes["published"], errors="coerce")
+    dl = pd.to_datetime(changes["deadline"], errors="coerce")
+    end = max(pub.max(), dl.max() if dl.notna().any() else pub.max()) + timedelta(days=180)
+    d = pd.DataFrame({"date": pd.date_range(pub.min().normalize(), end, freq="D")})
+    d["year"] = d["date"].dt.year
+    d["month_num"] = d["date"].dt.month
+    d["month_name"] = d["date"].dt.strftime("%b")
+    d["year_month"] = d["date"].dt.strftime("%Y-%m")
+    d["month_start"] = d["date"].dt.to_period("M").dt.to_timestamp().dt.date
+    d["week_start"] = (d["date"] - pd.to_timedelta(d["date"].dt.weekday, unit="D")).dt.date
+    d["date"] = d["date"].dt.date
+    return d
+
+
 def report(new: pd.DataFrame, impact: pd.DataFrame | None, log: list[dict], today: date, baseline: bool) -> str:
     ok = sum(1 for l in log if l["status"].startswith("ok"))
     lines = [f"# Regulatory change report: {today:%d %b %Y}", "",
@@ -118,6 +134,8 @@ def main(dry: bool = False) -> int:
     changes.to_csv(LIVE / "changes.csv", index=False)
     _split(changes, "topics", "topic").to_csv(LIVE / "change_topics.csv", index=False)
     _split(changes, "audiences", "audience").to_csv(LIVE / "change_audiences.csv", index=False)
+    if len(changes):
+        dim_date(changes).to_csv(LIVE / "dim_date.csv", index=False)
     pd.DataFrame(items, columns=["source", "feed", "via", "published", "title", "link", "id"]).merge(
         fresh[["id", "topics", "impact"]], on="id", how="left").to_csv(LIVE / "fetched_latest.csv", index=False)
     pd.concat([seen_df, pd.DataFrame({"id": fresh["id"], "first_seen": str(today)})]).to_csv(LIVE / "seen.csv", index=False)

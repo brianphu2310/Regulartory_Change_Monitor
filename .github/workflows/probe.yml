@@ -1,0 +1,14 @@
+name: probe sources (temp)
+on:
+  push:
+    branches: [feature/live-monitor]
+    paths: ["monitor/probe.py", ".github/workflows/probe.yml"]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q -r requirements.txt -r requirements-monitor.txt
+      - run: python -m monitor.probe

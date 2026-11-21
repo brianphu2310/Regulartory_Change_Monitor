@@ -16,7 +16,7 @@ Issue, and feeds a Power BI dashboard. Nobody has to open a browser.
 | **Question** | Which regulatory changes matter to a law firm, what will they cost, and does the team have the hours to deal with them? |
 | **What I built** | A weekly pipeline (Docker on GitHub Actions) that fetches agency news, de-duplicates, classifies with transparent rules, costs each change with an impact model, commits the results and raises a GitHub Issue; a 10-page Power BI report on top that switches between sample and live data with one parameter. |
 | **Key results** | On the synthetic year: **$137K** one-off cost ($104K staff time, $33K external), **$23K a year** ongoing, **473 outstanding hours**, 27 changes past target. October needs **400 hours against 140 available**, mostly the Compliance Officer and the Principal: the money is manageable, the people are not. |
-| **Live proof** | First cloud run on 20 Nov 2026 fetched 10 real Treasury consultations; blocked sources are logged, not worked around. |
+| **Live proof** | 35 candidate sources probed from the cloud; 15 in the monitor, 11 of them reachable from GitHub. First full run (21 Nov 2026): 321 real items fetched, 29 relevant kept, 7 needing action. Blocked sources are logged, not worked around ([docs/SOURCES.md](docs/SOURCES.md)). |
 | **Tech** | Python, pandas, requests, BeautifulSoup, feedparser · Docker · GitHub Actions · Power BI (TMDL + PBIR project, DAX, Power Query M) · pytest |
 | **Honest limits** | Tags and costs come from stated rules and assumptions, not legal advice or quotes. Several agency sites refuse cloud runners; those need a desktop run. The v1 report uses synthetic data. |
 
@@ -77,7 +77,7 @@ The original v1 file is kept as [`regulatory_change_monitor.pbix`](https://githu
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest -q                  # 34 tests: rules, impact model, fetcher (offline), Power BI project
+python -m pytest -q                  # 39 tests: rules, impact model, fetcher (offline), Power BI project
 python -m monitor.run --dry-run      # fetch and print, write nothing
 python -m monitor.run                # one full run: data/live/ and reports/latest.md
 python impact_model.py               # rebuild the impact tables on the sample data
@@ -88,7 +88,7 @@ Or the same run in Docker: `docker build -t reg-monitor . && docker run --rm -v 
 
 ## Tests and CI
 
-`python -m pytest -q` runs 34 tests: classifier rules (including real Treasury titles), consistency of the star schema,
+`python -m pytest -q` runs 39 tests: classifier rules (including real Treasury titles), consistency of the star schema,
 the impact model's totals (effort adds up, cost = internal + external, capacity balances), the fetcher offline
 (RSS and page parsing, robots.txt respected, a failing source does not stop the run, baseline then no duplicates), and
 the Power BI project (every field any of the 14 pages uses exists in the model, every model column exists in the CSV, every sidebar links all ten pages). CI runs them on every push.

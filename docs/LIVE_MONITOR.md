@@ -39,13 +39,12 @@ flowchart LR
 The first run is a **baseline**: it loads what is already published and flags nothing, so the first issue is not 50
 "new" items.
 
-## What works where (tested 20 Nov 2026)
+## What works where
 
-| Source | From GitHub's cloud runners | From a desktop |
-|---|---|---|
-| Treasury consultations | Works (10 open consultations fetched) | Works |
-| AUSTRAC, Fair Work | Connection times out | Expected to work |
-| ATO, OAIC | 403 Forbidden | Expected to work |
+15 sources, 11 of them reachable from GitHub's runners (Treasury, Attorney-General's consultations, APRA, the Federal
+Register of Legislation API, Law Society NSW, Legal Services Board, Revenue NSW, NSW Fair Trading, NSW ministerial
+releases, NSW DCJ, SafeWork NSW). AUSTRAC, the ATO, Fair Work Ombudsman and the OAIC refuse cloud traffic and are
+covered by a desktop run. Full list, including the 20 sources tried and left out: [SOURCES.md](SOURCES.md).
 
 Many government sites refuse data-centre traffic. The monitor **does not work around that** (no fake browser
 headers, no proxies, no scraping of search engines whose robots.txt forbids it); a failing source is logged and the

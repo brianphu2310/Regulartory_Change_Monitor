@@ -91,10 +91,11 @@ report's Source health table and the Power BI Capacity & sources page; the run s
 
 ## 6. Scale and reliability
 
-About 10 to 60 items a week across six sources; a run takes under two minutes including the Docker build. The CSVs grow
-by a few kilobytes a week, so Git storage is not a concern for years. The weakest link is source availability: from
-GitHub's runners, Treasury answers, while AUSTRAC and Fair Work time out and the ATO and OAIC return 403
-(tested 20 Nov 2026). Desktop runs reach them.
+The first run fetched 321 items from 15 sources and kept 29; later weeks add only what is new, typically a few to a
+few dozen items. A run takes about two minutes including the Docker build. The CSVs grow by kilobytes a week, so Git
+storage is not a concern for years. The weakest link is source availability: 11 of the 15 sources answer GitHub's
+runners; AUSTRAC, the ATO, Fair Work Ombudsman and the OAIC refuse cloud traffic and need a desktop run
+(tested 21 Nov 2026, see SOURCES.md).
 
 ## 7. What I would revisit as it grows
 

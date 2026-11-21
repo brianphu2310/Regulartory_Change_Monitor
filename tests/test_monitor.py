@@ -89,3 +89,24 @@ def test_run_flags_only_new_relevant_changes(offline, monkeypatch, tmp_path):
     for f in ("changes.csv", "change_topics.csv", "change_audiences.csv", "dim_date.csv", "dashboard_changes.csv"):
         sample = set(pd.read_csv(Path(__file__).resolve().parent.parent / "bi_export" / f, nrows=1).columns)
         assert sample <= set(pd.read_csv(R.LIVE / f, nrows=1).columns), f
+
+
+def test_federal_register_api_items_become_links(monkeypatch):
+    class J:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self):
+            return {"value": [{"id": "F2026L01234", "name": "Anti-Money Laundering and Counter-Terrorism Financing Amendment Rules 2026",
+                               "collection": "LegislativeInstrument", "asMadeRegisteredAt": "2026-11-20T16:15:00"}]}
+    monkeypatch.setattr(F.requests, "get", lambda *a, **k: J())
+    items = F.from_api(Source("Federal Register", "x", rss=None, page=None, api="https://api.example/v1/Titles"))
+    assert items[0]["link"] == "https://www.legislation.gov.au/F2026L01234/asmade/text"
+    assert items[0]["published"] == date(2026, 11, 20)
+
+
+def test_every_source_has_somewhere_to_read():
+    from monitor.sources import SOURCES
+    assert len(SOURCES) >= 15
+    for s in SOURCES:
+        assert s.rss or s.page or s.api, s.agency
+        assert not s.page or s.link_pattern, s.agency

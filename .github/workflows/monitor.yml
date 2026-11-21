@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: "17 20 * * 0"   # Monday 07:17 Sydney (AEDT): a weekly digest, ready for the Monday compliance meeting
   workflow_dispatch:
+  push:   # TEMP: baseline run on the feature branch
+    branches: [feature/live-monitor]
+    paths: ["monitor/sources.py"]
 
 permissions:
   contents: write

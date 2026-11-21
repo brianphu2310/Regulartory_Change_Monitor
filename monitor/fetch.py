@@ -74,6 +74,21 @@ def from_rss(src: Source) -> list[dict]:
     return out
 
 
+def from_api(src: Source) -> list[dict]:
+    """Federal Register of Legislation OData API: newest titles first."""
+    r = requests.get(src.api, headers={"User-Agent": UA, "Accept": "application/json"}, timeout=TIMEOUT)
+    r.raise_for_status()
+    out = []
+    for t in r.json().get("value", []):
+        when = (t.get("asMadeRegisteredAt") or "")[:10]
+        out.append({"title": t.get("name", "").strip(), "summary": f"{t.get('collection', '')} registered on the Federal Register of Legislation",
+                    "link": f"https://www.legislation.gov.au/{t['id']}/asmade/text",
+                    "published": datetime.strptime(when, "%Y-%m-%d").date() if when else None})
+    if not out:
+        raise ValueError("API returned no titles")
+    return out
+
+
 def from_page(src: Source) -> list[dict]:
     soup = BeautifulSoup(_get(src.page).text, "html.parser")
     pat, seen, out = re.compile(src.link_pattern), set(), []
@@ -95,7 +110,7 @@ def from_page(src: Source) -> list[dict]:
 def fetch(src: Source) -> tuple[list[dict], str]:
     """Return (items, status). Never raises: a failing source is reported, not fatal."""
     errors = []
-    for kind, url, fn in (("rss", src.rss, from_rss), ("page", src.page, from_page)):
+    for kind, url, fn in (("rss", src.rss, from_rss), ("api", src.api, from_api), ("page", src.page, from_page)):
         if not url:
             continue
         if not allowed(url):

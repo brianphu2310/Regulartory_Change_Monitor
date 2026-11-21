@@ -1,0 +1,53 @@
+id,role,one_off_hours,ongoing_hours_yr,one_off_cost,ongoing_cost_yr,department,hourly_cost
+0b273dccc1eaf48c,IT Consultant,0.5,0.0,75.0,0.0,Privacy & IT,150
+1bf210830ea59adf,Accounts Officer,0.25,0.0,13.75,0.0,Accounts & Trust,55
+1bf210830ea59adf,HR & Payroll Officer,0.25,0.0,13.75,0.0,HR & Payroll,55
+202b2d87f12de786,Accounts Officer,0.96,0.0,52.8,0.0,Accounts & Trust,55
+202b2d87f12de786,Principal,0.24,0.0,60.0,0.0,Management,250
+2578e980f2f9cd87,Compliance Officer,5.6,1.4,448.0,112.0,Compliance & AML,80
+2578e980f2f9cd87,Solicitor,2.4,0.6,288.0,72.0,Legal,120
+28ca383ceeed13c4,Accounts Officer,0.96,0.0,52.8,0.0,Accounts & Trust,55
+28ca383ceeed13c4,Principal,0.24,0.0,60.0,0.0,Management,250
+29ed3762a38305e1,Conveyancer,0.5,0.0,37.5,0.0,Property,75
+39212a0dad52f318,Accounts Officer,0.62,0.0,33.83,0.0,Accounts & Trust,55
+39212a0dad52f318,HR & Payroll Officer,0.31,0.0,17.32,0.0,HR & Payroll,55
+39212a0dad52f318,Principal,0.12,0.0,30.0,0.0,Management,250
+3b5346468c3f4f6b,Accounts Officer,0.25,0.0,13.75,0.0,Accounts & Trust,55
+3b5346468c3f4f6b,Conveyancer,0.25,0.0,18.75,0.0,Property,75
+42cb84d2a3d3ab25,Accounts Officer,0.5,0.0,27.5,0.0,Accounts & Trust,55
+53599c09858ddc2e,Compliance Officer,5.6,1.4,448.0,112.0,Compliance & AML,80
+53599c09858ddc2e,Solicitor,2.4,0.6,288.0,72.0,Legal,120
+6612abeb25860946,Accounts Officer,2.73,0.63,150.33,34.83,Accounts & Trust,55
+6612abeb25860946,Conveyancer,1.4,0.23,105.0,17.5,Property,75
+6612abeb25860946,HR & Payroll Officer,1.4,0.23,77.0,12.83,HR & Payroll,55
+6612abeb25860946,Principal,0.53,0.13,133.33,33.33,Management,250
+6612abeb25860946,Solicitor,0.6,0.1,72.0,12.0,Legal,120
+6f92e9413d96a323,Accounts Officer,0.5,0.0,27.5,0.0,Accounts & Trust,55
+73ede1719198f463,IT Consultant,0.5,0.0,75.0,0.0,Privacy & IT,150
+84e3fe61f3668bc7,Accounts Officer,0.25,0.0,13.75,0.0,Accounts & Trust,55
+84e3fe61f3668bc7,HR & Payroll Officer,0.25,0.0,13.75,0.0,HR & Payroll,55
+8ba51d7f0d57e119,Compliance Officer,2.8,0.0,224.0,0.0,Compliance & AML,80
+8ba51d7f0d57e119,Solicitor,1.2,0.0,144.0,0.0,Legal,120
+8ccc882a35787ba5,Accounts Officer,0.5,0.0,27.5,0.0,Accounts & Trust,55
+9161a04a18f4e606,Accounts Officer,0.62,0.0,33.83,0.0,Accounts & Trust,55
+9161a04a18f4e606,HR & Payroll Officer,0.31,0.0,17.32,0.0,HR & Payroll,55
+9161a04a18f4e606,Principal,0.12,0.0,30.0,0.0,Management,250
+98173023382765d7,Accounts Officer,0.96,0.0,52.8,0.0,Accounts & Trust,55
+98173023382765d7,Principal,0.24,0.0,60.0,0.0,Management,250
+995744149129c1a5,HR & Payroll Officer,0.5,0.0,27.5,0.0,HR & Payroll,55
+a9d7c7aee2e3424c,IT Consultant,0.5,0.0,75.0,0.0,Privacy & IT,150
+b4babc90fdcae53a,Conveyancer,0.5,0.0,37.5,0.0,Property,75
+b587ad29ca514734,Accounts Officer,0.5,0.0,27.5,0.0,Accounts & Trust,55
+bca19ec0fae5433b,Accounts Officer,0.5,0.0,27.5,0.0,Accounts & Trust,55
+d0a09bbb8ed6290c,Conveyancer,0.5,0.0,37.5,0.0,Property,75
+da31e90a96619771,Accounts Officer,1.6,0.0,88.0,0.0,Accounts & Trust,55
+da31e90a96619771,Conveyancer,1.05,0.0,78.75,0.0,Property,75
+da31e90a96619771,Principal,0.4,0.0,100.0,0.0,Management,250
+da31e90a96619771,Solicitor,0.45,0.0,54.0,0.0,Legal,120
+dc66bd7d80245158,Accounts Officer,0.62,0.0,33.83,0.0,Accounts & Trust,55
+dc66bd7d80245158,HR & Payroll Officer,0.31,0.0,17.32,0.0,HR & Payroll,55
+dc66bd7d80245158,Principal,0.12,0.0,30.0,0.0,Management,250
+e2dbbf1ccea01beb,Accounts Officer,0.5,0.0,27.5,0.0,Accounts & Trust,55
+f9e8bbb390b8c1bd,IT Consultant,0.5,0.0,75.0,0.0,Privacy & IT,150
+ff05e084ee4e46cb,Compliance Officer,5.6,1.4,448.0,112.0,Compliance & AML,80
+ff05e084ee4e46cb,Solicitor,2.4,0.6,288.0,72.0,Legal,120

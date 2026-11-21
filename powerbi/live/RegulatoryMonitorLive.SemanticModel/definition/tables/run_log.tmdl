@@ -1,0 +1,52 @@
+table run_log
+	lineageTag: b0d14504-4b9b-5726-8d4b-9fd985b9ba45
+
+	measure 'Sources Checked' = VAR d = INT ( MAX ( run_log[run_at] ) ) RETURN COUNTROWS ( FILTER ( run_log, INT ( run_log[run_at] ) = d ) ) + 0
+		formatString: #,0
+		lineageTag: 748e7dc0-2200-5b48-8ad8-4ceac735df65
+
+	measure 'Sources OK' = VAR d = INT ( MAX ( run_log[run_at] ) ) RETURN COUNTROWS ( FILTER ( run_log, INT ( run_log[run_at] ) = d && LEFT ( run_log[status], 2 ) = "ok" ) ) + 0
+		formatString: #,0
+		lineageTag: 05de3b6c-4bbc-5c81-bfc5-9426a80f764a
+
+	measure 'Sources OK Label' = IF ( [Sources Checked] = 0, "n/a (sample)", FORMAT ( [Sources OK], "0" ) & " / " & FORMAT ( [Sources Checked], "0" ) )
+		lineageTag: da88d3d0-f16c-561e-b6ff-c131ca2c770f
+
+	column run_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: run_at
+		lineageTag: b78a3b81-f5a7-5b19-8ee3-69a0bc2d1bd3
+
+	column agency
+		dataType: string
+		summarizeBy: none
+		sourceColumn: agency
+		lineageTag: 8eb7ed64-8780-522b-b294-0d5b0f70c447
+
+	column feed
+		dataType: string
+		summarizeBy: none
+		sourceColumn: feed
+		lineageTag: 90201f8d-9fc7-5d7d-8353-0d645c37a6c0
+
+	column status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: status
+		lineageTag: f62e7a04-156a-531b-8b8e-4e47c5473f4d
+
+	column items
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: items
+		lineageTag: 7424487f-1460-5fea-a1d7-f0eefb316e3a
+
+	partition run_log = m
+		mode: import
+		source =
+				let
+				    Raw = try Table.Buffer(Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/run_log.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true])) otherwise #table(type table [run_at = text, agency = text, feed = text, status = text, items = text], {}),
+				    Typed = Table.TransformColumnTypes(Raw, {{"run_at", type datetimezone}, {"agency", type text}, {"feed", type text}, {"status", type text}, {"items", Int64.Type}}, "en-AU")
+				in
+				    Typed

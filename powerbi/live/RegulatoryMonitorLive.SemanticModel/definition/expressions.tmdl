@@ -1,0 +1,9 @@
+expression Branch = "main" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 9e2f47a6-4a71-504e-921e-40ce5488a4aa
+
+	annotation PBI_ResultType = Text
+
+expression Dataset = "bi_export" meta [IsParameterQuery = true, List = {"bi_export", "data/live"}, DefaultValue = "bi_export", Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 1d7e74eb-1cb5-5a73-ad97-49218053905e
+
+	annotation PBI_ResultType = Text

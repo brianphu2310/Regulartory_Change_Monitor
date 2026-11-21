@@ -1,0 +1,235 @@
+table dashboard_changes
+	lineageTag: 2bddbcad-fedc-58c5-8b76-4b323985d7f3
+
+	measure 'Changes' = COUNTROWS ( dashboard_changes ) + 0
+		formatString: #,0
+		lineageTag: 54f875e9-d02b-572d-b602-ae0c77c2e5f9
+
+	measure 'New This Week' = VAR asOf = MAX ( dashboard_changes[as_of] ) RETURN CALCULATE ( COUNTROWS ( dashboard_changes ), dashboard_changes[first_seen] > asOf - 7 ) + 0
+		formatString: #,0
+		lineageTag: 48fabd65-8a04-5f0b-8fa8-20eb724b9abc
+
+	measure 'Needs Action' = CALCULATE ( COUNTROWS ( dashboard_changes ), dashboard_changes[work_status] = "Outstanding" ) + 0
+		formatString: #,0
+		lineageTag: 8f4de4dd-c930-57e8-80dc-8ca32912f9d9
+
+	measure 'Past Target Date' = CALCULATE ( COUNTROWS ( dashboard_changes ), dashboard_changes[work_status] = "Outstanding", dashboard_changes[days_left] < 0 ) + 0
+		formatString: #,0
+		lineageTag: 4b5588fd-bd79-5205-b8ef-9592c6236529
+
+	measure 'One-off Cost' = SUM ( dashboard_changes[total_one_off_cost] )
+		formatString: \$#,0
+		lineageTag: fa7e7804-d450-542b-81da-53776af6d486
+
+	measure 'Staff Time Cost' = SUM ( dashboard_changes[internal_one_off_cost] )
+		formatString: \$#,0
+		lineageTag: 40927398-e761-507f-98ff-962e8b277896
+
+	measure 'External Cost' = SUM ( dashboard_changes[external_one_off] )
+		formatString: \$#,0
+		lineageTag: 92c64012-c2ef-5dee-9658-1b228bee478d
+
+	measure 'Ongoing Cost / yr' = SUM ( dashboard_changes[total_ongoing_cost_yr] )
+		formatString: \$#,0
+		lineageTag: 65854f7f-f2ce-5897-9ff7-33c372ba00ed
+
+	measure 'Backlog Hours' = SUM ( dashboard_changes[outstanding_hours] )
+		formatString: #,0
+		lineageTag: e83321f5-b01d-57a6-924c-b82dbf90b00d
+
+	measure 'Data As At' = "Data as at " & FORMAT ( MAX ( dashboard_changes[as_of] ), "d mmm yyyy" )
+		lineageTag: dbe65d96-82f2-5498-a93f-e34d79c8cc40
+
+	measure 'Takeaway' = "The changes on file cost about " & FORMAT ( [One-off Cost], "$#,0" ) & " once and " & FORMAT ( [Ongoing Cost / yr], "$#,0" ) & " a year. " & FORMAT ( [Past Target Date], "0" ) & " are past their target date and the backlog is " & FORMAT ( [Backlog Hours], "#,0" ) & " staff hours."
+		lineageTag: 2204dfa1-7f39-5cd2-9f3c-dcc9bc6e53d8
+
+	measure 'Days Left Colour' = VAR d = MAX ( dashboard_changes[days_left] ) RETURN SWITCH ( TRUE (), d < 0, "#C0392B", d < 14, "#D98C00", "#1F2933" )
+		lineageTag: 65c2ed65-b953-5bfc-9776-bf9186374aa3
+
+	column id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: id
+		lineageTag: 5082078a-1f6f-5db3-a7a8-524c88df251c
+
+	column source
+		dataType: string
+		summarizeBy: none
+		sourceColumn: source
+		lineageTag: 21436da4-ad8c-50d0-bbb6-8c2af93a277a
+
+	column title
+		dataType: string
+		summarizeBy: none
+		sourceColumn: title
+		lineageTag: f8af7ff8-0e8e-55e8-9853-80bdac142fef
+
+	column link
+		dataType: string
+		summarizeBy: none
+		sourceColumn: link
+		lineageTag: cbb98c06-1117-5219-8e07-8084abf0b93d
+
+	column impact
+		dataType: string
+		summarizeBy: none
+		sourceColumn: impact
+		lineageTag: 398dd44e-3726-5191-914c-7d4056d5a8df
+
+	column impact_sort
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: impact_sort
+		lineageTag: b388a906-d928-5362-b18f-f5adc7d53743
+
+	column topics
+		dataType: string
+		summarizeBy: none
+		sourceColumn: topics
+		lineageTag: 963b0a91-f730-5581-8446-b143b3709ca4
+
+	column status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: status
+		lineageTag: f39e50d6-c456-557f-93f5-0efc9c1dd24d
+
+	column action_req
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: action_req
+		lineageTag: 02b97ca8-0b88-5ca0-a7c8-8dcbd4a2aa21
+
+	column published
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: published
+		lineageTag: 0c3043cf-e6b7-523d-80b2-0bb6da344506
+
+	column deadline
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: deadline
+		lineageTag: 724748b6-ec60-5fe1-9324-301070ddfd8b
+
+	column one_off_hours
+		dataType: double
+		summarizeBy: none
+		sourceColumn: one_off_hours
+		lineageTag: 3811bdc6-a334-537b-8d23-bb1f77f98beb
+
+	column ongoing_hours_yr
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ongoing_hours_yr
+		lineageTag: 2e944f86-2733-5299-accb-9e556b207ed7
+
+	column external_one_off
+		dataType: double
+		summarizeBy: none
+		sourceColumn: external_one_off
+		lineageTag: 5dadab67-7405-55c3-a083-16512f6d19f4
+
+	column external_ongoing_yr
+		dataType: double
+		summarizeBy: none
+		sourceColumn: external_ongoing_yr
+		lineageTag: 2da91b13-8e7d-52bd-b1da-6da9881e3e49
+
+	column internal_one_off_cost
+		dataType: double
+		summarizeBy: none
+		sourceColumn: internal_one_off_cost
+		lineageTag: b59a173a-7c5d-52e0-8429-bbdada136eb4
+
+	column internal_ongoing_cost_yr
+		dataType: double
+		summarizeBy: none
+		sourceColumn: internal_ongoing_cost_yr
+		lineageTag: 0a4ea751-4da7-5b85-832f-95f06bfa0874
+
+	column total_one_off_cost
+		dataType: double
+		summarizeBy: none
+		sourceColumn: total_one_off_cost
+		lineageTag: ed318eec-5593-587a-867f-15cbf3a60b7f
+
+	column total_ongoing_cost_yr
+		dataType: double
+		summarizeBy: none
+		sourceColumn: total_ongoing_cost_yr
+		lineageTag: 5a91b964-19b1-5341-aec4-ce2bacdb215d
+
+	column target_date
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: target_date
+		lineageTag: 5718546d-6a10-51c6-ac34-0aa3d4d6ea8a
+
+	column lead_time_days
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: lead_time_days
+		lineageTag: 6459ff61-d8bd-5305-9c9a-07b58a8b4d62
+
+	column days_left
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: days_left
+		lineageTag: e1660709-7851-5a1a-aa3d-d4eebedd8a28
+
+	column work_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: work_status
+		lineageTag: a2db2f80-8d7e-5650-a84a-5cc185db7d58
+
+	column outstanding_hours
+		dataType: double
+		summarizeBy: none
+		sourceColumn: outstanding_hours
+		lineageTag: c8fbf7e4-e289-5fe4-9a88-66d54e25e6aa
+
+	column at_risk
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: at_risk
+		lineageTag: 065a1efc-828f-59e6-9f63-c8ae60b50c68
+
+	column as_of
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: as_of
+		lineageTag: 2cdbd795-f275-538c-b17f-8c9f8c995542
+
+	column first_seen
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: first_seen
+		lineageTag: 41126360-d06d-5ba4-8477-7318de93b87c
+
+	column lead_role
+		dataType: string
+		summarizeBy: none
+		sourceColumn: lead_role
+		lineageTag: 39043501-8ee4-590e-b1a0-0b890b5f7858
+
+	column lead_department
+		dataType: string
+		summarizeBy: none
+		sourceColumn: lead_department
+		lineageTag: 2be8d49b-e573-5208-b225-1f0db1f5d8d0
+
+	partition dashboard_changes = m
+		mode: import
+		source =
+				let
+				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/dashboard_changes.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Raw, {{"id", type text}, {"source", type text}, {"title", type text}, {"link", type text}, {"impact", type text}, {"impact_sort", Int64.Type}, {"topics", type text}, {"status", type text}, {"action_req", Int64.Type}, {"published", type date}, {"deadline", type date}, {"one_off_hours", type number}, {"ongoing_hours_yr", type number}, {"external_one_off", type number}, {"external_ongoing_yr", type number}, {"internal_one_off_cost", type number}, {"internal_ongoing_cost_yr", type number}, {"total_one_off_cost", type number}, {"total_ongoing_cost_yr", type number}, {"target_date", type date}, {"lead_time_days", Int64.Type}, {"days_left", Int64.Type}, {"work_status", type text}, {"outstanding_hours", type number}, {"at_risk", Int64.Type}, {"as_of", type date}, {"first_seen", type date}, {"lead_role", type text}, {"lead_department", type text}}, "en-AU")
+				in
+				    Typed

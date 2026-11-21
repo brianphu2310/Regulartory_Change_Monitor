@@ -138,6 +138,8 @@ def build(out: Path = OUT, as_of: pd.Timestamp | None = None) -> dict[str, pd.Da
     # one wide table for the focused dashboard: the change, its cost and time, and who leads it
     lead = effort.sort_values("one_off_hours", ascending=False).drop_duplicates("id").set_index("id")["role"]
     dash = changes[["id", "published", "source", "title", "link", "impact", "impact_sort", "topics", "status", "action_req"]].drop(columns="published").merge(imp, on="id")
+    seen = changes.set_index("id")["first_seen"] if "first_seen" in changes else changes.set_index("id")["published"]
+    dash["first_seen"] = pd.to_datetime(dash["id"].map(seen)).dt.date
     dash["lead_role"] = dash["id"].map(lead)
     dash["lead_department"] = dash["lead_role"].map(roles.set_index("role")["department"])
     dash["published"] = pd.to_datetime(dash["published"]).dt.date

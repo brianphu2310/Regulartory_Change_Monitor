@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "RegulatoryMonitorLive"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0d916b2e-4f12-5030-8127-5876d94d2787"
+  }
+}

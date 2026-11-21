@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:   # TEMP: baseline run on the feature branch
     branches: [feature/live-monitor]
-    paths: ["monitor/sources.py"]
+    paths: ["monitor/sources.py", "monitor/fetch.py", "classifier.py"]
 
 permissions:
   contents: write

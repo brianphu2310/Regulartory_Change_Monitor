@@ -17,15 +17,14 @@ TOPIC_RULES = {
     "Tax": ["income tax", "gst", "fringe benefits", "land tax", "tax return",
             "bas ", "ato ", "deduction", "capital gains", " tax ", "taxation",
             "tax transparency", "minimum tax", "payroll tax", "transfer duty",
-            "duties"],
+            "duties", "purchaser duty"],
     "Employment": ["fair work", "award", "minimum wage", "modern award",
                    "unfair dismissal", "enterprise agreement", "leave entitlement",
                    "casual", "employee"],
-    "Trust Accounts": ["trust account", "trust money", "legal practitioner",
-                       "law society", "legal services council", "conveyancing",
-                       "legal profession", "uniform law"],
+    "Trust Accounts": ["trust account", "trust money", "trust record", "controlled money",
+                       "legal services council", "conveyancing"],
     "Property": ["property", "settlement", "stamp duty", "pexa", "conveyanc",
-                 "strata", "title", "transfer duty", "real estate",
+                 "strata", "land title", "certificate of title", "transfer duty", "real estate", "underquoting",
                  "land registry"],
     "Privacy & Data": ["privacy", "data breach", "notifiable data", "oaic",
                        "cyber security", "consumer data right"],
@@ -61,8 +60,18 @@ _DATE_RE = re.compile(
     r"september|october|november|december)\s+(20\d{2})\b", re.I)
 
 
+def _pattern(word: str) -> re.Pattern:
+    """A keyword matches at the start of a word ("penalt" finds "penalties", "title" does not match "entitlement");
+    a keyword written with a trailing space must also end the word ("bas " is not "basic")."""
+    core = re.escape(word.strip())
+    return re.compile(r"(?<![a-z0-9])" + core + (r"(?![a-z0-9])" if word.endswith(" ") else ""))
+
+
+_CACHE: dict[str, re.Pattern] = {}
+
+
 def _hits(text: str, words: list[str]) -> int:
-    return sum(1 for w in words if w in text)
+    return sum(1 for w in words if (_CACHE.get(w) or _CACHE.setdefault(w, _pattern(w))).search(text))
 
 
 def extract_deadline(text: str, published: date) -> date | None:
@@ -78,8 +87,16 @@ def extract_deadline(text: str, published: date) -> date | None:
     return min(found) if found else None
 
 
+# Government notices that share keywords with the topics above but do not bind a law firm
+NOT_FOR_FIRMS = ["family tax benefit", "veterans", "national health", "parliamentary superannuation",
+                 "(pss)", "commonwealth superannuation", "defence force", "social security", "medicare",
+                 "pharmaceutical benefits", "data matching program", "asic corporations", "asic credit"]
+
+
 def classify(title: str, summary: str, published: date) -> dict:
     text = f" {title} {summary} ".lower()
+    if _hits(text, NOT_FOR_FIRMS):
+        text = ""
 
     topics = [t for t, kws in TOPIC_RULES.items() if _hits(text, kws)]
     audiences = [a for a, kws in AUDIENCE_RULES.items() if _hits(text, kws)]

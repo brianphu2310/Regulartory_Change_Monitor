@@ -89,12 +89,25 @@ def from_api(src: Source) -> list[dict]:
     return out
 
 
+_TYPE_WORD = re.compile(r"^(announcement|seminar|newsletter|media release|news|article|update)\s+(?=[A-Z0-9])", re.I)
+
+
+def clean_title(a) -> str:
+    """Link text on card layouts holds type, title, date and summary; keep the title only."""
+    head = a.find(["h2", "h3", "h4", "h5"])
+    text = (head or a).get_text(" ", strip=True)
+    m = _DATE.search(text)
+    if m and m.start() > 15:
+        text = text[:m.start()].strip()
+    return _TYPE_WORD.sub("", text).strip()
+
+
 def from_page(src: Source) -> list[dict]:
     soup = BeautifulSoup(_get(src.page).text, "html.parser")
     pat, seen, out = re.compile(src.link_pattern), set(), []
     for a in soup.find_all("a", href=True):
         link = urljoin(src.page, a["href"]).split("#")[0]
-        title = a.get_text(" ", strip=True)
+        title = clean_title(a)
         if not pat.search(urlparse(link).path) or link.rstrip("/") == src.page.rstrip("/") or len(title) < 15 or link in seen:
             continue
         seen.add(link)

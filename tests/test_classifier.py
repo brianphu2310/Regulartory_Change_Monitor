@@ -64,3 +64,18 @@ def test_real_treasury_titles_are_tagged():
     assert "Tax" in classify("Global and domestic minimum tax – amending legislation tranche 4", "", D)["topics"]
     assert "Privacy & Data" in classify("Consumer Data Right FAPI 2.0 alignment – draft standards", "", D)["topics"]
     assert classify("Reforms to the bankruptcy system", "", D)["topics"] == "Other"
+
+
+def test_keywords_match_whole_words_and_skip_non_firm_notices():
+    assert classify("Veterans' Entitlements (Income Stream) Determination 2026", "", D)["topics"] == "Other"
+    assert classify("Basic guide to the new strata scheme rules", "", D)["topics"] == "Property"   # not Tax via "bas"
+    assert "Payroll" in classify("Be payroll tax ready – pay on time", "", D)["topics"]
+    assert classify("Foundation to boost Indigenous legal practitioners", "", D)["topics"] == "Other"
+
+
+def test_card_titles_are_cleaned():
+    from bs4 import BeautifulSoup
+    from monitor.fetch import clean_title
+    a = BeautifulSoup('<a href="/x">announcement Preparing for land tax in 2027 16 November 2026 Revenue NSW will start '
+                      'issuing land tax assessment notices.</a>', "html.parser").a
+    assert clean_title(a) == "Preparing for land tax in 2027"

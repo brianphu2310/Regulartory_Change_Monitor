@@ -1,9 +1,9 @@
 name: Regulatory monitor
 
-# Runs every morning, builds the monitor's Docker image and runs it; commits live data and opens a report issue.
+# Runs every Monday morning (or on demand), builds the monitor's Docker image and runs it; commits live data and opens a report issue.
 on:
   schedule:
-    - cron: "17 20 * * *"   # 07:17 Sydney (AEDT)
+    - cron: "17 20 * * 0"   # Monday 07:17 Sydney (AEDT): a weekly digest, ready for the Monday compliance meeting
   workflow_dispatch:
 
 permissions:

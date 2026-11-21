@@ -5,7 +5,7 @@ announcements**, every day, without anyone opening a browser.
 
 ```mermaid
 flowchart LR
-    A[GitHub Actions<br/>07:17 Sydney daily] --> B[Docker image<br/>reg-monitor]
+    A[GitHub Actions<br/>Monday 07:17 Sydney] --> B[Docker image<br/>reg-monitor]
     B --> C[Fetch: RSS first,<br/>news page fallback<br/>robots.txt checked]
     C --> D[New? de-duplicate<br/>on link hash]
     D --> E[Classify<br/>topic, impact, action,<br/>deadline]
@@ -18,7 +18,7 @@ flowchart LR
 
 | Step | Tech | Where |
 |---|---|---|
-| Schedule and orchestration | GitHub Actions (cron + manual run) | `.github/workflows/monitor.yml` |
+| Schedule and orchestration | GitHub Actions (weekly cron + manual run) | `.github/workflows/monitor.yml` |
 | Packaging | Docker (`python:3.12-slim`, non-root) | `Dockerfile` |
 | Fetching | `requests`, `feedparser`, `BeautifulSoup`, `urllib.robotparser` | `monitor/fetch.py`, `monitor/sources.py` |
 | Classification and costing | Keyword rules, rule-based impact model | `classifier.py`, `impact_model.py` |

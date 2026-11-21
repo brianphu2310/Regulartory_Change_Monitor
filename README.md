@@ -30,7 +30,7 @@ A Power BI report (plus an interactive HTML design preview) that tracks regulato
 
 ## v3: a live monitor that runs itself
 
-Every morning GitHub Actions builds a **Docker** image and runs [`monitor/`](monitor/): it reads official agency news (RSS first, news page fallback, robots.txt checked), keeps what is new and relevant, classifies it, costs it with the impact model, commits the results to `data/live/` and opens a **GitHub Issue** with the report when something new appears. Power BI reads the same CSVs over HTTPS, so **Refresh** brings in the latest run. Some agency sites refuse cloud runners; the run log says so and `run_local.ps1` runs the same image from a desktop. Details: [docs/LIVE_MONITOR.md](docs/LIVE_MONITOR.md).
+Every Monday morning GitHub Actions builds a **Docker** image and runs [`monitor/`](monitor/): it reads official agency news (RSS first, news page fallback, robots.txt checked), keeps what is new and relevant, classifies it, costs it with the impact model, commits the results to `data/live/` and opens a **GitHub Issue** with the report when something new appears. Power BI reads the same CSVs over HTTPS, so **Refresh** brings in the latest run. Some agency sites refuse cloud runners; the run log says so and `run_local.ps1` runs the same image from a desktop. Details: [docs/LIVE_MONITOR.md](docs/LIVE_MONITOR.md).
 
 ## What is in the repo
 | Path | What it is |

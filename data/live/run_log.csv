@@ -14,3 +14,18 @@ run_at,agency,feed,status,items
 2026-11-21T11:19:32+00:00,NSW Government,Ministerial releases,ok via page (10 items),10
 2026-11-21T11:19:34+00:00,NSW DCJ,Justice media releases,ok via page (10 items),10
 2026-11-21T11:19:39+00:00,SafeWork NSW,SafeWork media releases,ok via page (8 items),8
+2026-11-23T00:56:50+00:00,AUSTRAC,Media releases and updates,"page: ReadTimeout: HTTPSConnectionPool(host='www.austrac.gov.au', port=443): Read timed out. (read timeout=12)",0
+2026-11-23T00:56:50+00:00,ATO,New information (all topics),rss: HTTPError: 403 Client Error: Forbidden for url: https://www.ato.gov.au/rss/all-new-information.xml,0
+2026-11-23T00:57:14+00:00,Fair Work,Fair Work Ombudsman news,"page: ReadTimeout: HTTPSConnectionPool(host='www.fairwork.gov.au', port=443): Read timed out. (read timeout=12)",0
+2026-11-23T00:57:15+00:00,OAIC,OAIC news and media,page: HTTPError: 403 Client Error: Forbidden for url: https://www.oaic.gov.au/news/media-centre,0
+2026-11-23T00:57:15+00:00,APRA,News and publications,ok via page (11 items),11
+2026-11-23T00:57:16+00:00,Treasury,Open consultations,ok via page (10 items),10
+2026-11-23T00:57:20+00:00,Attorney-General's,Consultation hub,ok via page (8 items),8
+2026-11-23T00:57:24+00:00,Federal Register,New Acts and instruments,ok via api (200 items),200
+2026-11-23T00:57:26+00:00,Law Society NSW,News and media releases,ok via page (25 items),25
+2026-11-23T00:57:26+00:00,Legal Services Board,Uniform Law Commissioner news (VIC),ok via page (10 items),10
+2026-11-23T00:57:27+00:00,Revenue NSW,News and media releases,ok via page (20 items),20
+2026-11-23T00:57:28+00:00,NSW Fair Trading,Fair Trading news,ok via page (9 items),9
+2026-11-23T00:57:30+00:00,NSW Government,Ministerial releases,ok via page (10 items),10
+2026-11-23T00:57:32+00:00,NSW DCJ,Justice media releases,ok via page (10 items),10
+2026-11-23T00:57:39+00:00,SafeWork NSW,SafeWork media releases,ok via page (8 items),8

@@ -23,6 +23,23 @@ and visual can be reviewed in Git. [`build_pbip.py`](build_pbip.py) generates it
 
 Every Monday after 07:17 Sydney the monitor commits a new run; with `Dataset = data/live`, **Refresh** loads it.
 
+## Data source: CSV or Databricks
+
+| Parameter | Values | Default |
+|---|---|---|
+| `Source` | `GitHub CSV` (the files in this repo) or `Databricks` (the lakehouse gold tables) | `GitHub CSV` |
+| `Dataset` | `bi_export` (synthetic year) or `data/live` (weekly monitor); CSV mode only | `bi_export` |
+| `DatabricksHost`, `DatabricksHttpPath`, `DatabricksCatalog` | from the SQL warehouse's *Connection details*; Databricks mode only | placeholders, `workspace` |
+
+Both sources have the same table and column names, so every page works on either. Only the chosen branch of each query
+is evaluated, so CSV mode never asks for Databricks credentials. Set-up: [docs/DATABRICKS.md](../docs/DATABRICKS.md).
+
+## See it without Power BI
+
+`python powerbi/render_preview.py` draws every page from the report's own `page.json` / `visual.json` files (positions,
+fields, filters, sort, colours) and the same CSVs, with each measure re-implemented in pandas, into `preview/report.html`.
+That file is the live link in the main README. `tests/test_report_preview.py` pins the headline numbers.
+
 ## Model
 
 | Table | Source | Used by |
@@ -33,7 +50,9 @@ Every Monday after 07:17 Sydney the monitor commits a new run; with `Dataset = d
 | `run_log` | CSV (live runs only; empty in sample mode) | Source health |
 
 Relationships as in v1 (`changes` to `dim_date` on published, inactive on deadline; topic and audience bridges both
-ways) plus `change_effort` to `dashboard_changes`. The v1 measure **Sample Data Note** now says whether sample or live
+ways) plus `change_effort` to `dashboard_changes`, and the department path `dim_department` → `topic_department` →
+`dim_topic` → `change_topics` → `changes`, so each department page shows only the changes whose topics reach it.
+Deadlines and "last 30 days" count from the date of the data (`As Of Date` = latest `as_of`), not from the day the file is opened. The v1 measure **Sample Data Note** now says whether sample or live
 data is loaded.
 
 ## Design system

@@ -1,0 +1,55 @@
+table quality_checks
+	lineageTag: 1063fc42-ed24-5911-9425-7715c7f50e67
+
+	measure 'Checks Passed Label' = VAR d = MAX ( quality_checks[run_date] ) VAR n = CALCULATE ( COUNTROWS ( quality_checks ), quality_checks[run_date] = d ) VAR ok = COUNTROWS ( FILTER ( ALL ( quality_checks ), quality_checks[run_date] = d && UPPER ( quality_checks[passed] ) = "TRUE" ) ) + 0 RETURN IF ( n = 0, "n/a", FORMAT ( ok, "0" ) & " / " & FORMAT ( n, "0" ) )
+		lineageTag: 64aa4530-d0a2-53e2-9964-f16c323980e9
+
+	measure 'Check Colour' = IF ( UPPER ( SELECTEDVALUE ( quality_checks[passed] ) ) = "TRUE", "#5F7A1A", IF ( UPPER ( SELECTEDVALUE ( quality_checks[blocking] ) ) = "TRUE", "#C0392B", "#D98C00" ) )
+		lineageTag: 8e5255ba-a55e-5ac7-9b2c-c6ddf09e6983
+
+	column run_date
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: run_date
+		lineageTag: 82b3ff78-01ee-5331-afdd-2c3a416e54a1
+
+	column check_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: check_name
+		lineageTag: 0e6f577d-e4f4-5764-8b4f-5a1870580ad3
+
+	column blocking
+		dataType: string
+		summarizeBy: none
+		sourceColumn: blocking
+		lineageTag: 96ced7cf-3f4c-5711-a0eb-780e1203946a
+
+	column failed_rows
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: failed_rows
+		lineageTag: 8c3cc5b7-5be7-5986-9d06-feb0da6f7eb2
+
+	column passed
+		dataType: string
+		summarizeBy: none
+		sourceColumn: passed
+		lineageTag: 59e5856a-0d7b-53f6-9b39-492e474e3308
+
+	column 'Latest Load' = IF ( quality_checks[run_date] = MAX ( quality_checks[run_date] ), "Yes", "No" )
+		dataType: string
+		summarizeBy: none
+		lineageTag: f1d6f2f6-7d67-59eb-9abf-017d17ca6ca3
+
+	partition quality_checks = m
+		mode: import
+		source =
+				let
+				    Raw = if Source = "Databricks" then Databricks.Catalogs(DatabricksHost, DatabricksHttpPath, [Catalog = null, Database = null, EnableAutomaticProxyDiscovery = null]){[Name = DatabricksCatalog, Kind = "Database"]}[Data]{[Name = "rcm_gold", Kind = "Schema"]}[Data]{[Name = "quality_checks", Kind = "Table"]}[Data]
+				          else try Table.Buffer(Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/quality_checks.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true])) otherwise #table(type table [run_date = text, check_name = text, blocking = text, failed_rows = text, passed = text], {}),
+				    Picked = Table.SelectColumns(Raw, {"run_date", "check_name", "blocking", "failed_rows", "passed"}, MissingField.UseNull),
+				    Typed = Table.TransformColumnTypes(Picked, {{"run_date", type date}, {"check_name", type text}, {"blocking", type text}, {"failed_rows", Int64.Type}, {"passed", type text}}, "en-AU")
+				in
+				    Typed

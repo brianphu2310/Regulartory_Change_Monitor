@@ -20,3 +20,16 @@ relationship dd096323-1e4d-55d3-90a5-053fec329e28
 relationship 91cbbaf0-0805-528d-8e1a-399c74743263
 	fromColumn: change_effort.id
 	toColumn: dashboard_changes.id
+
+relationship fe8fa688-7d58-55bc-acb8-899e2d11b0af
+	fromColumn: topic_department.department
+	toColumn: dim_department.department
+
+relationship 1e521765-d69e-503a-ade1-aad6689a3a19
+	crossFilteringBehavior: bothDirections
+	fromColumn: topic_department.topic
+	toColumn: dim_topic.topic
+
+relationship 8a331fe1-192d-520a-af87-cae4dc64d2f0
+	fromColumn: change_topics.topic
+	toColumn: dim_topic.topic

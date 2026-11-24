@@ -51,7 +51,8 @@ table dim_date
 		mode: import
 		source =
 				let
-				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/dim_date.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Raw = if Source = "Databricks" then Databricks.Catalogs(DatabricksHost, DatabricksHttpPath, [Catalog = null, Database = null, EnableAutomaticProxyDiscovery = null]){[Name = DatabricksCatalog, Kind = "Database"]}[Data]{[Name = "rcm_gold", Kind = "Schema"]}[Data]{[Name = "dim_date", Kind = "Table"]}[Data]
+				          else Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/dim_date.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
 				    Picked = Table.SelectColumns(Raw, {"date", "year", "month_num", "month_name", "year_month", "month_start", "week_start"}, MissingField.UseNull),
 				    Typed = Table.TransformColumnTypes(Picked, {{"date", type date}, {"year", Int64.Type}, {"month_num", Int64.Type}, {"month_name", type text}, {"year_month", type text}, {"month_start", type date}, {"week_start", type date}}, "en-AU")
 				in

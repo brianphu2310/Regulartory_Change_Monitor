@@ -66,9 +66,9 @@ def test_run_log_columns_match_what_the_monitor_writes():
     assert "run_at" in Path(run.__file__).read_text()
 
 
-def test_every_sidebar_page_links_to_all_ten_items_in_sidebar_order():
+def test_every_sidebar_page_links_to_every_item_in_sidebar_order():
     pages = json.loads((B.REPORT / "definition" / "pages" / "pages.json").read_text())["pageOrder"]
-    assert len(pages) == 14
+    assert len(pages) == 15
     for pid in pages:
         page = json.loads((B.REPORT / "definition" / "pages" / pid / "page.json").read_text())
         if page.get("type") == "Tooltip":

@@ -17,7 +17,8 @@ table change_audiences
 		mode: import
 		source =
 				let
-				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/change_audiences.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Raw = if Source = "Databricks" then Databricks.Catalogs(DatabricksHost, DatabricksHttpPath, [Catalog = null, Database = null, EnableAutomaticProxyDiscovery = null]){[Name = DatabricksCatalog, Kind = "Database"]}[Data]{[Name = "rcm_gold", Kind = "Schema"]}[Data]{[Name = "change_audiences", Kind = "Table"]}[Data]
+				          else Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/change_audiences.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
 				    Picked = Table.SelectColumns(Raw, {"id", "audience"}, MissingField.UseNull),
 				    Typed = Table.TransformColumnTypes(Picked, {{"id", type text}, {"audience", type text}}, "en-AU")
 				in

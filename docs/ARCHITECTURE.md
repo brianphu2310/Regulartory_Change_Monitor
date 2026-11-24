@@ -103,3 +103,14 @@ runners; AUSTRAC, the ATO, Fair Work Ombudsman and the OAIC refuse cloud traffic
 - **Blocked sources:** a self-hosted Actions runner on an office machine, with the organisation's permission, instead of any workaround.
 - **Better tagging:** keep the rules as the baseline and add an LLM pass whose output must cite the sentence it relied on, scored against a hand-labelled set.
 - **Scheduled refresh:** publish to Power BI Service once a licensed workspace exists.
+
+
+## v4: Databricks lakehouse
+
+The CSV files in Git stay the system of record for the report (anyone can open it, no account needed), and each run is
+also loaded into Databricks: bronze keeps every run as raw text, a quality gate blocks bad loads, silver `MERGE`s the
+changes into a history that never loses a change, and gold publishes the report's tables plus a weekly snapshot.
+Why push from GitHub Actions instead of pulling from Databricks: Free Edition restricts outbound internet, and the
+monitor already runs in Actions. Why SQL files over a notebook: they run on a SQL warehouse through the REST API, are
+reviewed in pull requests like any code, and are tested offline by translating them to DuckDB with sqlglot.
+Details: [DATABRICKS.md](DATABRICKS.md).

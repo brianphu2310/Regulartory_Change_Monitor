@@ -7,3 +7,23 @@ expression Dataset = "bi_export" meta [IsParameterQuery = true, List = {"bi_expo
 	lineageTag: 1d7e74eb-1cb5-5a73-ad97-49218053905e
 
 	annotation PBI_ResultType = Text
+
+expression Source = "GitHub CSV" meta [IsParameterQuery = true, List = {"GitHub CSV", "Databricks"}, DefaultValue = "GitHub CSV", Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: e25fdf9a-e54e-5571-a8f0-d1ecf6236d1e
+
+	annotation PBI_ResultType = Text
+
+expression DatabricksHost = "dbc-xxxxxxxx-xxxx.cloud.databricks.com" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = false]
+	lineageTag: b1643509-d785-5dfa-824a-f5520d463943
+
+	annotation PBI_ResultType = Text
+
+expression DatabricksHttpPath = "/sql/1.0/warehouses/xxxxxxxxxxxxxxxx" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = false]
+	lineageTag: 003317fe-0022-5a92-b799-c397e83be5f9
+
+	annotation PBI_ResultType = Text
+
+expression DatabricksCatalog = "workspace" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = false]
+	lineageTag: d7bf5fdc-a3b6-5310-8019-736130a9b6b1
+
+	annotation PBI_ResultType = Text

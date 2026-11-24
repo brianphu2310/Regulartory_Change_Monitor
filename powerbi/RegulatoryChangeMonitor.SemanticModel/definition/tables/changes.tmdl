@@ -1,6 +1,11 @@
 table changes
 	lineageTag: a1dc5a75-528c-51d8-8d46-307ac1e5392f
 
+	measure 'As Of Date' = COALESCE ( MAXX ( ALL ( dashboard_changes ), dashboard_changes[as_of] ), TODAY () )
+		formatString: d mmm yyyy
+		displayFolder: Labels
+		lineageTag: 2a975ff8-ab2e-5eba-9e31-36a93a486043
+
 	measure 'Total Changes' = COUNTROWS ( changes )
 		formatString: #,0
 		displayFolder: Counts
@@ -16,12 +21,12 @@ table changes
 		displayFolder: Actions
 		lineageTag: b51b2a48-96d7-5a67-bed5-02929fa9b093
 
-	measure 'Due In 30 Days' = CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] >= TODAY () && changes[deadline] <= TODAY () + 30 ) )
+	measure 'Due In 30 Days' = VAR t = [As Of Date] RETURN CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] >= t && changes[deadline] <= t + 30 ) )
 		formatString: #,0
 		displayFolder: Actions
 		lineageTag: 3c82965a-1aaf-5bc3-b41f-9d55ebe4a788
 
-	measure 'Overdue Actions' = CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] < TODAY () ) )
+	measure 'Overdue Actions' = VAR t = [As Of Date] RETURN CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] < t ) )
 		formatString: #,0
 		displayFolder: Actions
 		lineageTag: 5aafad7d-b95e-5481-808b-ba4448db219c
@@ -31,12 +36,12 @@ table changes
 		displayFolder: Actions
 		lineageTag: cb21d11d-430d-548e-931b-85044c4e6b12
 
-	measure 'Changes Last 30 Days' = CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > TODAY () - 30 && changes[published] <= TODAY () ) )
+	measure 'Changes Last 30 Days' = VAR t = [As Of Date] RETURN CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > t - 30 && changes[published] <= t ) )
 		formatString: #,0
 		displayFolder: Trend
 		lineageTag: 28db887a-e517-5f37-b81c-48fb93643e41
 
-	measure 'Changes Prior 30 Days' = CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > TODAY () - 60 && changes[published] <= TODAY () - 30 ) )
+	measure 'Changes Prior 30 Days' = VAR t = [As Of Date] RETURN CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > t - 60 && changes[published] <= t - 30 ) )
 		formatString: #,0
 		displayFolder: Trend
 		lineageTag: 5ce30c14-36fb-5054-99d2-896f1dc46792
@@ -142,12 +147,12 @@ table changes
 		sourceColumn: audiences
 		lineageTag: b3dec68e-6b3d-52a0-9bad-67499284dcf6
 
-	column 'Days To Deadline' = IF ( ISBLANK ( changes[deadline] ), BLANK (), DATEDIFF ( TODAY (), changes[deadline], DAY ) )
+	column 'Days To Deadline' = VAR t = COALESCE ( MAXX ( ALL ( dashboard_changes ), dashboard_changes[as_of] ), TODAY () ) RETURN IF ( ISBLANK ( changes[deadline] ), BLANK (), DATEDIFF ( t, changes[deadline], DAY ) )
 		dataType: int64
 		summarizeBy: none
 		lineageTag: 633b2d68-7dd4-5420-add2-8832847ae879
 
-	column 'Deadline Bucket' = IF ( ISBLANK ( changes[deadline] ), "No fixed date", IF ( changes[deadline] < TODAY (), "Overdue", IF ( changes[deadline] <= TODAY () + 30, "Due in 30 days", "Later" ) ) )
+	column 'Deadline Bucket' = VAR t = COALESCE ( MAXX ( ALL ( dashboard_changes ), dashboard_changes[as_of] ), TODAY () ) RETURN IF ( ISBLANK ( changes[deadline] ), "No fixed date", IF ( changes[deadline] < t, "Overdue", IF ( changes[deadline] <= t + 30, "Due in 30 days", "Later" ) ) )
 		dataType: string
 		summarizeBy: none
 		lineageTag: 070362e1-868b-52b8-b07e-c8ebce938b45
@@ -156,7 +161,8 @@ table changes
 		mode: import
 		source =
 				let
-				    Raw = Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/changes.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Raw = if Source = "Databricks" then Databricks.Catalogs(DatabricksHost, DatabricksHttpPath, [Catalog = null, Database = null, EnableAutomaticProxyDiscovery = null]){[Name = DatabricksCatalog, Kind = "Database"]}[Data]{[Name = "rcm_gold", Kind = "Schema"]}[Data]{[Name = "changes", Kind = "Table"]}[Data]
+				          else Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/changes.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
 				    Picked = Table.SelectColumns(Raw, {"id", "published", "source", "title", "summary", "link", "impact", "action_req", "deadline", "status", "impact_sort", "data_type", "topics", "audiences"}, MissingField.UseNull),
 				    Typed = Table.TransformColumnTypes(Picked, {{"id", type text}, {"published", type date}, {"source", type text}, {"title", type text}, {"summary", type text}, {"link", type text}, {"impact", type text}, {"action_req", Int64.Type}, {"deadline", type date}, {"status", type text}, {"impact_sort", Int64.Type}, {"data_type", type text}, {"topics", type text}, {"audiences", type text}}, "en-AU")
 				in

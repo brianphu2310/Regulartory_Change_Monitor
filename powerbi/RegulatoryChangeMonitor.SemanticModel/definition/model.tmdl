@@ -6,7 +6,7 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
-annotation PBI_QueryOrder = ["Branch", "Dataset", "changes", "change_topics", "change_audiences", "dim_date", "dashboard_changes", "change_effort", "capacity_monthly", "run_log"]
+annotation PBI_QueryOrder = ["Source", "Branch", "Dataset", "DatabricksHost", "DatabricksHttpPath", "DatabricksCatalog", "changes", "change_topics", "change_audiences", "dim_date", "dashboard_changes", "change_effort", "capacity_monthly", "run_log", "weekly_snapshot", "quality_checks"]
 
 ref table changes
 ref table change_topics
@@ -16,6 +16,8 @@ ref table dashboard_changes
 ref table change_effort
 ref table capacity_monthly
 ref table run_log
+ref table weekly_snapshot
+ref table quality_checks
 ref table open_actions
 ref table dim_topic
 ref table dim_department

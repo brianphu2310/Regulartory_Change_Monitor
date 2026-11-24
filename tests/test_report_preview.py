@@ -42,7 +42,7 @@ def test_dates_count_from_the_data_not_the_day_the_file_is_opened():
 
 def test_every_visual_renders(html):
     assert "class=\"v unk\"" not in html
-    assert html.count('class="page"') == 10
+    assert html.count('class="page"') == 11
 
 
 def test_headline_numbers(html):

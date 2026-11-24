@@ -1,0 +1,47 @@
+name: Lakehouse load
+
+# Loads what is in data/live into Databricks without fetching anything new (first set-up, or a re-run after a failure).
+# The weekly monitor workflow does the same load automatically after each run.
+on:
+  workflow_dispatch:
+    inputs:
+      run_date:
+        description: "Run date to load as (YYYY-MM-DD); empty = as_of in data/live"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: regulatory-monitor
+  cancel-in-progress: false
+
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      DATABRICKS_WAREHOUSE_ID: ${{ secrets.DATABRICKS_WAREHOUSE_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check the Databricks secrets are set
+        run: |
+          for k in DATABRICKS_HOST DATABRICKS_TOKEN DATABRICKS_WAREHOUSE_ID; do
+            if [ -z "${!k}" ]; then echo "::error::repository secret $k is not set (see docs/DATABRICKS.md)"; exit 1; fi
+          done
+      - name: Load into Databricks
+        run: |
+          pip install --quiet -r requirements-lakehouse.txt
+          python -m lakehouse.run --source data/live ${{ inputs.run_date && format('--run-date {0}', inputs.run_date) || '' }}
+      - name: Commit the weekly snapshot and quality results
+        run: |
+          git config user.name "regulatory-monitor[bot]"
+          git config user.email "regulatory-monitor@users.noreply.github.com"
+          git add data/live/weekly_snapshot.csv data/live/quality_checks.csv
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Lakehouse load $(date -u +%F)"
+          git push

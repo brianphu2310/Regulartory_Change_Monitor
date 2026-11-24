@@ -1,0 +1,451 @@
+run_date,check_name,blocking,failed_rows,passed
+2025-10-27,changes: deadline not before published,False,0,True
+2025-10-27,changes: id present,True,0,True
+2025-10-27,changes: id unique,True,0,True
+2025-10-27,changes: impact is High/Medium/Low,False,0,True
+2025-10-27,changes: published is a date,True,0,True
+2025-10-27,dashboard: every change is costed,True,0,True
+2025-10-27,effort: hours not negative,False,0,True
+2025-10-27,run log: at least one source checked,False,1,False
+2025-10-27,topics: refer to a known change,False,0,True
+2025-11-03,changes: deadline not before published,False,0,True
+2025-11-03,changes: id present,True,0,True
+2025-11-03,changes: id unique,True,0,True
+2025-11-03,changes: impact is High/Medium/Low,False,0,True
+2025-11-03,changes: published is a date,True,0,True
+2025-11-03,dashboard: every change is costed,True,0,True
+2025-11-03,effort: hours not negative,False,0,True
+2025-11-03,run log: at least one source checked,False,1,False
+2025-11-03,topics: refer to a known change,False,0,True
+2025-11-10,changes: deadline not before published,False,0,True
+2025-11-10,changes: id present,True,0,True
+2025-11-10,changes: id unique,True,0,True
+2025-11-10,changes: impact is High/Medium/Low,False,0,True
+2025-11-10,changes: published is a date,True,0,True
+2025-11-10,dashboard: every change is costed,True,0,True
+2025-11-10,effort: hours not negative,False,0,True
+2025-11-10,run log: at least one source checked,False,1,False
+2025-11-10,topics: refer to a known change,False,0,True
+2025-11-17,changes: deadline not before published,False,0,True
+2025-11-17,changes: id present,True,0,True
+2025-11-17,changes: id unique,True,0,True
+2025-11-17,changes: impact is High/Medium/Low,False,0,True
+2025-11-17,changes: published is a date,True,0,True
+2025-11-17,dashboard: every change is costed,True,0,True
+2025-11-17,effort: hours not negative,False,0,True
+2025-11-17,run log: at least one source checked,False,1,False
+2025-11-17,topics: refer to a known change,False,0,True
+2025-11-24,changes: deadline not before published,False,0,True
+2025-11-24,changes: id present,True,0,True
+2025-11-24,changes: id unique,True,0,True
+2025-11-24,changes: impact is High/Medium/Low,False,0,True
+2025-11-24,changes: published is a date,True,0,True
+2025-11-24,dashboard: every change is costed,True,0,True
+2025-11-24,effort: hours not negative,False,0,True
+2025-11-24,run log: at least one source checked,False,1,False
+2025-11-24,topics: refer to a known change,False,0,True
+2025-12-01,changes: deadline not before published,False,0,True
+2025-12-01,changes: id present,True,0,True
+2025-12-01,changes: id unique,True,0,True
+2025-12-01,changes: impact is High/Medium/Low,False,0,True
+2025-12-01,changes: published is a date,True,0,True
+2025-12-01,dashboard: every change is costed,True,0,True
+2025-12-01,effort: hours not negative,False,0,True
+2025-12-01,run log: at least one source checked,False,1,False
+2025-12-01,topics: refer to a known change,False,0,True
+2025-12-08,changes: deadline not before published,False,0,True
+2025-12-08,changes: id present,True,0,True
+2025-12-08,changes: id unique,True,0,True
+2025-12-08,changes: impact is High/Medium/Low,False,0,True
+2025-12-08,changes: published is a date,True,0,True
+2025-12-08,dashboard: every change is costed,True,0,True
+2025-12-08,effort: hours not negative,False,0,True
+2025-12-08,run log: at least one source checked,False,1,False
+2025-12-08,topics: refer to a known change,False,0,True
+2025-12-15,changes: deadline not before published,False,0,True
+2025-12-15,changes: id present,True,0,True
+2025-12-15,changes: id unique,True,0,True
+2025-12-15,changes: impact is High/Medium/Low,False,0,True
+2025-12-15,changes: published is a date,True,0,True
+2025-12-15,dashboard: every change is costed,True,0,True
+2025-12-15,effort: hours not negative,False,0,True
+2025-12-15,run log: at least one source checked,False,1,False
+2025-12-15,topics: refer to a known change,False,0,True
+2025-12-22,changes: deadline not before published,False,0,True
+2025-12-22,changes: id present,True,0,True
+2025-12-22,changes: id unique,True,0,True
+2025-12-22,changes: impact is High/Medium/Low,False,0,True
+2025-12-22,changes: published is a date,True,0,True
+2025-12-22,dashboard: every change is costed,True,0,True
+2025-12-22,effort: hours not negative,False,0,True
+2025-12-22,run log: at least one source checked,False,1,False
+2025-12-22,topics: refer to a known change,False,0,True
+2025-12-29,changes: deadline not before published,False,0,True
+2025-12-29,changes: id present,True,0,True
+2025-12-29,changes: id unique,True,0,True
+2025-12-29,changes: impact is High/Medium/Low,False,0,True
+2025-12-29,changes: published is a date,True,0,True
+2025-12-29,dashboard: every change is costed,True,0,True
+2025-12-29,effort: hours not negative,False,0,True
+2025-12-29,run log: at least one source checked,False,1,False
+2025-12-29,topics: refer to a known change,False,0,True
+2026-01-05,changes: deadline not before published,False,0,True
+2026-01-05,changes: id present,True,0,True
+2026-01-05,changes: id unique,True,0,True
+2026-01-05,changes: impact is High/Medium/Low,False,0,True
+2026-01-05,changes: published is a date,True,0,True
+2026-01-05,dashboard: every change is costed,True,0,True
+2026-01-05,effort: hours not negative,False,0,True
+2026-01-05,run log: at least one source checked,False,1,False
+2026-01-05,topics: refer to a known change,False,0,True
+2026-01-12,changes: deadline not before published,False,0,True
+2026-01-12,changes: id present,True,0,True
+2026-01-12,changes: id unique,True,0,True
+2026-01-12,changes: impact is High/Medium/Low,False,0,True
+2026-01-12,changes: published is a date,True,0,True
+2026-01-12,dashboard: every change is costed,True,0,True
+2026-01-12,effort: hours not negative,False,0,True
+2026-01-12,run log: at least one source checked,False,1,False
+2026-01-12,topics: refer to a known change,False,0,True
+2026-01-19,changes: deadline not before published,False,0,True
+2026-01-19,changes: id present,True,0,True
+2026-01-19,changes: id unique,True,0,True
+2026-01-19,changes: impact is High/Medium/Low,False,0,True
+2026-01-19,changes: published is a date,True,0,True
+2026-01-19,dashboard: every change is costed,True,0,True
+2026-01-19,effort: hours not negative,False,0,True
+2026-01-19,run log: at least one source checked,False,1,False
+2026-01-19,topics: refer to a known change,False,0,True
+2026-01-26,changes: deadline not before published,False,0,True
+2026-01-26,changes: id present,True,0,True
+2026-01-26,changes: id unique,True,0,True
+2026-01-26,changes: impact is High/Medium/Low,False,0,True
+2026-01-26,changes: published is a date,True,0,True
+2026-01-26,dashboard: every change is costed,True,0,True
+2026-01-26,effort: hours not negative,False,0,True
+2026-01-26,run log: at least one source checked,False,1,False
+2026-01-26,topics: refer to a known change,False,0,True
+2026-02-02,changes: deadline not before published,False,0,True
+2026-02-02,changes: id present,True,0,True
+2026-02-02,changes: id unique,True,0,True
+2026-02-02,changes: impact is High/Medium/Low,False,0,True
+2026-02-02,changes: published is a date,True,0,True
+2026-02-02,dashboard: every change is costed,True,0,True
+2026-02-02,effort: hours not negative,False,0,True
+2026-02-02,run log: at least one source checked,False,1,False
+2026-02-02,topics: refer to a known change,False,0,True
+2026-02-09,changes: deadline not before published,False,0,True
+2026-02-09,changes: id present,True,0,True
+2026-02-09,changes: id unique,True,0,True
+2026-02-09,changes: impact is High/Medium/Low,False,0,True
+2026-02-09,changes: published is a date,True,0,True
+2026-02-09,dashboard: every change is costed,True,0,True
+2026-02-09,effort: hours not negative,False,0,True
+2026-02-09,run log: at least one source checked,False,1,False
+2026-02-09,topics: refer to a known change,False,0,True
+2026-02-16,changes: deadline not before published,False,0,True
+2026-02-16,changes: id present,True,0,True
+2026-02-16,changes: id unique,True,0,True
+2026-02-16,changes: impact is High/Medium/Low,False,0,True
+2026-02-16,changes: published is a date,True,0,True
+2026-02-16,dashboard: every change is costed,True,0,True
+2026-02-16,effort: hours not negative,False,0,True
+2026-02-16,run log: at least one source checked,False,1,False
+2026-02-16,topics: refer to a known change,False,0,True
+2026-02-23,changes: deadline not before published,False,0,True
+2026-02-23,changes: id present,True,0,True
+2026-02-23,changes: id unique,True,0,True
+2026-02-23,changes: impact is High/Medium/Low,False,0,True
+2026-02-23,changes: published is a date,True,0,True
+2026-02-23,dashboard: every change is costed,True,0,True
+2026-02-23,effort: hours not negative,False,0,True
+2026-02-23,run log: at least one source checked,False,1,False
+2026-02-23,topics: refer to a known change,False,0,True
+2026-03-02,changes: deadline not before published,False,0,True
+2026-03-02,changes: id present,True,0,True
+2026-03-02,changes: id unique,True,0,True
+2026-03-02,changes: impact is High/Medium/Low,False,0,True
+2026-03-02,changes: published is a date,True,0,True
+2026-03-02,dashboard: every change is costed,True,0,True
+2026-03-02,effort: hours not negative,False,0,True
+2026-03-02,run log: at least one source checked,False,1,False
+2026-03-02,topics: refer to a known change,False,0,True
+2026-03-09,changes: deadline not before published,False,0,True
+2026-03-09,changes: id present,True,0,True
+2026-03-09,changes: id unique,True,0,True
+2026-03-09,changes: impact is High/Medium/Low,False,0,True
+2026-03-09,changes: published is a date,True,0,True
+2026-03-09,dashboard: every change is costed,True,0,True
+2026-03-09,effort: hours not negative,False,0,True
+2026-03-09,run log: at least one source checked,False,1,False
+2026-03-09,topics: refer to a known change,False,0,True
+2026-03-16,changes: deadline not before published,False,0,True
+2026-03-16,changes: id present,True,0,True
+2026-03-16,changes: id unique,True,0,True
+2026-03-16,changes: impact is High/Medium/Low,False,0,True
+2026-03-16,changes: published is a date,True,0,True
+2026-03-16,dashboard: every change is costed,True,0,True
+2026-03-16,effort: hours not negative,False,0,True
+2026-03-16,run log: at least one source checked,False,1,False
+2026-03-16,topics: refer to a known change,False,0,True
+2026-03-23,changes: deadline not before published,False,0,True
+2026-03-23,changes: id present,True,0,True
+2026-03-23,changes: id unique,True,0,True
+2026-03-23,changes: impact is High/Medium/Low,False,0,True
+2026-03-23,changes: published is a date,True,0,True
+2026-03-23,dashboard: every change is costed,True,0,True
+2026-03-23,effort: hours not negative,False,0,True
+2026-03-23,run log: at least one source checked,False,1,False
+2026-03-23,topics: refer to a known change,False,0,True
+2026-03-30,changes: deadline not before published,False,0,True
+2026-03-30,changes: id present,True,0,True
+2026-03-30,changes: id unique,True,0,True
+2026-03-30,changes: impact is High/Medium/Low,False,0,True
+2026-03-30,changes: published is a date,True,0,True
+2026-03-30,dashboard: every change is costed,True,0,True
+2026-03-30,effort: hours not negative,False,0,True
+2026-03-30,run log: at least one source checked,False,1,False
+2026-03-30,topics: refer to a known change,False,0,True
+2026-04-06,changes: deadline not before published,False,0,True
+2026-04-06,changes: id present,True,0,True
+2026-04-06,changes: id unique,True,0,True
+2026-04-06,changes: impact is High/Medium/Low,False,0,True
+2026-04-06,changes: published is a date,True,0,True
+2026-04-06,dashboard: every change is costed,True,0,True
+2026-04-06,effort: hours not negative,False,0,True
+2026-04-06,run log: at least one source checked,False,1,False
+2026-04-06,topics: refer to a known change,False,0,True
+2026-04-13,changes: deadline not before published,False,0,True
+2026-04-13,changes: id present,True,0,True
+2026-04-13,changes: id unique,True,0,True
+2026-04-13,changes: impact is High/Medium/Low,False,0,True
+2026-04-13,changes: published is a date,True,0,True
+2026-04-13,dashboard: every change is costed,True,0,True
+2026-04-13,effort: hours not negative,False,0,True
+2026-04-13,run log: at least one source checked,False,1,False
+2026-04-13,topics: refer to a known change,False,0,True
+2026-04-20,changes: deadline not before published,False,0,True
+2026-04-20,changes: id present,True,0,True
+2026-04-20,changes: id unique,True,0,True
+2026-04-20,changes: impact is High/Medium/Low,False,0,True
+2026-04-20,changes: published is a date,True,0,True
+2026-04-20,dashboard: every change is costed,True,0,True
+2026-04-20,effort: hours not negative,False,0,True
+2026-04-20,run log: at least one source checked,False,1,False
+2026-04-20,topics: refer to a known change,False,0,True
+2026-04-27,changes: deadline not before published,False,0,True
+2026-04-27,changes: id present,True,0,True
+2026-04-27,changes: id unique,True,0,True
+2026-04-27,changes: impact is High/Medium/Low,False,0,True
+2026-04-27,changes: published is a date,True,0,True
+2026-04-27,dashboard: every change is costed,True,0,True
+2026-04-27,effort: hours not negative,False,0,True
+2026-04-27,run log: at least one source checked,False,1,False
+2026-04-27,topics: refer to a known change,False,0,True
+2026-05-04,changes: deadline not before published,False,0,True
+2026-05-04,changes: id present,True,0,True
+2026-05-04,changes: id unique,True,0,True
+2026-05-04,changes: impact is High/Medium/Low,False,0,True
+2026-05-04,changes: published is a date,True,0,True
+2026-05-04,dashboard: every change is costed,True,0,True
+2026-05-04,effort: hours not negative,False,0,True
+2026-05-04,run log: at least one source checked,False,1,False
+2026-05-04,topics: refer to a known change,False,0,True
+2026-05-11,changes: deadline not before published,False,0,True
+2026-05-11,changes: id present,True,0,True
+2026-05-11,changes: id unique,True,0,True
+2026-05-11,changes: impact is High/Medium/Low,False,0,True
+2026-05-11,changes: published is a date,True,0,True
+2026-05-11,dashboard: every change is costed,True,0,True
+2026-05-11,effort: hours not negative,False,0,True
+2026-05-11,run log: at least one source checked,False,1,False
+2026-05-11,topics: refer to a known change,False,0,True
+2026-05-18,changes: deadline not before published,False,0,True
+2026-05-18,changes: id present,True,0,True
+2026-05-18,changes: id unique,True,0,True
+2026-05-18,changes: impact is High/Medium/Low,False,0,True
+2026-05-18,changes: published is a date,True,0,True
+2026-05-18,dashboard: every change is costed,True,0,True
+2026-05-18,effort: hours not negative,False,0,True
+2026-05-18,run log: at least one source checked,False,1,False
+2026-05-18,topics: refer to a known change,False,0,True
+2026-05-25,changes: deadline not before published,False,0,True
+2026-05-25,changes: id present,True,0,True
+2026-05-25,changes: id unique,True,0,True
+2026-05-25,changes: impact is High/Medium/Low,False,0,True
+2026-05-25,changes: published is a date,True,0,True
+2026-05-25,dashboard: every change is costed,True,0,True
+2026-05-25,effort: hours not negative,False,0,True
+2026-05-25,run log: at least one source checked,False,1,False
+2026-05-25,topics: refer to a known change,False,0,True
+2026-06-01,changes: deadline not before published,False,0,True
+2026-06-01,changes: id present,True,0,True
+2026-06-01,changes: id unique,True,0,True
+2026-06-01,changes: impact is High/Medium/Low,False,0,True
+2026-06-01,changes: published is a date,True,0,True
+2026-06-01,dashboard: every change is costed,True,0,True
+2026-06-01,effort: hours not negative,False,0,True
+2026-06-01,run log: at least one source checked,False,1,False
+2026-06-01,topics: refer to a known change,False,0,True
+2026-06-08,changes: deadline not before published,False,0,True
+2026-06-08,changes: id present,True,0,True
+2026-06-08,changes: id unique,True,0,True
+2026-06-08,changes: impact is High/Medium/Low,False,0,True
+2026-06-08,changes: published is a date,True,0,True
+2026-06-08,dashboard: every change is costed,True,0,True
+2026-06-08,effort: hours not negative,False,0,True
+2026-06-08,run log: at least one source checked,False,1,False
+2026-06-08,topics: refer to a known change,False,0,True
+2026-06-15,changes: deadline not before published,False,0,True
+2026-06-15,changes: id present,True,0,True
+2026-06-15,changes: id unique,True,0,True
+2026-06-15,changes: impact is High/Medium/Low,False,0,True
+2026-06-15,changes: published is a date,True,0,True
+2026-06-15,dashboard: every change is costed,True,0,True
+2026-06-15,effort: hours not negative,False,0,True
+2026-06-15,run log: at least one source checked,False,1,False
+2026-06-15,topics: refer to a known change,False,0,True
+2026-06-22,changes: deadline not before published,False,0,True
+2026-06-22,changes: id present,True,0,True
+2026-06-22,changes: id unique,True,0,True
+2026-06-22,changes: impact is High/Medium/Low,False,0,True
+2026-06-22,changes: published is a date,True,0,True
+2026-06-22,dashboard: every change is costed,True,0,True
+2026-06-22,effort: hours not negative,False,0,True
+2026-06-22,run log: at least one source checked,False,1,False
+2026-06-22,topics: refer to a known change,False,0,True
+2026-06-29,changes: deadline not before published,False,0,True
+2026-06-29,changes: id present,True,0,True
+2026-06-29,changes: id unique,True,0,True
+2026-06-29,changes: impact is High/Medium/Low,False,0,True
+2026-06-29,changes: published is a date,True,0,True
+2026-06-29,dashboard: every change is costed,True,0,True
+2026-06-29,effort: hours not negative,False,0,True
+2026-06-29,run log: at least one source checked,False,1,False
+2026-06-29,topics: refer to a known change,False,0,True
+2026-07-06,changes: deadline not before published,False,0,True
+2026-07-06,changes: id present,True,0,True
+2026-07-06,changes: id unique,True,0,True
+2026-07-06,changes: impact is High/Medium/Low,False,0,True
+2026-07-06,changes: published is a date,True,0,True
+2026-07-06,dashboard: every change is costed,True,0,True
+2026-07-06,effort: hours not negative,False,0,True
+2026-07-06,run log: at least one source checked,False,1,False
+2026-07-06,topics: refer to a known change,False,0,True
+2026-07-13,changes: deadline not before published,False,0,True
+2026-07-13,changes: id present,True,0,True
+2026-07-13,changes: id unique,True,0,True
+2026-07-13,changes: impact is High/Medium/Low,False,0,True
+2026-07-13,changes: published is a date,True,0,True
+2026-07-13,dashboard: every change is costed,True,0,True
+2026-07-13,effort: hours not negative,False,0,True
+2026-07-13,run log: at least one source checked,False,1,False
+2026-07-13,topics: refer to a known change,False,0,True
+2026-07-20,changes: deadline not before published,False,0,True
+2026-07-20,changes: id present,True,0,True
+2026-07-20,changes: id unique,True,0,True
+2026-07-20,changes: impact is High/Medium/Low,False,0,True
+2026-07-20,changes: published is a date,True,0,True
+2026-07-20,dashboard: every change is costed,True,0,True
+2026-07-20,effort: hours not negative,False,0,True
+2026-07-20,run log: at least one source checked,False,1,False
+2026-07-20,topics: refer to a known change,False,0,True
+2026-07-27,changes: deadline not before published,False,0,True
+2026-07-27,changes: id present,True,0,True
+2026-07-27,changes: id unique,True,0,True
+2026-07-27,changes: impact is High/Medium/Low,False,0,True
+2026-07-27,changes: published is a date,True,0,True
+2026-07-27,dashboard: every change is costed,True,0,True
+2026-07-27,effort: hours not negative,False,0,True
+2026-07-27,run log: at least one source checked,False,1,False
+2026-07-27,topics: refer to a known change,False,0,True
+2026-08-03,changes: deadline not before published,False,0,True
+2026-08-03,changes: id present,True,0,True
+2026-08-03,changes: id unique,True,0,True
+2026-08-03,changes: impact is High/Medium/Low,False,0,True
+2026-08-03,changes: published is a date,True,0,True
+2026-08-03,dashboard: every change is costed,True,0,True
+2026-08-03,effort: hours not negative,False,0,True
+2026-08-03,run log: at least one source checked,False,1,False
+2026-08-03,topics: refer to a known change,False,0,True
+2026-08-10,changes: deadline not before published,False,0,True
+2026-08-10,changes: id present,True,0,True
+2026-08-10,changes: id unique,True,0,True
+2026-08-10,changes: impact is High/Medium/Low,False,0,True
+2026-08-10,changes: published is a date,True,0,True
+2026-08-10,dashboard: every change is costed,True,0,True
+2026-08-10,effort: hours not negative,False,0,True
+2026-08-10,run log: at least one source checked,False,1,False
+2026-08-10,topics: refer to a known change,False,0,True
+2026-08-17,changes: deadline not before published,False,0,True
+2026-08-17,changes: id present,True,0,True
+2026-08-17,changes: id unique,True,0,True
+2026-08-17,changes: impact is High/Medium/Low,False,0,True
+2026-08-17,changes: published is a date,True,0,True
+2026-08-17,dashboard: every change is costed,True,0,True
+2026-08-17,effort: hours not negative,False,0,True
+2026-08-17,run log: at least one source checked,False,1,False
+2026-08-17,topics: refer to a known change,False,0,True
+2026-08-24,changes: deadline not before published,False,0,True
+2026-08-24,changes: id present,True,0,True
+2026-08-24,changes: id unique,True,0,True
+2026-08-24,changes: impact is High/Medium/Low,False,0,True
+2026-08-24,changes: published is a date,True,0,True
+2026-08-24,dashboard: every change is costed,True,0,True
+2026-08-24,effort: hours not negative,False,0,True
+2026-08-24,run log: at least one source checked,False,1,False
+2026-08-24,topics: refer to a known change,False,0,True
+2026-08-31,changes: deadline not before published,False,0,True
+2026-08-31,changes: id present,True,0,True
+2026-08-31,changes: id unique,True,0,True
+2026-08-31,changes: impact is High/Medium/Low,False,0,True
+2026-08-31,changes: published is a date,True,0,True
+2026-08-31,dashboard: every change is costed,True,0,True
+2026-08-31,effort: hours not negative,False,0,True
+2026-08-31,run log: at least one source checked,False,1,False
+2026-08-31,topics: refer to a known change,False,0,True
+2026-09-07,changes: deadline not before published,False,0,True
+2026-09-07,changes: id present,True,0,True
+2026-09-07,changes: id unique,True,0,True
+2026-09-07,changes: impact is High/Medium/Low,False,0,True
+2026-09-07,changes: published is a date,True,0,True
+2026-09-07,dashboard: every change is costed,True,0,True
+2026-09-07,effort: hours not negative,False,0,True
+2026-09-07,run log: at least one source checked,False,1,False
+2026-09-07,topics: refer to a known change,False,0,True
+2026-09-14,changes: deadline not before published,False,0,True
+2026-09-14,changes: id present,True,0,True
+2026-09-14,changes: id unique,True,0,True
+2026-09-14,changes: impact is High/Medium/Low,False,0,True
+2026-09-14,changes: published is a date,True,0,True
+2026-09-14,dashboard: every change is costed,True,0,True
+2026-09-14,effort: hours not negative,False,0,True
+2026-09-14,run log: at least one source checked,False,1,False
+2026-09-14,topics: refer to a known change,False,0,True
+2026-09-21,changes: deadline not before published,False,0,True
+2026-09-21,changes: id present,True,0,True
+2026-09-21,changes: id unique,True,0,True
+2026-09-21,changes: impact is High/Medium/Low,False,0,True
+2026-09-21,changes: published is a date,True,0,True
+2026-09-21,dashboard: every change is costed,True,0,True
+2026-09-21,effort: hours not negative,False,0,True
+2026-09-21,run log: at least one source checked,False,1,False
+2026-09-21,topics: refer to a known change,False,0,True
+2026-09-28,changes: deadline not before published,False,0,True
+2026-09-28,changes: id present,True,0,True
+2026-09-28,changes: id unique,True,0,True
+2026-09-28,changes: impact is High/Medium/Low,False,0,True
+2026-09-28,changes: published is a date,True,0,True
+2026-09-28,dashboard: every change is costed,True,0,True
+2026-09-28,effort: hours not negative,False,0,True
+2026-09-28,run log: at least one source checked,False,1,False
+2026-09-28,topics: refer to a known change,False,0,True
+2026-10-02,changes: deadline not before published,False,0,True
+2026-10-02,changes: id present,True,0,True
+2026-10-02,changes: id unique,True,0,True
+2026-10-02,changes: impact is High/Medium/Low,False,0,True
+2026-10-02,changes: published is a date,True,0,True
+2026-10-02,dashboard: every change is costed,True,0,True
+2026-10-02,effort: hours not negative,False,0,True
+2026-10-02,run log: at least one source checked,False,1,False
+2026-10-02,topics: refer to a known change,False,0,True

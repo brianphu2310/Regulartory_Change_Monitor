@@ -1,0 +1,4 @@
+pandas>=2.0
+requests>=2.31
+duckdb>=1.4
+sqlglot>=26

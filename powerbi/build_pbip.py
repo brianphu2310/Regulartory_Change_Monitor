@@ -60,14 +60,22 @@ NEW_PAGES = [
                 "roles": ((1280, 316, 1884, 676), "Outstanding hours by role"),
                 "due": ((372, 696, 1000, 1056), "Backlog by target month"),
                 "log": ((1020, 696, 1884, 1056), "Source health: latest weekly run (live)")}},
+    {"id": "p_trend00000000000001", "name": "Weekly trend", "title": "WEEKLY TREND",
+     "subtitle": "Every weekly run kept in the Databricks lakehouse: is the backlog shrinking?",
+     "kpis": ["WEEKLY RUNS", "CHANGES ON FILE", "BACKLOG HOURS", "BACKLOG vs 4 WEEKS AGO", "QUALITY CHECKS PASSED"],
+     "panels": {"backlog": ((372, 316, 1260, 676), "Open actions (columns) and backlog hours (line), week by week"),
+                "volume": ((1280, 316, 1884, 676), "New changes each week and changes on file"),
+                "late": ((372, 696, 1260, 1056), "Changes past their target date"),
+                "quality": ((1280, 696, 1884, 1056), "Data quality checks: latest load")}},
 ]
 # sidebar order: v1 pages with the two new pages before Action tracker and About
 NAV = [("p7ov0000000000000001", "Overview", "◎"), ("p7d00000000000000001", "Accounts & Trust", "▣"),
        ("p7d10000000000000001", "Compliance & AML", "⚑"), ("p7d20000000000000001", "HR & Payroll", "☺"),
        ("p7d30000000000000001", "Property", "⌂"), ("p7d40000000000000001", "Privacy & IT", "◈"),
        ("p_finance000000000001", "Finance impact", "$"), ("p_capacity00000000001", "Capacity & sources", "▦"),
+       ("p_trend00000000000001", "Weekly trend", "↗"),
        ("p7tk0000000000000001", "Action tracker", "✓"), ("p7ab0000000000000001", "About", "i")]
-NAV_Y0, NAV_STEP = 190, 66
+NAV_Y0, NAV_STEP = 184, 62
 
 
 # ------------------------------------------------------------------------------------------- background images
@@ -169,21 +177,28 @@ def background(page: dict, path: Path) -> None:
 
 
 # ------------------------------------------------------------------------------------------------ semantic model
-def _csv_source(file: str, types: list[tuple[str, str]], optional: bool = False) -> str:
+LIVE_ONLY = {"run_log"}   # real in both modes: the run log only exists in data/live
+
+
+def _source(table: str, file: str, types: list[tuple[str, str]], optional: bool = False) -> str:
+    """M for one table. Source = "GitHub CSV" reads the CSV from the repo (Dataset folder); Source = "Databricks" reads the
+    same table from the lakehouse gold schema. Only the chosen branch is evaluated, so CSV mode never asks for
+    Databricks credentials."""
     type_list = ", ".join(f'{{"{c}", {t}}}' for c, t in types)
     names = "{" + ", ".join(f'"{c}"' for c, _ in types) + "}"
-    folder = '"data/live"' if optional else "Dataset"   # the run log is real in both modes: it only exists in data/live
+    folder = '"data/live"' if table in LIVE_ONLY else "Dataset"
     fetch = (f'Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "{REPO}/" & Branch & "/" & {folder} & "/{file}"]), '
              f'[Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv])')
-    if optional:   # no run yet (new fork): an empty table keeps the report working
+    csv = f"Table.PromoteHeaders({fetch}, [PromoteAllScalars = true])"
+    if optional:   # not there yet (no run, no lakehouse load): an empty table keeps the report working
         empty = "#table(type table [" + ", ".join(f"{c} = text" for c, _ in types) + "], {})"
-        body = (f"    Raw = try Table.Buffer(Table.PromoteHeaders({fetch}, [PromoteAllScalars = true])) otherwise {empty},\n"
-                f"    Picked = Table.SelectColumns(Raw, {names}, MissingField.UseNull),\n"
-                f"    Typed = Table.TransformColumnTypes(Picked, {{{type_list}}}, \"en-AU\")")
-    else:
-        body = (f"    Raw = Table.PromoteHeaders({fetch}, [PromoteAllScalars = true]),\n"
-                f"    Picked = Table.SelectColumns(Raw, {names}, MissingField.UseNull),\n"
-                f"    Typed = Table.TransformColumnTypes(Picked, {{{type_list}}}, \"en-AU\")")
+        csv = f"try Table.Buffer({csv}) otherwise {empty}"
+    lake = (f'Databricks.Catalogs(DatabricksHost, DatabricksHttpPath, [Catalog = null, Database = null, EnableAutomaticProxyDiscovery = null])'
+            f'{{[Name = DatabricksCatalog, Kind = "Database"]}}[Data]{{[Name = "rcm_gold", Kind = "Schema"]}}[Data]'
+            f'{{[Name = "{table}", Kind = "Table"]}}[Data]')
+    body = (f"    Raw = if Source = \"Databricks\" then {lake}\n          else {csv},\n"
+            f"    Picked = Table.SelectColumns(Raw, {names}, MissingField.UseNull),\n"
+            f"    Typed = Table.TransformColumnTypes(Picked, {{{type_list}}}, \"en-AU\")")
     return f"let\n{body}\nin\n    Typed"
 
 
@@ -217,6 +232,13 @@ TABLES = {
         ("load_pct", "num"), ("hours_over_capacity", "num")]),
     "run_log": ("run_log.csv", True, [
         ("run_at", "dt"), ("agency", "text"), ("feed", "text"), ("status", "text"), ("items", "int")]),
+    # lakehouse (v4): written by lakehouse/run.py after each load, and by lakehouse/backfill.py for the sample
+    "weekly_snapshot": ("weekly_snapshot.csv", True, [
+        ("run_date", "date"), ("changes_on_file", "int"), ("new_this_run", "int"), ("high_impact", "int"),
+        ("needs_action", "int"), ("past_target_date", "int"), ("one_off_cost", "num"), ("ongoing_cost_yr", "num"),
+        ("backlog_hours", "num"), ("peak_month_load", "num"), ("sources_checked", "int"), ("sources_ok", "int")]),
+    "quality_checks": ("quality_checks.csv", True, [
+        ("run_date", "date"), ("check_name", "text"), ("blocking", "text"), ("failed_rows", "int"), ("passed", "text")]),
 }
 V1_MEASURES = [
     ("As Of Date", "COALESCE ( MAXX ( ALL ( dashboard_changes ), dashboard_changes[as_of] ), TODAY () )", "d mmm yyyy", "Labels"),
@@ -234,6 +256,7 @@ V1_MEASURES = [
     ("Heat Color", 'VAR n = [Total Changes] RETURN IF ( ISBLANK ( n ), BLANK (), IF ( n <= 10, "#F1F7DA", IF ( n <= 25, "#DDEBA6", IF ( n <= 45, "#C8E070", "#A9CF3A" ) ) ) )', None, None),
 ]
 CALC_COLUMNS = {
+    "quality_checks": [("Latest Load", "text", 'IF ( quality_checks[run_date] = MAX ( quality_checks[run_date] ), "Yes", "No" )')],
     "changes": [
         ("Days To Deadline", "int", "VAR t = COALESCE ( MAXX ( ALL ( dashboard_changes ), dashboard_changes[as_of] ), TODAY () ) RETURN IF ( ISBLANK ( changes[deadline] ), BLANK (), DATEDIFF ( t, changes[deadline], DAY ) )"),
         ("Deadline Bucket", "text", 'VAR t = COALESCE ( MAXX ( ALL ( dashboard_changes ), dashboard_changes[as_of] ), TODAY () ) RETURN IF ( ISBLANK ( changes[deadline] ), "No fixed date", IF ( changes[deadline] < t, "Overdue", IF ( changes[deadline] <= t + 30, "Due in 30 days", "Later" ) ) )'),
@@ -300,6 +323,32 @@ MEASURES = {
         ("Sources OK", 'VAR d = INT ( MAX ( run_log[run_at] ) ) RETURN COUNTROWS ( FILTER ( run_log, INT ( run_log[run_at] ) = d && LEFT ( run_log[status], 2 ) = "ok" ) ) + 0', "#,0"),
         ("Sources OK Label", 'IF ( [Sources Checked] = 0, "n/a (sample)", FORMAT ( [Sources OK], "0" ) & " / " & FORMAT ( [Sources Checked], "0" ) )', None),
     ],
+    "weekly_snapshot": [
+        ("Weekly Runs", "COUNTROWS ( weekly_snapshot ) + 0", "#,0"),
+        ("Latest Run", "MAX ( weekly_snapshot[run_date] )", "d mmm yyyy"),
+        ("Changes On File (run)", "VAR d = MAX ( weekly_snapshot[run_date] ) RETURN CALCULATE ( SUM ( weekly_snapshot[changes_on_file] ), weekly_snapshot[run_date] = d )", "#,0"),
+        ("New Changes (run)", "SUM ( weekly_snapshot[new_this_run] )", "#,0"),
+        ("Needs Action (run)", "VAR d = MAX ( weekly_snapshot[run_date] ) RETURN CALCULATE ( SUM ( weekly_snapshot[needs_action] ), weekly_snapshot[run_date] = d )", "#,0"),
+        ("Past Target (run)", "VAR d = MAX ( weekly_snapshot[run_date] ) RETURN CALCULATE ( SUM ( weekly_snapshot[past_target_date] ), weekly_snapshot[run_date] = d )", "#,0"),
+        ("Backlog Hours (run)", "VAR d = MAX ( weekly_snapshot[run_date] ) RETURN CALCULATE ( SUM ( weekly_snapshot[backlog_hours] ), weekly_snapshot[run_date] = d )", "#,0"),
+        ("Backlog vs 4 Weeks", "VAR d = MAX ( weekly_snapshot[run_date] ) "
+                               "VAR p = CALCULATE ( MAX ( weekly_snapshot[run_date] ), ALL ( weekly_snapshot ), weekly_snapshot[run_date] <= d - 28 ) "
+                               "RETURN IF ( ISBLANK ( p ), BLANK (), [Backlog Hours (run)] - CALCULATE ( SUM ( weekly_snapshot[backlog_hours] ), ALL ( weekly_snapshot ), weekly_snapshot[run_date] = p ) )",
+         "+#,0;-#,0;0"),
+        ("Trend Takeaway", 'VAR d = MAX ( weekly_snapshot[run_date] ) '
+                           'VAR p = CALCULATE ( MAX ( weekly_snapshot[run_date] ), ALL ( weekly_snapshot ), weekly_snapshot[run_date] <= d - 28 ) '
+                           'VAR late_then = CALCULATE ( SUM ( weekly_snapshot[past_target_date] ), ALL ( weekly_snapshot ), weekly_snapshot[run_date] = p ) '
+                           'RETURN IF ( [Weekly Runs] = 0, "No weekly history yet: it builds up from the first Databricks load.", '
+                           '"Backlog " & FORMAT ( [Backlog Hours (run)], "#,0" ) & " hours, " & IF ( [Backlog vs 4 Weeks] >= 0, "up ", "down " ) '
+                           '& FORMAT ( ABS ( [Backlog vs 4 Weeks] ), "#,0" ) & " in four weeks; " & FORMAT ( [Past Target (run)], "0" ) '
+                           '& " changes past their target date (" & FORMAT ( late_then, "0" ) & " four weeks earlier)." )', None),
+    ],
+    "quality_checks": [
+        ("Checks Passed Label", 'VAR d = MAX ( quality_checks[run_date] ) VAR n = CALCULATE ( COUNTROWS ( quality_checks ), quality_checks[run_date] = d ) '
+                                'VAR ok = COUNTROWS ( FILTER ( ALL ( quality_checks ), quality_checks[run_date] = d && UPPER ( quality_checks[passed] ) = "TRUE" ) ) + 0 '
+                                'RETURN IF ( n = 0, "n/a", FORMAT ( ok, "0" ) & " / " & FORMAT ( n, "0" ) )', None),
+        ("Check Colour", 'IF ( UPPER ( SELECTEDVALUE ( quality_checks[passed] ) ) = "TRUE", "#5F7A1A", IF ( UPPER ( SELECTEDVALUE ( quality_checks[blocking] ) ) = "TRUE", "#C0392B", "#D98C00" ) )', None),
+    ],
 }
 
 
@@ -348,7 +397,7 @@ def _tmdl_table(name: str) -> str:
         lines += _column(name, c, t, source=c)
     for c, t, expr in CALC_COLUMNS.get(name, []):
         lines += _column(name, c, t, expr=expr)
-    src = _csv_source(file, [(c, TYPES[t][1]) for c, t in cols], optional)
+    src = _source(name, file, [(c, TYPES[t][1]) for c, t in cols], optional)
     lines += [f"\tpartition {name} = m", "\t\tmode: import", "\t\tsource ="]
     lines += ["\t\t\t\t" + ln for ln in src.splitlines()]
     return "\n".join(lines) + "\n"
@@ -373,7 +422,7 @@ def build_model() -> None:
         "version": "4.2", "settings": {}}, indent=2))
     (d / "database.tmdl").write_text("database\n\tcompatibilityLevel: 1567\n")
     all_tables = [*TABLES, *CALC_TABLES]
-    order = json.dumps(["Branch", "Dataset", *TABLES])
+    order = json.dumps(["Source", "Branch", "Dataset", "DatabricksHost", "DatabricksHttpPath", "DatabricksCatalog", *TABLES])
     (d / "model.tmdl").write_text(
         "model Model\n\tculture: en-AU\n\tdefaultPowerBIDataSourceVersion: powerBI_V3\n\tsourceQueryCulture: en-AU\n"
         "\tdataAccessOptions\n\t\tlegacyRedirects\n\t\treturnErrorValuesAsNull\n\n"
@@ -385,6 +434,19 @@ def build_model() -> None:
         'expression Dataset = "bi_export" meta [IsParameterQuery = true, List = {"bi_export", "data/live"}, '
         'DefaultValue = "bi_export", Type = "Text", IsParameterQueryRequired = true]\n'
         f"\tlineageTag: {_tag('Dataset')}\n\n"
+        '\tannotation PBI_ResultType = Text\n\n'
+        'expression Source = "GitHub CSV" meta [IsParameterQuery = true, List = {"GitHub CSV", "Databricks"}, '
+        'DefaultValue = "GitHub CSV", Type = "Text", IsParameterQueryRequired = true]\n'
+        f"\tlineageTag: {_tag('Source')}\n\n"
+        '\tannotation PBI_ResultType = Text\n\n'
+        'expression DatabricksHost = "dbc-xxxxxxxx-xxxx.cloud.databricks.com" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = false]\n'
+        f"\tlineageTag: {_tag('DatabricksHost')}\n\n"
+        '\tannotation PBI_ResultType = Text\n\n'
+        'expression DatabricksHttpPath = "/sql/1.0/warehouses/xxxxxxxxxxxxxxxx" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = false]\n'
+        f"\tlineageTag: {_tag('DatabricksHttpPath')}\n\n"
+        '\tannotation PBI_ResultType = Text\n\n'
+        'expression DatabricksCatalog = "workspace" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = false]\n'
+        f"\tlineageTag: {_tag('DatabricksCatalog')}\n\n"
         '\tannotation PBI_ResultType = Text\n')
     rel = []
     for frm, to, active, both in RELATIONSHIPS:
@@ -531,6 +593,69 @@ def page_finance(p):
     return vs
 
 
+def page_trend(p):
+    P = p["panels"]
+    k = kpi_boxes(5)
+    S, Q = "weekly_snapshot", "quality_checks"
+    vs = [container(f"kpt{i}0000000000000000", k[i], card(t, m), 1000 + i)
+          for i, (t, m) in enumerate([(S, "Weekly Runs"), (S, "Changes On File (run)"), (S, "Backlog Hours (run)"),
+                                      (S, "Backlog vs 4 Weeks"), (Q, "Checks Passed Label")])]
+    vs.append(container("takeawayt0000000000", (372, 248, 1884, 300), {
+        **card(S, "Trend Takeaway", 17, TOKENS["ink"]),
+        "visualContainerObjects": {"background": [{"properties": {"show": lit("true"), "color": colour("#D9EC9A"), "transparency": lit("0D")}}],
+                                   "border": [{"properties": {"show": lit("false")}}]}}, 1006))
+    week = proj(S, "run_date", active=True, name="Week")
+    cat_axis = [{"properties": {"axisType": lit("'Categorical'"), "showAxisTitle": lit("false")}}]
+    vs.append(container("trendbacklog0000000", inner(P["backlog"][0]), {
+        "visualType": "lineClusteredColumnComboChart",
+        "query": {"queryState": {"Category": {"projections": [week]},
+                                 "Y": {"projections": [proj(S, "Needs Action (run)", True)]},
+                                 "Y2": {"projections": [proj(S, "Backlog Hours (run)", True)]}},
+                  "sortDefinition": {"sort": [{"field": field(S, "run_date"), "direction": "Ascending"}]}},
+        "objects": {"dataPoint": [{"properties": {"fill": colour(TOKENS["slate"])}, "selector": {"metadata": f"{S}.Needs Action (run)"}},
+                                  {"properties": {"fill": colour(TOKENS["lime_dark"])}, "selector": {"metadata": f"{S}.Backlog Hours (run)"}}],
+                    "legend": [{"properties": {"show": lit("true"), "position": lit("'Top'")}}],
+                    "categoryAxis": cat_axis}}, 1010))
+    vs.append(container("trendvolume00000000", inner(P["volume"][0]), {
+        "visualType": "lineClusteredColumnComboChart",
+        "query": {"queryState": {"Category": {"projections": [week]},
+                                 "Y": {"projections": [proj(S, "New Changes (run)", True)]},
+                                 "Y2": {"projections": [proj(S, "Changes On File (run)", True)]}},
+                  "sortDefinition": {"sort": [{"field": field(S, "run_date"), "direction": "Ascending"}]}},
+        "objects": {"dataPoint": [{"properties": {"fill": colour(TOKENS["lime"])}, "selector": {"metadata": f"{S}.New Changes (run)"}},
+                                  {"properties": {"fill": colour(TOKENS["slate"])}, "selector": {"metadata": f"{S}.Changes On File (run)"}}],
+                    "legend": [{"properties": {"show": lit("true"), "position": lit("'Top'")}}],
+                    "categoryAxis": cat_axis}}, 1020))
+    vs.append(container("trendlate000000000", inner(P["late"][0]), {
+        "visualType": "lineChart",
+        "query": {"queryState": {"Category": {"projections": [week]},
+                                 "Y": {"projections": [proj(S, "Past Target (run)", True)]}},
+                  "sortDefinition": {"sort": [{"field": field(S, "run_date"), "direction": "Ascending"}]}},
+        "objects": {"dataPoint": [{"properties": {"fill": colour("#C8553D")}}],
+                    "lineStyles": [{"properties": {"strokeWidth": lit("3D"), "showMarker": lit("true")}}],
+                    "labels": [{"properties": {"show": lit("false")}}],
+                    "categoryAxis": cat_axis}}, 1030))
+    vs.append(container("quality000000000000", inner(P["quality"][0]), {
+        "visualType": "tableEx",
+        "query": {"queryState": {"Values": {"projections": [proj(Q, "check_name", name="Check"), proj(Q, "blocking", name="Blocking"),
+                                                            proj(Q, "failed_rows", name="Failed rows"), proj(Q, "passed", name="Passed")]}},
+                  "sortDefinition": {"sort": [{"field": field(Q, "check_name"), "direction": "Ascending"}]}},
+        "objects": {"values": [{"properties": {"fontSize": lit("12D")}},
+                               {"properties": {"fontColor": {"solid": {"color": {"expr": field(Q, "Check Colour", True)}}}},
+                                "selector": {"data": [{"dataViewWildcard": {"matchingOption": 1}}], "metadata": f"{Q}.passed"}}],
+                    "columnHeaders": [{"properties": {"fontSize": lit("12D"), "bold": lit("true")}}],
+                    "total": [{"properties": {"totals": lit("false")}}],
+                    "columnWidth": [{"properties": {"value": lit("300D")}, "selector": {"metadata": f"{Q}.check_name"}},
+                                    {"properties": {"value": lit("80D")}, "selector": {"metadata": f"{Q}.blocking"}},
+                                    {"properties": {"value": lit("90D")}, "selector": {"metadata": f"{Q}.failed_rows"}},
+                                    {"properties": {"value": lit("70D")}, "selector": {"metadata": f"{Q}.passed"}}]}},
+        1040, {"filterConfig": {"filters": [{"name": "f_latest", "field": field(Q, "Latest Load"), "type": "Categorical", "filter": {
+            "Version": 2, "From": [{"Name": "q", "Entity": Q, "Type": 0}],
+            "Where": [{"Condition": {"In": {"Expressions": [{"Column": {"Expression": {"SourceRef": {"Source": "q"}}, "Property": "Latest Load"}}],
+                                            "Values": [[{"Literal": {"Value": "'Yes'"}}]]}}}]}}]}}))
+    return vs
+
+
 def page_capacity(p):
     P = p["panels"]
     k = kpi_boxes(5)
@@ -605,7 +730,9 @@ ABOUT = [
     ("Cost and hours:  ", "Staff time x loaded hourly rate + external spend (advisers, systems), from stated assumptions "
                           "in impact_model.py. Not quotes and not legal advice.", "16pt"),
     ("Capacity:  ", "Hours each role needs for regulatory work in a month against the hours it has for it.", "16pt"),
-    ("Data:  ", "Dataset parameter = bi_export (synthetic year, every page populated) or data/live (the weekly monitor). "
+    ("Weekly trend:  ", "One row per weekly run, kept in the Databricks lakehouse (bronze, quality gate, silver, gold). "
+                        "In sample mode the synthetic year is replayed week by week through the same pipeline.", "16pt"),
+    ("Data:  ", "Source = GitHub CSV (Dataset = bi_export synthetic year or data/live weekly monitor) or Databricks (gold tables). "
                 "Source health always shows the latest real weekly run.", "16pt"),
 ]
 
@@ -690,7 +817,7 @@ def build_report() -> None:
     # new pages
     report = json.loads((d / "report.json").read_text())
     images = next(p for p in report["resourcePackages"] if p["name"] == "RegisteredResources")["items"]
-    for p, builder in zip(NEW_PAGES, (page_finance, page_capacity)):
+    for p, builder in zip(NEW_PAGES, (page_finance, page_capacity, page_trend)):
         bg = f"bg_{p['id'][2:10]}.png"
         background(p, res / bg)
         if not any(i["name"] == bg for i in images):

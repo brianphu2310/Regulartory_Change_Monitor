@@ -1,0 +1,121 @@
+table weekly_snapshot
+	lineageTag: 8c0a3bc3-1c67-52c9-a076-44d523717cb0
+
+	measure 'Weekly Runs' = COUNTROWS ( weekly_snapshot ) + 0
+		formatString: #,0
+		lineageTag: 1ae68265-818a-59f9-a074-51ace6880f85
+
+	measure 'Latest Run' = MAX ( weekly_snapshot[run_date] )
+		formatString: d mmm yyyy
+		lineageTag: 4d669b78-7afb-514b-91e4-e0e8c78d31bf
+
+	measure 'Changes On File (run)' = VAR d = MAX ( weekly_snapshot[run_date] ) RETURN CALCULATE ( SUM ( weekly_snapshot[changes_on_file] ), weekly_snapshot[run_date] = d )
+		formatString: #,0
+		lineageTag: 2027a575-d492-53b6-9d26-83e69b14139e
+
+	measure 'New Changes (run)' = SUM ( weekly_snapshot[new_this_run] )
+		formatString: #,0
+		lineageTag: acaa1f1c-05bf-57f1-a253-9349c2c8fcea
+
+	measure 'Needs Action (run)' = VAR d = MAX ( weekly_snapshot[run_date] ) RETURN CALCULATE ( SUM ( weekly_snapshot[needs_action] ), weekly_snapshot[run_date] = d )
+		formatString: #,0
+		lineageTag: 1fe958bf-32a6-58a4-9a51-94b111b2cd7e
+
+	measure 'Past Target (run)' = VAR d = MAX ( weekly_snapshot[run_date] ) RETURN CALCULATE ( SUM ( weekly_snapshot[past_target_date] ), weekly_snapshot[run_date] = d )
+		formatString: #,0
+		lineageTag: 65d867ac-6b05-51dd-8aba-382d00d65e62
+
+	measure 'Backlog Hours (run)' = VAR d = MAX ( weekly_snapshot[run_date] ) RETURN CALCULATE ( SUM ( weekly_snapshot[backlog_hours] ), weekly_snapshot[run_date] = d )
+		formatString: #,0
+		lineageTag: d3c11f52-5b8a-56ce-9d6f-be6949998cd3
+
+	measure 'Backlog vs 4 Weeks' = VAR d = MAX ( weekly_snapshot[run_date] ) VAR p = CALCULATE ( MAX ( weekly_snapshot[run_date] ), ALL ( weekly_snapshot ), weekly_snapshot[run_date] <= d - 28 ) RETURN IF ( ISBLANK ( p ), BLANK (), [Backlog Hours (run)] - CALCULATE ( SUM ( weekly_snapshot[backlog_hours] ), ALL ( weekly_snapshot ), weekly_snapshot[run_date] = p ) )
+		formatString: +#,0;-#,0;0
+		lineageTag: 4d9bc596-8a0e-508e-9e5b-5d1bb4178d2f
+
+	measure 'Trend Takeaway' = VAR d = MAX ( weekly_snapshot[run_date] ) VAR p = CALCULATE ( MAX ( weekly_snapshot[run_date] ), ALL ( weekly_snapshot ), weekly_snapshot[run_date] <= d - 28 ) VAR late_then = CALCULATE ( SUM ( weekly_snapshot[past_target_date] ), ALL ( weekly_snapshot ), weekly_snapshot[run_date] = p ) RETURN IF ( [Weekly Runs] = 0, "No weekly history yet: it builds up from the first Databricks load.", "Backlog " & FORMAT ( [Backlog Hours (run)], "#,0" ) & " hours, " & IF ( [Backlog vs 4 Weeks] >= 0, "up ", "down " ) & FORMAT ( ABS ( [Backlog vs 4 Weeks] ), "#,0" ) & " in four weeks; " & FORMAT ( [Past Target (run)], "0" ) & " changes past their target date (" & FORMAT ( late_then, "0" ) & " four weeks earlier)." )
+		lineageTag: cb4a108d-8614-5c55-9d9f-08ec61289a57
+
+	column run_date
+		dataType: dateTime
+		formatString: d mmm yyyy
+		summarizeBy: none
+		sourceColumn: run_date
+		lineageTag: 55f529ce-e03d-59a7-b61e-07ac4aaf4512
+
+	column changes_on_file
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: changes_on_file
+		lineageTag: fd354725-543f-5ed2-b0ab-20383771cd9b
+
+	column new_this_run
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: new_this_run
+		lineageTag: 6b166dec-a2b1-50e7-8e74-d97c0b23036a
+
+	column high_impact
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: high_impact
+		lineageTag: 65142910-0388-59ed-aef1-93caa053ad92
+
+	column needs_action
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: needs_action
+		lineageTag: ff77b837-a841-51ac-b317-9f7074de3557
+
+	column past_target_date
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: past_target_date
+		lineageTag: f369d8f9-1848-5119-b5f5-510b5ba0df15
+
+	column one_off_cost
+		dataType: double
+		summarizeBy: none
+		sourceColumn: one_off_cost
+		lineageTag: d16b88d9-82b1-5712-b7b0-01858ac2cc95
+
+	column ongoing_cost_yr
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ongoing_cost_yr
+		lineageTag: 9183c504-3e59-5984-b73f-08bb38ab6efb
+
+	column backlog_hours
+		dataType: double
+		summarizeBy: none
+		sourceColumn: backlog_hours
+		lineageTag: 17153501-31af-5556-8f40-3ef2907ca8cd
+
+	column peak_month_load
+		dataType: double
+		summarizeBy: none
+		sourceColumn: peak_month_load
+		lineageTag: 14e0d2a8-9414-5b23-9ef4-8e989d20d8aa
+
+	column sources_checked
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: sources_checked
+		lineageTag: cd03e3dd-8678-5ac2-9460-afbb3cf47c07
+
+	column sources_ok
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: sources_ok
+		lineageTag: a35ea301-9b56-5a1c-b39c-b42d1ad2bb0b
+
+	partition weekly_snapshot = m
+		mode: import
+		source =
+				let
+				    Raw = if Source = "Databricks" then Databricks.Catalogs(DatabricksHost, DatabricksHttpPath, [Catalog = null, Database = null, EnableAutomaticProxyDiscovery = null]){[Name = DatabricksCatalog, Kind = "Database"]}[Data]{[Name = "rcm_gold", Kind = "Schema"]}[Data]{[Name = "weekly_snapshot", Kind = "Table"]}[Data]
+				          else try Table.Buffer(Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & Dataset & "/weekly_snapshot.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true])) otherwise #table(type table [run_date = text, changes_on_file = text, new_this_run = text, high_impact = text, needs_action = text, past_target_date = text, one_off_cost = text, ongoing_cost_yr = text, backlog_hours = text, peak_month_load = text, sources_checked = text, sources_ok = text], {}),
+				    Picked = Table.SelectColumns(Raw, {"run_date", "changes_on_file", "new_this_run", "high_impact", "needs_action", "past_target_date", "one_off_cost", "ongoing_cost_yr", "backlog_hours", "peak_month_load", "sources_checked", "sources_ok"}, MissingField.UseNull),
+				    Typed = Table.TransformColumnTypes(Picked, {{"run_date", type date}, {"changes_on_file", Int64.Type}, {"new_this_run", Int64.Type}, {"high_impact", Int64.Type}, {"needs_action", Int64.Type}, {"past_target_date", Int64.Type}, {"one_off_cost", type number}, {"ongoing_cost_yr", type number}, {"backlog_hours", type number}, {"peak_month_load", type number}, {"sources_checked", Int64.Type}, {"sources_ok", Int64.Type}}, "en-AU")
+				in
+				    Typed

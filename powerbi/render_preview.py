@@ -68,6 +68,12 @@ class Data:
         self.effort = read("change_effort.csv")
         self.cap = read("capacity_monthly.csv", ("month_start",))
         self.log = Data._live_log()
+        self.snap = read("weekly_snapshot.csv", ("run_date",))
+        self.qc = read("quality_checks.csv", ("run_date",))
+        if len(self.qc):
+            self.qc["Latest Load"] = (self.qc["run_date"] == self.qc["run_date"].max()).map({True: "Yes", False: "No"})
+            for c in ("blocking", "passed"):
+                self.qc[c] = self.qc[c].astype(str).str.capitalize()
         if self.log.empty:
             self.log = pd.DataFrame({"run_at": pd.Series(dtype="datetime64[ns]"), "agency": [], "feed": [], "status": [], "items": []})
 
@@ -158,7 +164,28 @@ def log_measures():
             "Sources OK Label": lambda r: "n/a (sample)" if checked(r) == 0 else f"{ok(r)} / {checked(r)}"}
 
 
-FORMATS = {"Action Rate": "0%", "Capacity Load": "0%", "Peak Month Load": "0%", "FTE Gap (months)": "0.0", "One-off Cost": "$", "Staff Time Cost": "$",
+def snap_measures():
+    def at(df, d, col):
+        return df.loc[df["run_date"] == d, col].sum()
+    last = lambda df: df["run_date"].max() if len(df) else None
+
+    def vs4(df_all, df):
+        d = last(df)
+        prev = df_all[df_all["run_date"] <= d - pd.Timedelta(days=28)]["run_date"].max() if d is not None else None
+        return None if prev is None or pd.isna(prev) else at(df, d, "backlog_hours") - at(df_all, prev, "backlog_hours")
+
+    m = {
+        "Weekly Runs": lambda df: len(df),
+        "Changes On File (run)": lambda df: at(df, last(df), "changes_on_file") if len(df) else None,
+        "New Changes (run)": lambda df: df["new_this_run"].sum(),
+        "Needs Action (run)": lambda df: at(df, last(df), "needs_action") if len(df) else None,
+        "Past Target (run)": lambda df: at(df, last(df), "past_target_date") if len(df) else None,
+        "Backlog Hours (run)": lambda df: at(df, last(df), "backlog_hours") if len(df) else None,
+    }
+    return m, vs4
+
+
+FORMATS = {"Backlog vs 4 Weeks": "+", "Action Rate": "0%", "Capacity Load": "0%", "Peak Month Load": "0%", "FTE Gap (months)": "0.0", "One-off Cost": "$", "Staff Time Cost": "$",
            "External Cost": "$", "Ongoing Cost / yr": "$", "total_one_off_cost": "$"}
 
 
@@ -174,6 +201,8 @@ def fmt(v, name="", short=False):
         return f"{v:.0%}" if not short else f"{v * 100:.1f}%"
     if f == "0.0":
         return f"{v:.1f}"
+    if f == "+":
+        return f"{v:+,.0f}"
     pre = "$" if f == "$" else ""
     if short and abs(v) >= 1000:
         return f"{pre}{v / 1000:.0f}K" if abs(v) >= 10000 else f"{pre}{v / 1000:.1f}K"
@@ -269,8 +298,18 @@ def apply_filters(df, filters, entity):
 class Engine:
     def __init__(self, D: Data):
         self.D = D
+        sm, vs4 = snap_measures()
+        sm["Backlog vs 4 Weeks"] = lambda df: vs4(D.snap, df)
+        sm["Trend Takeaway"] = lambda df: "No weekly history yet: it builds up from the first Databricks load." if not len(df) else (
+            lambda d, ch: f"Backlog {sm['Backlog Hours (run)'](df):,.0f} hours, {'up' if (ch or 0) >= 0 else 'down'} {abs(ch or 0):,.0f} in four weeks; "
+                          f"{sm['Past Target (run)'](df):.0f} changes past their target date "
+                          f"({D.snap.loc[D.snap['run_date'] == D.snap[D.snap['run_date'] <= d - pd.Timedelta(days=28)]['run_date'].max(), 'past_target_date'].sum():.0f} four weeks earlier).")(
+            df["run_date"].max(), vs4(D.snap, df))
+        qm = {"Checks Passed Label": lambda q: "n/a" if not len(q) else
+              (lambda l: f"{(l['passed'] == 'True').sum()} / {len(l)}")(q[q["run_date"] == q["run_date"].max()]),
+              "Check Colour": lambda q: "#5F7A1A" if (q["passed"] == "True").all() else "#C0392B" if (q["blocking"] == "True").any() else "#D98C00"}
         self.M = {"changes": changes_measures(D), "dashboard_changes": dash_measures(D), "capacity_monthly": cap_measures(),
-                  "change_effort": {}, "run_log": log_measures()}
+                  "change_effort": {}, "run_log": log_measures(), "weekly_snapshot": sm, "quality_checks": qm}
 
     def frame(self, entity, page_filters, vis_filters):
         D = self.D
@@ -294,6 +333,10 @@ class Engine:
             return entity, D.cap
         if entity == "run_log":
             return entity, D.log
+        if entity == "weekly_snapshot":
+            return entity, D.snap
+        if entity == "quality_checks":
+            return entity, apply_filters(D.qc, vis_filters, entity) if len(D.qc) else D.qc
         raise KeyError(entity)
 
     def measure(self, fam, name, df):
@@ -426,9 +469,11 @@ def draw_column(w, h, cats, series, objs, stacked=True, horizontal=False, labels
                 sw = bw / len(series)
                 bh = (bot - top) * v / mx
                 body += f'<rect x="{x + sw * k:.1f}" y="{bot - bh:.1f}" width="{sw - 1:.1f}" height="{bh:.1f}" fill="{col}"/>'
-        if show_labels and (len(series) == 1 or stacked):
+        if show_labels and (len(series) == 1 or stacked) and n <= 16:
             body += text(x + bw / 2, bot - (bot - top) * acc / mx - 4, fmt(acc, series[0][0], True), 10.5, "#605e5c", "middle")
         lab = str(c)
+        if n > 16 and i % thin(n, x1 - x0) and i != n - 1:
+            continue
         if rot:
             body += text(x + bw / 2, bot + 12, lab, 10.5, "#605e5c", "end", extra=f'transform="rotate(-40 {x + bw / 2:.1f} {bot + 12:.1f})"')
         else:
@@ -438,12 +483,43 @@ def draw_column(w, h, cats, series, objs, stacked=True, horizontal=False, labels
         lmx = max([v for v in lvals if v is not None] + [0.0001]) * 1.25
         pts = [(x0 + band * i + band / 2, bot - (bot - top) * (v or 0) / lmx) for i, v in enumerate(lvals)]
         body += f'<polyline points="{" ".join(f"{a:.1f},{b:.1f}" for a, b in pts)}" fill="none" stroke="{lcol}" stroke-width="3"/>'
-        for (a, b), v in zip(pts, lvals):
-            body += f'<circle cx="{a:.1f}" cy="{b:.1f}" r="4" fill="{lcol}"/>'
+        for j, ((a, b), v) in enumerate(zip(pts, lvals)):
+            body += f'<circle cx="{a:.1f}" cy="{b:.1f}" r="{4 if n <= 16 else 2.5}" fill="{lcol}"/>'
+            if n > 16 and j != n - 1:
+                continue
             body += f'<rect x="{a - 19:.1f}" y="{b - 22:.1f}" width="38" height="15" rx="2" fill="#fff" fill-opacity=".85"/>' + text(a, b - 11, fmt(v, lname, True), 10, INK, "middle")
     if leg:
         items = [(s[0], s[2]) for s in series] + ([(line[0], line[2])] if line else [])
         body += legend(items, w, h - 6)
+    return svg(w, h, body)
+
+
+def thin(n, room, each=34):
+    """Show every k-th category label so dense axes stay readable."""
+    return max(1, math.ceil(n * each / max(room, 1)))
+
+
+def draw_lines(w, h, cats, series):
+    top, bot, x0, x1 = 12, h - 34, 40, w - 14
+    vals = [v or 0 for _, vs, _ in series for v in vs]
+    mx = nice_max(max(vals + [1]) * 1.1)
+    n = max(1, len(cats))
+    xs = [x0 + (x1 - x0) * (i + 0.5) / n for i in range(n)]
+    body = ""
+    for k in range(5):
+        y = bot - (bot - top) * k / 4
+        body += f'<line x1="{x0}" x2="{x1}" y1="{y:.1f}" y2="{y:.1f}" stroke="#e1e6ea"/>' + text(x0 - 6, y + 4, fmt(mx * k / 4, "", True), 10, "#8a96a3", "end")
+    for name, vs, col in series:
+        pts = [(x, bot - (bot - top) * (v or 0) / mx) for x, v in zip(xs, vs)]
+        body += f'<polyline points="{" ".join(f"{a:.1f},{b:.1f}" for a, b in pts)}" fill="none" stroke="{col}" stroke-width="3"/>'
+        for (a, b), v, c in zip(pts, vs, cats):
+            body += f'<circle cx="{a:.1f}" cy="{b:.1f}" r="3" fill="{col}"><title>{esc(c)}: {fmt(v, name)}</title></circle>'
+        if pts:
+            body += text(pts[-1][0], pts[-1][1] - 8, fmt(vs[-1], name), 11, INK, "end", 700)
+    step = thin(n, x1 - x0, 62)
+    for i, c in enumerate(cats):
+        if i % step == 0 and (n - 1 - i) >= step or i == n - 1:
+            body += text(xs[i], bot + 16, c, 10, "#605e5c", "middle")
     return svg(w, h, body)
 
 
@@ -598,7 +674,7 @@ class Renderer:
                 return f'<div class="v card txt" style="{style};font-size:{size}px;color:{col};{f"background:{bgc};" if bgc else ""}">{esc(val)}</div>'
             return f'<div class="v card" style="{style};font-size:{size}px;color:{col}"><b>{esc(fmt(val, name))}</b></div>'
 
-        if t in ("columnChart", "barChart", "clusteredBarChart", "lineClusteredColumnComboChart", "donutChart", "treemap"):
+        if t in ("columnChart", "barChart", "clusteredBarChart", "lineClusteredColumnComboChart", "donutChart", "treemap", "lineChart"):
             cat_key = "Category" if "Category" in R else "Group"
             (_, cent, ccol), _ = R[cat_key][0]
             ys = R.get("Y") or R.get("Values")
@@ -627,7 +703,7 @@ class Renderer:
                 (k, e, n), d = sd[0]
                 key = (lambda i: order_val[i] or 0) if k == "Measure" else (lambda i: cats[i])
                 idx.sort(key=key, reverse=d == "Descending")
-            elif ccol in ("year_month", "month_start", "target_date") or ccol == "Deadline Bucket":
+            elif ccol in ("year_month", "month_start", "target_date", "run_date") or ccol == "Deadline Bucket":
                 order = ["Overdue", "Due in 30 days", "Later", "No fixed date"]
                 idx.sort(key=lambda i: order.index(cats[i]) if ccol == "Deadline Bucket" else cats[i])
             else:
@@ -642,6 +718,8 @@ class Renderer:
                 cats, data = list(agg), {list(data)[0]: list(agg.values())}
             elif ccol == "month_start":
                 cats = [c.strftime("%b %Y") for c in cats]
+            elif ccol == "run_date":
+                cats = [c.strftime("%-d %b %y") for c in cats]
             if t == "donutChart":
                 name = list(data)[0]
                 cols = [series_colour(objs, c, i) for i, c in enumerate(cats)]
@@ -651,11 +729,15 @@ class Renderer:
                 name = list(data)[0]
                 return f'<div class="v" style="{style}">{draw_treemap(w, h, list(zip(cats, data[name])))}</div>'
             line = None
+            if t == "lineChart":
+                name = list(data)[0]
+                return f'<div class="v" style="{style}">{draw_lines(w, h, cats, [(name, data[name], series_colour(objs, name, 0))])}</div>'
             if t == "lineClusteredColumnComboChart":
                 y2 = R["Y2"][0][0][2]
                 fam2, df2 = frame_for(R["Y2"][0][0][1])
-                g2 = dict((k, self.E.measure(fam2, y2, g)) for k, g in self.E.groups(fam2, df2, cent, ccol))
-                line = (y2, [g2.get(c) for c in cats], COLOURS[1])
+                g2 = dict((k.strftime("%-d %b %y") if ccol == "run_date" else k, self.E.measure(fam2, y2, g))
+                          for k, g in self.E.groups(fam2, df2, cent, ccol))
+                line = (y2, [g2.get(c) for c in cats], series_colour(objs, y2, 1))
             series = [(s, vals, series_colour(objs, s, i)) for i, (s, vals) in enumerate(data.items())]
             if len(series) == 1 and not series_role:
                 pc = [series_colour(objs, c, 0) for c in cats]

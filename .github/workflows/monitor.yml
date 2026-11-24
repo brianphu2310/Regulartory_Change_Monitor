@@ -17,6 +17,10 @@ concurrency:
 jobs:
   monitor:
     runs-on: ubuntu-latest
+    env:   # set these repository secrets to load each run into Databricks (docs/DATABRICKS.md); without them the step is skipped
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      DATABRICKS_WAREHOUSE_ID: ${{ secrets.DATABRICKS_WAREHOUSE_ID }}
     steps:
       - uses: actions/checkout@v4
       - name: Build the monitor image
@@ -27,6 +31,17 @@ jobs:
         run: |
           mkdir -p data/live reports
           docker run --rm --user "$(id -u):$(id -g)" -v "$PWD/data:/app/data" -v "$PWD/reports:/app/reports" -v "$GITHUB_OUTPUT:/tmp/gh_output" -e GITHUB_OUTPUT=/tmp/gh_output reg-monitor
+
+      - uses: actions/setup-python@v5
+        if: env.DATABRICKS_HOST != ''
+        with:
+          python-version: "3.12"
+
+      - name: Load the run into the Databricks lakehouse (bronze, quality gate, silver, gold)
+        if: env.DATABRICKS_HOST != '' && env.DATABRICKS_TOKEN != '' && env.DATABRICKS_WAREHOUSE_ID != ''
+        run: |
+          pip install --quiet -r requirements-lakehouse.txt
+          python -m lakehouse.run --source data/live
 
       - name: Commit live data and report
         run: |

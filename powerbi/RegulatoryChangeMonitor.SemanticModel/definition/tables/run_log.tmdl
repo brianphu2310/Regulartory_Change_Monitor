@@ -46,7 +46,8 @@ table run_log
 		mode: import
 		source =
 				let
-				    Raw = try Table.Buffer(Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & "data/live" & "/run_log.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true])) otherwise #table(type table [run_at = text, agency = text, feed = text, status = text, items = text], {}),
+				    Raw = if Source = "Databricks" then Databricks.Catalogs(DatabricksHost, DatabricksHttpPath, [Catalog = null, Database = null, EnableAutomaticProxyDiscovery = null]){[Name = DatabricksCatalog, Kind = "Database"]}[Data]{[Name = "rcm_gold", Kind = "Schema"]}[Data]{[Name = "run_log", Kind = "Table"]}[Data]
+				          else try Table.Buffer(Table.PromoteHeaders(Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "brianphu2310/Regulartory_Change_Monitor/" & Branch & "/" & "data/live" & "/run_log.csv"]), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true])) otherwise #table(type table [run_at = text, agency = text, feed = text, status = text, items = text], {}),
 				    Picked = Table.SelectColumns(Raw, {"run_at", "agency", "feed", "status", "items"}, MissingField.UseNull),
 				    Typed = Table.TransformColumnTypes(Picked, {{"run_at", type datetimezone}, {"agency", type text}, {"feed", type text}, {"status", type text}, {"items", Int64.Type}}, "en-AU")
 				in

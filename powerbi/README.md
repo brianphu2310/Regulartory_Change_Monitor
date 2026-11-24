@@ -23,6 +23,17 @@ and visual can be reviewed in Git. [`build_pbip.py`](build_pbip.py) generates it
 
 Every Monday after 07:17 Sydney the monitor commits a new run; with `Dataset = data/live`, **Refresh** loads it.
 
+## Data source: CSV or Databricks
+
+| Parameter | Values | Default |
+|---|---|---|
+| `Source` | `GitHub CSV` (the files in this repo) or `Databricks` (the lakehouse gold tables) | `GitHub CSV` |
+| `Dataset` | `bi_export` (synthetic year) or `data/live` (weekly monitor); CSV mode only | `bi_export` |
+| `DatabricksHost`, `DatabricksHttpPath`, `DatabricksCatalog` | from the SQL warehouse's *Connection details*; Databricks mode only | placeholders, `workspace` |
+
+Both sources have the same table and column names, so every page works on either. Only the chosen branch of each query
+is evaluated, so CSV mode never asks for Databricks credentials. Set-up: [docs/DATABRICKS.md](../docs/DATABRICKS.md).
+
 ## See it without Power BI
 
 `python powerbi/render_preview.py` draws every page from the report's own `page.json` / `visual.json` files (positions,

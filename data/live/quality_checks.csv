@@ -1,0 +1,10 @@
+run_date,check_name,blocking,failed_rows,passed
+2026-11-23,changes: deadline not before published,False,0,True
+2026-11-23,changes: id present,True,0,True
+2026-11-23,changes: id unique,True,0,True
+2026-11-23,changes: impact is High/Medium/Low,False,0,True
+2026-11-23,changes: published is a date,True,0,True
+2026-11-23,dashboard: every change is costed,True,0,True
+2026-11-23,effort: hours not negative,False,0,True
+2026-11-23,run log: at least one source checked,False,0,True
+2026-11-23,topics: refer to a known change,False,0,True

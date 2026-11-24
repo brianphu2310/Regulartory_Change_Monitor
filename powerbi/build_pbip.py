@@ -55,11 +55,11 @@ NEW_PAGES = [
                 "people": ((1280, 696, 1884, 1056), "Who does the work: hours needed vs available")}},
     {"id": "p_capacity00000000001", "name": "Capacity & sources", "title": "CAPACITY & SOURCES",
      "subtitle": "Can the team absorb the backlog, and did every source answer this run?",
-     "kpis": ["CAPACITY LOAD", "HOURS OVER CAPACITY", "FTE GAP (MONTHS)", "ONGOING COST / YR", "SOURCES OK"],
+     "kpis": ["PEAK MONTH LOAD", "HOURS OVER CAPACITY", "FTE GAP (MONTHS)", "ONGOING COST / YR", "SOURCES OK (LIVE)"],
      "panels": {"heat": ((372, 316, 1260, 676), "Capacity load by role and month"),
                 "roles": ((1280, 316, 1884, 676), "Outstanding hours by role"),
                 "due": ((372, 696, 1000, 1056), "Backlog by target month"),
-                "log": ((1020, 696, 1884, 1056), "Source health: latest run")}},
+                "log": ((1020, 696, 1884, 1056), "Source health: latest weekly run (live)")}},
 ]
 # sidebar order: v1 pages with the two new pages before Action tracker and About
 NAV = [("p7ov0000000000000001", "Overview", "◎"), ("p7d00000000000000001", "Accounts & Trust", "▣"),
@@ -172,9 +172,10 @@ def background(page: dict, path: Path) -> None:
 def _csv_source(file: str, types: list[tuple[str, str]], optional: bool = False) -> str:
     type_list = ", ".join(f'{{"{c}", {t}}}' for c, t in types)
     names = "{" + ", ".join(f'"{c}"' for c, _ in types) + "}"
-    fetch = (f'Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "{REPO}/" & Branch & "/" & Dataset & "/{file}"]), '
+    folder = '"data/live"' if optional else "Dataset"   # the run log is real in both modes: it only exists in data/live
+    fetch = (f'Csv.Document(Web.Contents("https://raw.githubusercontent.com", [RelativePath = "{REPO}/" & Branch & "/" & {folder} & "/{file}"]), '
              f'[Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv])')
-    if optional:   # run_log.csv only exists in the live data; an empty table keeps the sample mode working
+    if optional:   # no run yet (new fork): an empty table keeps the report working
         empty = "#table(type table [" + ", ".join(f"{c} = text" for c, _ in types) + "], {})"
         body = (f"    Raw = try Table.Buffer(Table.PromoteHeaders({fetch}, [PromoteAllScalars = true])) otherwise {empty},\n"
                 f"    Picked = Table.SelectColumns(Raw, {names}, MissingField.UseNull),\n"
@@ -218,14 +219,15 @@ TABLES = {
         ("run_at", "dt"), ("agency", "text"), ("feed", "text"), ("status", "text"), ("items", "int")]),
 }
 V1_MEASURES = [
+    ("As Of Date", "COALESCE ( MAXX ( ALL ( dashboard_changes ), dashboard_changes[as_of] ), TODAY () )", "d mmm yyyy", "Labels"),
     ("Total Changes", "COUNTROWS ( changes )", "#,0", "Counts"),
     ("High Impact", 'CALCULATE ( [Total Changes], changes[impact] = "High" )', "#,0", "Counts"),
     ("Open Actions", 'CALCULATE ( [Total Changes], changes[action_req] = 1, changes[status] <> "Actioned" )', "#,0", "Actions"),
-    ("Due In 30 Days", "CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] >= TODAY () && changes[deadline] <= TODAY () + 30 ) )", "#,0", "Actions"),
-    ("Overdue Actions", "CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] < TODAY () ) )", "#,0", "Actions"),
+    ("Due In 30 Days", "VAR t = [As Of Date] RETURN CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] >= t && changes[deadline] <= t + 30 ) )", "#,0", "Actions"),
+    ("Overdue Actions", "VAR t = [As Of Date] RETURN CALCULATE ( [Open Actions], FILTER ( ALL ( changes[deadline] ), NOT ISBLANK ( changes[deadline] ) && changes[deadline] < t ) )", "#,0", "Actions"),
     ("Action Rate", "DIVIDE ( [Open Actions], [Total Changes] )", "0%", "Actions"),
-    ("Changes Last 30 Days", "CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > TODAY () - 30 && changes[published] <= TODAY () ) )", "#,0", "Trend"),
-    ("Changes Prior 30 Days", "CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > TODAY () - 60 && changes[published] <= TODAY () - 30 ) )", "#,0", "Trend"),
+    ("Changes Last 30 Days", "VAR t = [As Of Date] RETURN CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > t - 30 && changes[published] <= t ) )", "#,0", "Trend"),
+    ("Changes Prior 30 Days", "VAR t = [As Of Date] RETURN CALCULATE ( [Total Changes], FILTER ( ALL ( changes[published] ), changes[published] > t - 60 && changes[published] <= t - 30 ) )", "#,0", "Trend"),
     ("Change vs Prior 30 Days", "DIVIDE ( [Changes Last 30 Days] - [Changes Prior 30 Days], [Changes Prior 30 Days] )", "0%", "Trend"),
     ("Sample Data Note", 'IF ( MAX ( changes[data_type] ) = "Live", "Live data from the weekly monitor. Keyword classification, not legal advice.", "Synthetic sample data. Keyword classification, not legal advice." )', None, "Labels"),
     ("Deadline Color", 'VAR d = MIN ( changes[Days To Deadline] ) RETURN IF ( ISBLANK ( d ), BLANK (), IF ( d >= 9999, "#8A97A5", IF ( d < 0, "#C0392B", IF ( d <= 30, "#D98E04", "#1F2933" ) ) ) )', None, None),
@@ -233,8 +235,8 @@ V1_MEASURES = [
 ]
 CALC_COLUMNS = {
     "changes": [
-        ("Days To Deadline", "int", "IF ( ISBLANK ( changes[deadline] ), BLANK (), DATEDIFF ( TODAY (), changes[deadline], DAY ) )"),
-        ("Deadline Bucket", "text", 'IF ( ISBLANK ( changes[deadline] ), "No fixed date", IF ( changes[deadline] < TODAY (), "Overdue", IF ( changes[deadline] <= TODAY () + 30, "Due in 30 days", "Later" ) ) )'),
+        ("Days To Deadline", "int", "VAR t = COALESCE ( MAXX ( ALL ( dashboard_changes ), dashboard_changes[as_of] ), TODAY () ) RETURN IF ( ISBLANK ( changes[deadline] ), BLANK (), DATEDIFF ( t, changes[deadline], DAY ) )"),
+        ("Deadline Bucket", "text", 'VAR t = COALESCE ( MAXX ( ALL ( dashboard_changes ), dashboard_changes[as_of] ), TODAY () ) RETURN IF ( ISBLANK ( changes[deadline] ), "No fixed date", IF ( changes[deadline] < t, "Overdue", IF ( changes[deadline] <= t + 30, "Due in 30 days", "Later" ) ) )'),
     ],
 }
 CALC_TABLES = {
@@ -254,6 +256,10 @@ RELATIONSHIPS = [
     ("change_topics.id", "changes.id", True, True),
     ("change_audiences.id", "changes.id", True, True),
     ("change_effort.id", "dashboard_changes.id", True, False),
+    # department pages and the department x agency heatmap: a department reaches its changes through its topics
+    ("topic_department.department", "dim_department.department", True, False),
+    ("topic_department.topic", "dim_topic.topic", True, True),
+    ("change_topics.topic", "dim_topic.topic", True, False),
 ]
 MEASURES = {
     "changes": [(m, e, f) for m, e, f, _ in V1_MEASURES],
@@ -277,7 +283,14 @@ MEASURES = {
     "capacity_monthly": [
         ("Hours Needed", "SUM ( capacity_monthly[hours_required] )", "#,0"),
         ("Hours Available", "SUM ( capacity_monthly[hours_available] )", "#,0"),
+        ("Hours Available / Month", "AVERAGEX ( VALUES ( capacity_monthly[month_start] ), [Hours Available] )", "#,0"),
         ("Capacity Load", "DIVIDE ( [Hours Needed], [Hours Available] )", "0%"),
+        ("Peak Month Load", "MAXX ( VALUES ( capacity_monthly[month_start] ), [Capacity Load] )", "0%"),
+        ("Capacity Takeaway", 'VAR pm = MAXX ( TOPN ( 1, VALUES ( capacity_monthly[month_start] ), [Capacity Load] ), capacity_monthly[month_start] ) '
+         'VAR need = CALCULATE ( [Hours Needed], capacity_monthly[month_start] = pm ) VAR av = CALCULATE ( [Hours Available], capacity_monthly[month_start] = pm ) '
+         'RETURN "Money is manageable, hours are not: " & FORMAT ( pm, "mmm yyyy" ) & " needs " & FORMAT ( need, "#,0" ) & " hours against " '
+         '& FORMAT ( av, "#,0" ) & " available. Short-term help for that month covers it."', None),
+        ("Peak Month", 'FORMAT ( MAXX ( TOPN ( 1, VALUES ( capacity_monthly[month_start] ), [Capacity Load] ), capacity_monthly[month_start] ), "mmm yyyy" )', None),
         ("Hours Over Capacity", "SUM ( capacity_monthly[hours_over_capacity] )", "#,0"),
         ("FTE Gap (months)", "DIVIDE ( [Hours Over Capacity], 152 )", "0.0"),
         ("Load Colour", 'VAR l = [Capacity Load] RETURN SWITCH ( TRUE (), ISBLANK ( l ), BLANK (), l > 1, "#E8A29A", l > 0.8, "#F3D27A", "#D9EC9A" )', None),
@@ -509,12 +522,12 @@ def page_finance(p):
     vs.append(container("peoplebar0000000000", inner(P["people"][0]), {
         "visualType": "clusteredBarChart",
         "query": {"queryState": {"Category": {"projections": [proj(C, "role", active=True, name="Role")]},
-                                 "Y": {"projections": [proj(C, "Hours Needed", True), proj(C, "Hours Available", True)]}},
+                                 "Y": {"projections": [proj(C, "Hours Needed", True), proj(C, "Hours Available / Month", True)]}},
                   "sortDefinition": {"sort": [{"field": field(C, "Hours Needed", True), "direction": "Descending"}]}},
         "objects": {"labels": [{"properties": {"show": lit("true"), "fontSize": lit("10D")}}],
                     "legend": [{"properties": {"show": lit("true"), "position": lit("'Top'")}}],
                     "dataPoint": [{"properties": {"fill": colour(TOKENS["lime_dark"])}, "selector": {"metadata": f"{C}.Hours Needed"}},
-                                  {"properties": {"fill": colour(TOKENS["muted"])}, "selector": {"metadata": f"{C}.Hours Available"}}]}}, 1050))
+                                  {"properties": {"fill": colour(TOKENS["muted"])}, "selector": {"metadata": f"{C}.Hours Available / Month"}}]}}, 1050))
     return vs
 
 
@@ -523,8 +536,12 @@ def page_capacity(p):
     k = kpi_boxes(5)
     C, E, L, F = "capacity_monthly", "dashboard_changes", "run_log", "change_effort"
     vs = [container(f"kpc{i}0000000000000000", k[i], card(t, m), 1000 + i)
-          for i, (t, m) in enumerate([(C, "Capacity Load"), (C, "Hours Over Capacity"), (C, "FTE Gap (months)"),
+          for i, (t, m) in enumerate([(C, "Peak Month Load"), (C, "Hours Over Capacity"), (C, "FTE Gap (months)"),
                                       (E, "Ongoing Cost / yr"), (L, "Sources OK Label")])]
+    vs.append(container("takeawayc0000000000", (372, 248, 1884, 300), {
+        **card(C, "Capacity Takeaway", 17, TOKENS["ink"]),
+        "visualContainerObjects": {"background": [{"properties": {"show": lit("true"), "color": colour("#D9EC9A"), "transparency": lit("0D")}}],
+                                   "border": [{"properties": {"show": lit("false")}}]}}, 1006))
     vs.append(container("heat000000000000000", inner(P["heat"][0]), {
         "visualType": "pivotTable",
         "query": {"queryState": {"Rows": {"projections": [proj(C, "role", active=True, name="Role")]},
@@ -557,9 +574,9 @@ def page_capacity(p):
         "objects": {"values": [{"properties": {"fontSize": lit("11D")}}],
                     "columnHeaders": [{"properties": {"fontSize": lit("12D"), "bold": lit("true")}}],
                     "total": [{"properties": {"totals": lit("false")}}],
-                    "columnWidth": [{"properties": {"value": lit("150D")}, "selector": {"metadata": f"{L}.run_at"}},
-                                    {"properties": {"value": lit("90D")}, "selector": {"metadata": f"{L}.agency"}},
-                                    {"properties": {"value": lit("480D")}, "selector": {"metadata": f"{L}.status"}},
+                    "columnWidth": [{"properties": {"value": lit("110D")}, "selector": {"metadata": f"{L}.run_at"}},
+                                    {"properties": {"value": lit("160D")}, "selector": {"metadata": f"{L}.agency"}},
+                                    {"properties": {"value": lit("440D")}, "selector": {"metadata": f"{L}.status"}},
                                     {"properties": {"value": lit("60D")}, "selector": {"metadata": f"{L}.items"}}]}}, 1040))
     return vs
 
@@ -572,6 +589,61 @@ def _nav_target(v: dict) -> str | None:
     except (KeyError, IndexError, TypeError):
         return None
     return None
+
+
+BUCKET_COLOURS = [("Overdue", "#c8553d"), ("Due in 30 days", "#b6d94c"), ("Later", "#46586b"), ("No fixed date", "#c3ccd6")]
+ABOUT = [
+    ("How to read this report", None, "24pt"),
+    ("Impact:  ", "High / Medium / Low, set by keyword rules (penalty, mandatory, must ...).", "16pt"),
+    ("Action required:  ", "The change states an obligation or a step the firm must take.", "16pt"),
+    ("Open action:  ", "Action required and the status is not Actioned.", "16pt"),
+    ("Deadline / Days left:  ", "Date taken from the text of the change; days left are counted from the date of the data "
+                                "(not the day the file is opened). Red = overdue, amber = due within 30 days.", "16pt"),
+    ("Departments:  ", "A change reaches a department through its topics (AML/CTF and Sanctions go to Compliance, "
+                       "Payroll and Super to HR and to Accounts ...), so department totals add up to more than the firm total.", "16pt"),
+    ("Heatmap:  ", "Department x agency; a darker green cell means more changes.", "16pt"),
+    ("Cost and hours:  ", "Staff time x loaded hourly rate + external spend (advisers, systems), from stated assumptions "
+                          "in impact_model.py. Not quotes and not legal advice.", "16pt"),
+    ("Capacity:  ", "Hours each role needs for regulatory work in a month against the hours it has for it.", "16pt"),
+    ("Data:  ", "Dataset parameter = bi_export (synthetic year, every page populated) or data/live (the weekly monitor). "
+                "Source health always shows the latest real weekly run.", "16pt"),
+]
+
+
+def patch_v1_visuals(pages: Path) -> None:
+    """Fixes to the v1 pages: tables sorted by urgency, the agency chart split by deadline, the About text."""
+    days = {"Column": {"Expression": {"SourceRef": {"Entity": "changes"}}, "Property": "Days To Deadline"}}
+    for vf in pages.glob("*/visuals/*/visual.json"):
+        v = json.loads(vf.read_text())
+        vis = v.get("visual", {})
+        t = vis.get("visualType")
+        q = vis.get("query", {})
+        fields = json.dumps(q)
+        if t == "tableEx" and "Days To Deadline" in fields and "sortDefinition" not in q:
+            q["sortDefinition"] = {"sort": [{"field": days, "direction": "Ascending"}]}   # most overdue first
+        elif t == "barChart" and '"Overdue Actions"' in fields and '"source"' in fields:
+            # "Open actions by agency": every open action, split overdue / due soon / later (same colours as the bucket chart)
+            q["queryState"]["Y"] = {"projections": [proj("changes", "Open Actions", True)]}
+            q["queryState"]["Series"] = {"projections": [proj("changes", "Deadline Bucket", active=True)]}
+            q["sortDefinition"] = {"sort": [{"field": field("changes", "Open Actions", True), "direction": "Descending"}]}
+            vis["objects"]["dataPoint"] = [
+                {"properties": {"fill": colour(c)}, "selector": {"data": [{"scopeId": {"Comparison": {
+                    "ComparisonKind": 0, "Left": {"Column": {"Expression": {"SourceRef": {"Entity": "changes"}}, "Property": "Deadline Bucket"}},
+                    "Right": {"Literal": {"Value": f"'{b}'"}}}}}]}} for b, c in BUCKET_COLOURS]
+            vis["objects"]["legend"] = [{"properties": {"show": lit("true"), "position": lit("'Top'")}}]
+        elif t == "textbox" and "How to read this report" in json.dumps(vis.get("objects", {})):
+            paras = []
+            for head, body, size in ABOUT:
+                if body is None:
+                    paras.append({"textRuns": [{"value": head, "textStyle": {"fontSize": size, "fontWeight": "bold", "color": TOKENS["ink"]}}]})
+                else:
+                    paras.append({"textRuns": [{"value": head, "textStyle": {"fontSize": size, "fontWeight": "bold", "color": "#5f7a1a"}},
+                                               {"value": body, "textStyle": {"fontSize": size, "color": TOKENS["ink"]}}]})
+                paras.append({"textRuns": [{"value": " ", "textStyle": {"fontSize": "5pt"}}]})
+            vis["objects"]["general"][0]["properties"]["paragraphs"] = paras
+        else:
+            continue
+        vf.write_text(json.dumps(v))
 
 
 def build_report() -> None:
@@ -588,6 +660,7 @@ def build_report() -> None:
         "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/2.0.0/schema.json",
         "version": "4.0", "datasetReference": {"byPath": {"path": f"../{NAME}.SemanticModel"}}}, indent=2))
     slot = {pid: i for i, (pid, _, _) in enumerate(NAV)}
+    patch_v1_visuals(d / "pages")
 
     # v1 pages: repaint the sidebar with the new items, move and add navigation buttons
     for pj in sorted((d / "pages").glob("*/page.json")):
